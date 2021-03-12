@@ -1,4 +1,4 @@
-# I.R.S HRTK
+# IRS-HRTK
 
 [![GitHub release](https://img.shields.io/github/release/nfu-irs-lab/hiwinrobot-irs-hrtk.svg)](https://github.com/nfu-irs-lab/hiwinrobot-irs-hrtk/releases)
 [![GitHub repo size](https://img.shields.io/github/repo-size/nfu-irs-lab/hiwinrobot-irs-hrtk)](https://github.com/nfu-irs-lab/hiwinrobot-irs-hrtk)
