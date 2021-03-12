@@ -8,7 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace IRSTK
+namespace IRS.HRTK
 {
     /// <summary>
     /// 基本裝置介面。

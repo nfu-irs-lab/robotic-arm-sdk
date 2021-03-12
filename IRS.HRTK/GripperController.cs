@@ -5,7 +5,7 @@ using System.IO.Ports;
 using System.Runtime.CompilerServices;
 using System.Windows.Forms;
 
-namespace IRSTK
+namespace IRS.HRTK
 {
     /// <summary>
     /// 夾爪控制介面。
@@ -38,11 +38,11 @@ namespace IRSTK
         public GripperController(string comPort, IMessage message)
         {
             SerialPortDevice = new SerialPortDevice(new SerialPort()
-                                                    {
-                                                        PortName = comPort,
-                                                        BaudRate = 115200,
-                                                        DataBits = 8
-                                                    },
+            {
+                PortName = comPort,
+                BaudRate = 115200,
+                DataBits = 8
+            },
                                                     message);
 
             Message = message;

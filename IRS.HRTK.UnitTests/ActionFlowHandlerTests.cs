@@ -1,7 +1,7 @@
 ﻿using System.Windows.Forms;
 using NUnit.Framework;
 
-namespace IRSTK.UnitTests
+namespace IRS.HRTK.UnitTests
 {
     [TestFixture]
     public class ActionFlowHandlerTests

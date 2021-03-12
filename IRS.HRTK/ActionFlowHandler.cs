@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace IRSTK
+namespace IRS.HRTK
 {
     public interface IActionFlowHandler
     {
@@ -41,12 +41,6 @@ namespace IRSTK
         void Clear();
 
         /// <summary>
-        /// 執行在 ListView 中選擇的動作。
-        /// </summary>
-        /// <returns>最後一個執行的動作索引值</returns>
-        int DoSelected();
-
-        /// <summary>
         /// 執行動作。
         /// </summary>
         /// <param name="actionIndex"></param>
@@ -73,6 +67,12 @@ namespace IRSTK
         /// </summary>
         /// <returns>最後一個執行的動作索引值。</returns>
         int DoEach();
+
+        /// <summary>
+        /// 執行在 ListView 中選擇的動作。
+        /// </summary>
+        /// <returns>最後一個執行的動作索引值</returns>
+        int DoSelected();
 
         /// <summary>
         /// 更新清單。
@@ -102,8 +102,8 @@ namespace IRSTK
         }
 
         public bool AutoNextAction { get; set; } = true;
-        public bool ShowMessageBeforeAction { get; set; } = true;
         public int LastActionIndex { get; private set; } = -1;
+        public bool ShowMessageBeforeAction { get; set; } = true;
 
         public void Add(string name, Action action, string comment = "--")
         {
@@ -127,25 +127,6 @@ namespace IRSTK
         public void Clear()
         {
             Actions.Clear();
-        }
-
-        public int DoSelected()
-        {
-            foreach (int selectedIndex in ActionsListView.SelectedIndices)
-            {
-                var act = Actions[selectedIndex];
-                if (ShowActionMessageAndContinue(selectedIndex))
-                {
-                    act.Action();
-                    LastActionIndex = selectedIndex;
-                }
-                else
-                {
-                    return LastActionIndex;
-                }
-            }
-            AutoSelectedNextAction();
-            return LastActionIndex;
         }
 
         public int Do(int actionIndex)
@@ -221,6 +202,25 @@ namespace IRSTK
                     return LastActionIndex;
                 }
             }
+            return LastActionIndex;
+        }
+
+        public int DoSelected()
+        {
+            foreach (int selectedIndex in ActionsListView.SelectedIndices)
+            {
+                var act = Actions[selectedIndex];
+                if (ShowActionMessageAndContinue(selectedIndex))
+                {
+                    act.Action();
+                    LastActionIndex = selectedIndex;
+                }
+                else
+                {
+                    return LastActionIndex;
+                }
+            }
+            AutoSelectedNextAction();
             return LastActionIndex;
         }
 

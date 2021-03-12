@@ -16,27 +16,27 @@ using System.Threading;
 using System.Windows.Forms;
 using Timer = System.Windows.Forms.Timer;
 
-namespace IRSTK
+namespace IRS.HRTK
 {
     #region - 列舉 enum -
 
     /// <summary>
-    /// 位置類型。
+    /// 座標類型。
     /// </summary>
-    public enum PositionType
+    public enum CoordinateType
     {
         /// <summary>
-        /// 絕對位置。
+        /// 笛卡爾座標。
         /// </summary>
-        Absolute,
+        Descartes,
 
         /// <summary>
-        /// 相對位置。
+        /// 關節座標。
         /// </summary>
-        Relative,
+        Joint,
 
         /// <summary>
-        /// 未知的位置類型。
+        /// 未知的座標類型。
         /// </summary>
         Unknown
     }
@@ -68,22 +68,22 @@ namespace IRSTK
     }
 
     /// <summary>
-    /// 座標類型。
+    /// 位置類型。
     /// </summary>
-    public enum CoordinateType
+    public enum PositionType
     {
         /// <summary>
-        /// 笛卡爾座標。
+        /// 絕對位置。
         /// </summary>
-        Descartes,
+        Absolute,
 
         /// <summary>
-        /// 關節座標。
+        /// 相對位置。
         /// </summary>
-        Joint,
+        Relative,
 
         /// <summary>
-        /// 未知的座標類型。
+        /// 未知的位置類型。
         /// </summary>
         Unknown
     }
