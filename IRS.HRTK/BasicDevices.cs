@@ -8,7 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Features
+namespace IRS.HRTK
 {
     /// <summary>
     /// 基本裝置介面。
@@ -66,11 +66,9 @@ namespace Features
             Message = message;
         }
 
-        private IMessage Message { get; set; }
-
         public bool Connected { get; private set; } = false;
-
         public SerialPort SerialPort { get; set; }
+        private IMessage Message { get; set; }
 
         public virtual bool Connect()
         {

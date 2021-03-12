@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Features
+namespace IRS.HRTK
 {
     public interface ICsvHandler
     {

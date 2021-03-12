@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Features
+namespace IRS.HRTK
 {
     /// <summary>
     /// CSV 位置資料格式。

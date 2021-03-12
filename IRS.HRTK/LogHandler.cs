@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Features
+namespace IRS.HRTK
 {
     /// <summary>
     /// 日誌等級。<br/>
@@ -50,9 +50,8 @@ namespace Features
 
     public class LogHandler : ILogHandler
     {
-        private string Filename;
-
         private readonly LoggingLevel LoggingLevel;
+        private string Filename;
 
         public LogHandler(string path = "",
                           LoggingLevel loggingLevel = LoggingLevel.Trace)
@@ -60,6 +59,11 @@ namespace Features
             Path = path;
             LoggingLevel = loggingLevel;
             CreateFile();
+        }
+
+        ~LogHandler()
+        {
+            Write("LogHandler Destruct.", LoggingLevel.Fatal);
         }
 
         public string Path { get; }
@@ -81,11 +85,6 @@ namespace Features
                 file.WriteLine(text);
                 file.Close();
             }
-        }
-
-        ~LogHandler()
-        {
-            Write("LogHandler Destruct.", LoggingLevel.Fatal);
         }
 
         private void CreateFile()
