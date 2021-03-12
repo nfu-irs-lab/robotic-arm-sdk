@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Runtime.CompilerServices;
 using System.Windows.Forms;
 
-namespace Features
+namespace IRSTK
 {
     /// <summary>
     /// 訊息處理介面。

@@ -5,7 +5,7 @@ using System.IO.Ports;
 using System.Runtime.CompilerServices;
 using System.Windows.Forms;
 
-namespace Features
+namespace IRSTK
 {
     /// <summary>
     /// 夾爪控制介面。

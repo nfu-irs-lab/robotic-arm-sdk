@@ -8,8 +8,8 @@
     <ProjectGuid>{23165E8B-D3D9-465A-98B3-AD90E97909C3}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Features</RootNamespace>
-    <AssemblyName>Features</AssemblyName>
+    <RootNamespace>IRSTK</RootNamespace>
+    <AssemblyName>IRSTK</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>

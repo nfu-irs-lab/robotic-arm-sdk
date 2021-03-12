@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Features
+namespace IRSTK
 {
     /// <summary>
     /// 日誌等級。<br/>

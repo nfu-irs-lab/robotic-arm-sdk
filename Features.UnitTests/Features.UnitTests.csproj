@@ -69,9 +69,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Features\Features.csproj">
+    <ProjectReference Include="..\Features\IRSTK.csproj">
       <Project>{23165e8b-d3d9-465a-98b3-ad90e97909c3}</Project>
-      <Name>Features</Name>
+      <Name>IRSTK</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
