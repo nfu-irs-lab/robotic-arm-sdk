@@ -8,8 +8,8 @@
     <ProjectGuid>{0064ACDF-3A06-4274-AAAB-5ABB110BCFBA}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>IRS.HRTK.UnitTests</RootNamespace>
-    <AssemblyName>IRS.HRTK.UnitTests</AssemblyName>
+    <RootNamespace>NFUIRSL.HRTK.UnitTests</RootNamespace>
+    <AssemblyName>NFUIRSL.HRTK.UnitTests</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -69,9 +69,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\IRS.HRTK\IRS.HRTK.csproj">
+    <ProjectReference Include="..\IRS.HRTK\NFUIRSL.HRTK.csproj">
       <Project>{23165e8b-d3d9-465a-98b3-ad90e97909c3}</Project>
-      <Name>IRS.HRTK</Name>
+      <Name>NFUIRSL.HRTK</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
