@@ -5,7 +5,7 @@ using System.IO.Ports;
 using System.Runtime.CompilerServices;
 using System.Windows.Forms;
 
-namespace IRS.HRTK
+namespace NFUIRSL.HRTK
 {
     /// <summary>
     /// 夾爪控制介面。
