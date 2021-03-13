@@ -16,7 +16,7 @@ using System.Threading;
 using System.Windows.Forms;
 using Timer = System.Windows.Forms.Timer;
 
-namespace IRS.HRTK
+namespace NFUIRSL.HRTK
 {
     #region - 列舉 enum -
 

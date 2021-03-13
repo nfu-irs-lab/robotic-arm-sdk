@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using SDKHrobot;
 
-namespace IRS.HRTK
+namespace NFUIRSL.HRTK
 {
     /// <summary>
     /// 上銀手臂 SDK 中介層介面。<br/>

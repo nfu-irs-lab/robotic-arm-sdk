@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IRS.HRTK
+namespace NFUIRSL.HRTK
 {
     public interface ICsvHandler
     {
