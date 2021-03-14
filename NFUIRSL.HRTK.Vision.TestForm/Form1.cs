@@ -12,7 +12,7 @@ namespace NFUIRSL.HRTK.Vision.TestForm
 {
     internal partial class VisionTestForm : Form
     {
-        private IDSCamera Camera;
+        private readonly IDSCamera Camera;
 
         public VisionTestForm()
         {
@@ -32,12 +32,12 @@ namespace NFUIRSL.HRTK.Vision.TestForm
 
         private void buttonOpenFreeRun_Click(object sender, EventArgs e)
         {
-            Camera.OpenFreeRun();
+            Camera.Open(CaptureMode.Snapshot);
         }
 
         private void buttonStopFreeRun_Click(object sender, EventArgs e)
         {
-            Camera.StopFreeRun();
+            Camera.Open(CaptureMode.FreeRun);
         }
     }
 }
