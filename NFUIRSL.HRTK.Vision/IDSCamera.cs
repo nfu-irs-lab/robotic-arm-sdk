@@ -17,18 +17,20 @@ namespace NFUIRSL.HRTK.Vision
         private Timer UpdateTimer = new Timer();
         private uEye.Defines.DisplayRenderMode RenderMode;
         private string SensorName;
+        private PictureBox PictureBox;
 
-        public IDSCamera(IMessage message)
+        public IDSCamera(PictureBox pictureBox, IMessage message)
         {
+            PictureBox = pictureBox;
             Message = message;
         }
 
-        public uEye.Defines.Status Init(int deviceId, PictureBox pictureBox)
+        public uEye.Defines.Status Init(int deviceId)
         {
             uEye.Defines.Status status;
             var id = deviceId | (Int32)uEye.Defines.DeviceEnumeration.UseDeviceID;
 
-            status = Camera.Init(id, pictureBox.Handle);
+            status = Camera.Init(id, PictureBox.Handle);
             if (status != uEye.Defines.Status.SUCCESS)
             {
                 Message.Show("Initializing the camera failed");
@@ -55,7 +57,7 @@ namespace NFUIRSL.HRTK.Vision
             uEye.Types.SensorInfo sensorInfo;
             Camera.Information.GetSensorInfo(out sensorInfo);
             SensorName = sensorInfo.SensorName;
-            pictureBox.SizeMode = PictureBoxSizeMode.Normal;
+            PictureBox.SizeMode = PictureBoxSizeMode.Normal;
             return status;
         }
 
