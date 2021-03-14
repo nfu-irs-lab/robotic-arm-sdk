@@ -47,7 +47,7 @@ namespace NFUIRSL.HRTK.Vision
             }
         }
 
-        public void OpenFreerun()
+        public void OpenFreeRun()
         {
             var status = Init();
             if (status == uEye.Defines.Status.SUCCESS)
@@ -62,6 +62,30 @@ namespace NFUIRSL.HRTK.Vision
                 {
                     // Everything is ok.
                     IsLive = true;
+                }
+            }
+
+            if (status != uEye.Defines.Status.SUCCESS && Camera.IsOpened)
+            {
+                Camera.Exit();
+            }
+        }
+        
+        public void StopFreeRun()
+        {
+            var status = Init();
+            if (status == uEye.Defines.Status.SUCCESS)
+            {
+                // Start Freeze.
+                status = Camera.Acquisition.Freeze();
+                if (status != uEye.Defines.Status.SUCCESS)
+                {
+                    Message.Show("Starting live video failed",LoggingLevel.Error);
+                }
+                else
+                {
+                    // Everything is ok.
+                    IsLive = false;
                 }
             }
 
