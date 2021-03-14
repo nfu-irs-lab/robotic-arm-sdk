@@ -45,7 +45,30 @@ namespace NFUIRSL.HRTK.Vision
             {
                 Message.Show(".NET Runtime Version 3.5.0 is required", LoggingLevel.Error);
             }
+        }
 
+        public void OpenFreerun()
+        {
+            var status = Init();
+            if (status == uEye.Defines.Status.SUCCESS)
+            {
+                // Start capture.
+                status = Camera.Acquisition.Capture();
+                if (status != uEye.Defines.Status.SUCCESS)
+                {
+                    Message.Show("Starting live video failed",LoggingLevel.Error);
+                }
+                else
+                {
+                    // Everything is ok.
+                    IsLive = true;
+                }
+            }
+
+            if (status != uEye.Defines.Status.SUCCESS && Camera.IsOpened)
+            {
+                Camera.Exit();
+            }
         }
 
         public void ChooseCamera()
@@ -118,8 +141,7 @@ namespace NFUIRSL.HRTK.Vision
             }
         }
 
-
-        public uEye.Defines.Status Init(int deviceId)
+        public uEye.Defines.Status Init()
         {
             if (Camera == null)
             {
@@ -127,7 +149,7 @@ namespace NFUIRSL.HRTK.Vision
             }
 
             uEye.Defines.Status status;
-            var id = deviceId | (Int32)uEye.Defines.DeviceEnumeration.UseDeviceID;
+            var id = DeviceId | (Int32)uEye.Defines.DeviceEnumeration.UseDeviceID;
 
             status = Camera.Init(id, PictureBox.Handle);
             if (status != uEye.Defines.Status.SUCCESS)
