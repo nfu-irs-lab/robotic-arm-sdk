@@ -62,6 +62,28 @@ namespace NFUIRSL.HRTK.Vision
         }
 
         private void FrameEvent(object sender, EventArgs e)
-        { }
+        {
+            var camera = sender as uEye.Camera;
+            if (camera.IsOpened)
+            {
+                uEye.Defines.DisplayMode mode;
+                camera.Display.Mode.Get(out mode);
+
+                if (mode == uEye.Defines.DisplayMode.DiB)
+                {
+                    Int32 memId;
+                    var status = camera.Memory.GetLast(out memId);
+                    if ((status == uEye.Defines.Status.SUCCESS) && 0 < memId)
+                    {
+                        if (camera.Memory.Lock(memId) == uEye.Defines.Status.SUCCESS)
+                        {
+                            camera.Display.Render(memId, RenderMode);
+                            camera.Memory.Unlock(memId);
+                        }
+                    }
+                }
+                ++FrameCount;
+            }
+        }
     }
 }
