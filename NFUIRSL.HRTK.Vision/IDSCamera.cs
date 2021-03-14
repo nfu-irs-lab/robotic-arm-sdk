@@ -15,6 +15,8 @@ namespace NFUIRSL.HRTK.Vision
         private PictureBox PictureBox;
         private Timer UpdateTimer;
 
+        public int DeviceId { get; private set; }
+        public int CameraId { get; private set; }
         public Boolean IsLive { get; private set; }
         public uEye.Defines.DisplayRenderMode RenderMode { get; private set; }
         public Int32 FrameCount { get; private set; }
@@ -32,7 +34,6 @@ namespace NFUIRSL.HRTK.Vision
                 PictureBox = pictureBox;
                 PictureBox.SizeMode = PictureBoxSizeMode.CenterImage;
 
-                Camera = new uEye.Camera();
                 IsLive = false;
                 RenderMode = uEye.Defines.DisplayRenderMode.FitToWindow;
 
@@ -45,6 +46,16 @@ namespace NFUIRSL.HRTK.Vision
                 Message.Show(".NET Runtime Version 3.5.0 is required", LoggingLevel.Error);
             }
 
+        }
+
+        public void ChooseCamera()
+        {
+            var chooseForm = new CameraChoose();
+            if (chooseForm.ShowDialog() == DialogResult.OK)
+            {
+                DeviceId = chooseForm.DeviceID;
+                CameraId = chooseForm.CameraID;
+            }
         }
 
         private bool CheckRuntimeVersion()
@@ -110,6 +121,11 @@ namespace NFUIRSL.HRTK.Vision
 
         public uEye.Defines.Status Init(int deviceId)
         {
+            if (Camera == null)
+            {
+                Camera = new uEye.Camera();
+            }
+
             uEye.Defines.Status status;
             var id = deviceId | (Int32)uEye.Defines.DeviceEnumeration.UseDeviceID;
 

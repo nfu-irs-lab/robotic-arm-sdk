@@ -33,6 +33,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -45,6 +46,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CameraChoose.cs" />
+    <Compile Include="CameraChoose.Designer.cs" />
     <Compile Include="IDSCamera.cs" />
     <Compile Include="MemoryHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -54,6 +57,11 @@
       <Project>{23165e8b-d3d9-465a-98b3-ad90e97909c3}</Project>
       <Name>NFUIRSL.HRTK</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="CameraChoose.resx">
+      <DependentUpon>CameraChoose.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
