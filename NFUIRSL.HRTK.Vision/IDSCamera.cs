@@ -32,6 +32,47 @@ namespace NFUIRSL.HRTK.Vision
         public string Failed { get; private set; }
         public string SensorName { get; private set; }
 
+        public bool AutoShutter
+        {
+            get
+            {
+                Camera.AutoFeatures.Software.Shutter.GetEnable(out bool enable);
+                return enable;
+            }
+
+            set
+            {
+                Camera.AutoFeatures.Software.Shutter.SetEnable(value);
+            }
+        }
+
+        public bool AutoWhiteBalance
+        {
+            get
+            {
+                Camera.AutoFeatures.Software.WhiteBalance.GetEnable(out bool enable);
+                return enable;
+            }
+
+            set
+            {
+                Camera.AutoFeatures.Software.WhiteBalance.SetEnable(value);
+            }
+        }
+        
+        public bool AutoGain
+        {
+            get
+            {
+                Camera.AutoFeatures.Software.Gain.GetEnable(out bool enable);
+                return enable;
+            }
+
+            set
+            {
+                Camera.AutoFeatures.Software.Gain.SetEnable(value);
+            }
+        }
 
         public IDSCamera(PictureBox pictureBox, IMessage message)
         {
@@ -127,7 +168,7 @@ namespace NFUIRSL.HRTK.Vision
             PictureBox.SizeMode = PictureBoxSizeMode.CenterImage;
             RenderMode = uEye.Defines.DisplayRenderMode.FitToWindow;
         }
-
+        
         public void ChooseCamera()
         {
             var chooseForm = new CameraChoose();
