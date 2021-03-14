@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace NFUIRSL.HRTK.Vision.TestForm
 {
-    public partial class VisionTestForm : Form
+    internal partial class VisionTestForm : Form
     {
         private IDSCamera Camera;
 
