@@ -49,6 +49,11 @@ namespace NFUIRSL.HRTK.Vision
             }
         }
 
+        ~IDSCamera()
+        {
+            Exit();
+        }
+
         public void OpenFreeRun()
         {
             var status = Init();
