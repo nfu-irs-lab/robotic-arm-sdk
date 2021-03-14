@@ -34,6 +34,8 @@ namespace NFUIRSL.HRTK.Vision
                 PictureBox = pictureBox;
                 PictureBox.SizeMode = PictureBoxSizeMode.CenterImage;
 
+                DeviceId = 1;
+                CameraId = 1;
                 IsLive = false;
                 RenderMode = uEye.Defines.DisplayRenderMode.FitToWindow;
 
