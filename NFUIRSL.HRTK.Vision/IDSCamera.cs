@@ -99,9 +99,7 @@ namespace NFUIRSL.HRTK.Vision
                     break;
 
                 default:
-                    func = () => uEye.Defines.Status.NO_SUCCESS;
-                    expectIsLive = false;
-                    break;
+                    return uEye.Defines.Status.NO_SUCCESS;
             }
 
             var status = func();
