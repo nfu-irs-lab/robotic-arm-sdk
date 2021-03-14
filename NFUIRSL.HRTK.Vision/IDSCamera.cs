@@ -16,6 +16,12 @@ namespace NFUIRSL.HRTK.Vision
         private Int32 FrameCount;
         private Timer UpdateTimer = new Timer();
         private uEye.Defines.DisplayRenderMode RenderMode;
+        private string SensorName;
+
+        public IDSCamera(IMessage message)
+        {
+            Message = message;
+        }
 
         public uEye.Defines.Status Init(int deviceId, PictureBox pictureBox)
         {
@@ -48,8 +54,8 @@ namespace NFUIRSL.HRTK.Vision
             UpdateTimer.Start();
             uEye.Types.SensorInfo sensorInfo;
             Camera.Information.GetSensorInfo(out sensorInfo);
+            SensorName = sensorInfo.SensorName;
             pictureBox.SizeMode = PictureBoxSizeMode.Normal;
-
             return status;
         }
 
