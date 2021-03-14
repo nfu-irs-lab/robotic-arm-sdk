@@ -245,7 +245,7 @@ namespace NFUIRSL.HRTK.Vision
             }
         }
 
-        public uEye.Defines.Status Init()
+        private uEye.Defines.Status Init()
         {
             if (Camera == null)
             {
