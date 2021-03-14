@@ -20,6 +20,11 @@ namespace NFUIRSL.HRTK.Vision.TestForm
             Camera = new IDSCamera(pictureBoxDisplay, new EmptyMessage());
         }
 
+        private void buttonCapModeSnapshot_Click(object sender, EventArgs e)
+        {
+            Camera.ChangeCaptureMode(CaptureMode.Snapshot);
+        }
+
         private void buttonChooseCamera_Click(object sender, EventArgs e)
         {
             Camera.ChooseCamera();
@@ -32,7 +37,14 @@ namespace NFUIRSL.HRTK.Vision.TestForm
 
         private void buttonOpenFreeRun_Click(object sender, EventArgs e)
         {
-            Camera.Open(CaptureMode.FreeRun, true);
+            var mode = radioButtonCapModeFreeRun.Checked ? CaptureMode.FreeRun : CaptureMode.Stop;
+            Camera.Open(mode, true);
+        }
+
+        private void radioButtonCapModeFreeRun_CheckedChanged(object sender, EventArgs e)
+        {
+            var mode = radioButtonCapModeFreeRun.Checked ? CaptureMode.FreeRun : CaptureMode.Stop;
+            Camera.ChangeCaptureMode(mode);
         }
     }
 }

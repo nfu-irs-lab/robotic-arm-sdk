@@ -34,9 +34,9 @@ namespace NFUIRSL.HRTK.Vision.TestForm
             this.buttonExit = new System.Windows.Forms.Button();
             this.buttonChooseCamera = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.radioButtonCapModeFreeRun = new System.Windows.Forms.RadioButton();
-            this.radioButtonCapModeStop = new System.Windows.Forms.RadioButton();
             this.buttonCapModeSnapshot = new System.Windows.Forms.Button();
+            this.radioButtonCapModeStop = new System.Windows.Forms.RadioButton();
+            this.radioButtonCapModeFreeRun = new System.Windows.Forms.RadioButton();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDisplay)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -91,17 +91,15 @@ namespace NFUIRSL.HRTK.Vision.TestForm
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Cap Mode";
             // 
-            // radioButtonCapModeFreeRun
+            // buttonCapModeSnapshot
             // 
-            this.radioButtonCapModeFreeRun.AutoSize = true;
-            this.radioButtonCapModeFreeRun.Checked = true;
-            this.radioButtonCapModeFreeRun.Location = new System.Drawing.Point(6, 24);
-            this.radioButtonCapModeFreeRun.Name = "radioButtonCapModeFreeRun";
-            this.radioButtonCapModeFreeRun.Size = new System.Drawing.Size(80, 19);
-            this.radioButtonCapModeFreeRun.TabIndex = 0;
-            this.radioButtonCapModeFreeRun.TabStop = true;
-            this.radioButtonCapModeFreeRun.Text = "Free Run";
-            this.radioButtonCapModeFreeRun.UseVisualStyleBackColor = true;
+            this.buttonCapModeSnapshot.Location = new System.Drawing.Point(26, 88);
+            this.buttonCapModeSnapshot.Name = "buttonCapModeSnapshot";
+            this.buttonCapModeSnapshot.Size = new System.Drawing.Size(86, 35);
+            this.buttonCapModeSnapshot.TabIndex = 1;
+            this.buttonCapModeSnapshot.Text = "Snapshot";
+            this.buttonCapModeSnapshot.UseVisualStyleBackColor = true;
+            this.buttonCapModeSnapshot.Click += new System.EventHandler(this.buttonCapModeSnapshot_Click);
             // 
             // radioButtonCapModeStop
             // 
@@ -113,14 +111,18 @@ namespace NFUIRSL.HRTK.Vision.TestForm
             this.radioButtonCapModeStop.Text = "Stop";
             this.radioButtonCapModeStop.UseVisualStyleBackColor = true;
             // 
-            // buttonCapModeSnapshot
+            // radioButtonCapModeFreeRun
             // 
-            this.buttonCapModeSnapshot.Location = new System.Drawing.Point(26, 88);
-            this.buttonCapModeSnapshot.Name = "buttonCapModeSnapshot";
-            this.buttonCapModeSnapshot.Size = new System.Drawing.Size(86, 35);
-            this.buttonCapModeSnapshot.TabIndex = 1;
-            this.buttonCapModeSnapshot.Text = "Snapshot";
-            this.buttonCapModeSnapshot.UseVisualStyleBackColor = true;
+            this.radioButtonCapModeFreeRun.AutoSize = true;
+            this.radioButtonCapModeFreeRun.Checked = true;
+            this.radioButtonCapModeFreeRun.Location = new System.Drawing.Point(6, 24);
+            this.radioButtonCapModeFreeRun.Name = "radioButtonCapModeFreeRun";
+            this.radioButtonCapModeFreeRun.Size = new System.Drawing.Size(80, 19);
+            this.radioButtonCapModeFreeRun.TabIndex = 0;
+            this.radioButtonCapModeFreeRun.TabStop = true;
+            this.radioButtonCapModeFreeRun.Text = "Free Run";
+            this.radioButtonCapModeFreeRun.UseVisualStyleBackColor = true;
+            this.radioButtonCapModeFreeRun.CheckedChanged += new System.EventHandler(this.radioButtonCapModeFreeRun_CheckedChanged);
             // 
             // VisionTestForm
             // 
