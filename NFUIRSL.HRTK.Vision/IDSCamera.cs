@@ -181,6 +181,8 @@ namespace NFUIRSL.HRTK.Vision
             if (Camera != null)
             {
                 var settingForm = new SettingsForm(Camera);
+                settingForm.SizeControl.AOIChanged += OnDisplayChanged;
+                settingForm.FormatControl.DisplayChanged += OnDisplayChanged;
                 settingForm.ShowDialog();
             }
             else
@@ -315,6 +317,58 @@ namespace NFUIRSL.HRTK.Vision
                 ++FrameCount;
             }
         }
+        
+        private void OnDisplayChanged(object sender, EventArgs e)
+        {
+            uEye.Defines.DisplayMode displayMode;
+            Camera.Display.Mode.Get(out displayMode);
+
+            // set scaling options
+            if (displayMode != uEye.Defines.DisplayMode.DiB)
+            {
+                if (RenderMode == uEye.Defines.DisplayRenderMode.DownScale_1_2)
+                {
+                    RenderMode = uEye.Defines.DisplayRenderMode.Normal;
+
+                    PictureBox.Anchor = AnchorStyles.Top | AnchorStyles.Left;
+
+                    // get image size
+                    System.Drawing.Rectangle rect;
+                    Camera.Size.AOI.Get(out rect);
+
+                    PictureBox.Width = rect.Width;
+                    PictureBox.Height = rect.Height;
+                }
+                else
+                {
+                    Camera.DirectRenderer.SetScaling(RenderMode == uEye.Defines.DisplayRenderMode.FitToWindow);
+                }
+            }
+            else
+            {
+                if (RenderMode != uEye.Defines.DisplayRenderMode.FitToWindow)
+                {
+                    PictureBox.Anchor = AnchorStyles.Top | AnchorStyles.Left;
+
+                    // get image size
+                    System.Drawing.Rectangle rect;
+                    Camera.Size.AOI.Get(out rect);
+
+                    if (RenderMode != uEye.Defines.DisplayRenderMode.Normal)
+                    {
+
+                        PictureBox.Width = rect.Width / 2;
+                        PictureBox.Height = rect.Height / 2;
+                    }
+                    else
+                    {
+                        PictureBox.Width = rect.Width;
+                        PictureBox.Height = rect.Height;
+                    }
+                }
+            }
+        }
+
 
         private void UpdateControls(object sender, EventArgs e)
         {
