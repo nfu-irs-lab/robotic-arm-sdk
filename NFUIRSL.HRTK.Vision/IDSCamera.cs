@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using uEye.Types;
 
 namespace NFUIRSL.HRTK.Vision
 {
@@ -14,10 +13,10 @@ namespace NFUIRSL.HRTK.Vision
         private IMessage Message;
         private const int CnNumberOfSeqBuffers = 3;
         private PictureBox PictureBox;
-        private Timer UpdateTimer = new Timer();
+        private Timer UpdateTimer;
 
         public Boolean IsLive { get; private set; }
-        public uEye.Defines.DisplayRenderMode RenderMode { get; private set; } = uEye.Defines.DisplayRenderMode.FitToWindow;
+        public uEye.Defines.DisplayRenderMode RenderMode { get; private set; }
         public Int32 FrameCount { get; private set; }
         public double Fps { get; private set; }
         public string Failed { get; private set; }
@@ -26,9 +25,17 @@ namespace NFUIRSL.HRTK.Vision
 
         public IDSCamera(PictureBox pictureBox, IMessage message)
         {
-            PictureBox = pictureBox;
             Message = message;
+            
+            PictureBox = pictureBox;
+            PictureBox.SizeMode = PictureBoxSizeMode.CenterImage;
 
+            Camera = new uEye.Camera();
+            IsLive = false;
+            RenderMode = uEye.Defines.DisplayRenderMode.FitToWindow;
+
+            UpdateTimer = new Timer();
+            UpdateTimer.Interval = 100;
             UpdateTimer.Tick += UpdateControls;
         }
 
