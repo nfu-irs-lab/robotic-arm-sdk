@@ -40,10 +40,7 @@ namespace NFUIRSL.HRTK.Vision
                 return enable;
             }
 
-            set
-            {
-                Camera.AutoFeatures.Software.Shutter.SetEnable(value);
-            }
+            set { Camera.AutoFeatures.Software.Shutter.SetEnable(value); }
         }
 
         public bool AutoWhiteBalance
@@ -54,12 +51,9 @@ namespace NFUIRSL.HRTK.Vision
                 return enable;
             }
 
-            set
-            {
-                Camera.AutoFeatures.Software.WhiteBalance.SetEnable(value);
-            }
+            set { Camera.AutoFeatures.Software.WhiteBalance.SetEnable(value); }
         }
-        
+
         public bool AutoGain
         {
             get
@@ -68,10 +62,7 @@ namespace NFUIRSL.HRTK.Vision
                 return enable;
             }
 
-            set
-            {
-                Camera.AutoFeatures.Software.Gain.SetEnable(value);
-            }
+            set { Camera.AutoFeatures.Software.Gain.SetEnable(value); }
         }
 
         public IDSCamera(PictureBox pictureBox, IMessage message)
@@ -174,7 +165,7 @@ namespace NFUIRSL.HRTK.Vision
             PictureBox.SizeMode = PictureBoxSizeMode.CenterImage;
             RenderMode = uEye.Defines.DisplayRenderMode.FitToWindow;
         }
-        
+
         public void ChooseCamera()
         {
             var chooseForm = new CameraChoose();
@@ -187,8 +178,15 @@ namespace NFUIRSL.HRTK.Vision
 
         public void ShowSettingForm()
         {
-            var settingForm = new SettingsForm(Camera);
-            settingForm.ShowDialog();
+            if (Camera != null)
+            {
+                var settingForm = new SettingsForm(Camera);
+                settingForm.ShowDialog();
+            }
+            else
+            {
+                Message.Show("Camera never initialization.", LoggingLevel.Warn);
+            }
         }
 
         private bool CheckRuntimeVersion()
