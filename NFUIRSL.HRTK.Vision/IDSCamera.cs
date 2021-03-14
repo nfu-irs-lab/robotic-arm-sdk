@@ -25,19 +25,88 @@ namespace NFUIRSL.HRTK.Vision
 
         public IDSCamera(PictureBox pictureBox, IMessage message)
         {
-            Message = message;
-            
-            PictureBox = pictureBox;
-            PictureBox.SizeMode = PictureBoxSizeMode.CenterImage;
+            if (CheckRuntimeVersion())
+            {
+                Message = message;
 
-            Camera = new uEye.Camera();
-            IsLive = false;
-            RenderMode = uEye.Defines.DisplayRenderMode.FitToWindow;
+                PictureBox = pictureBox;
+                PictureBox.SizeMode = PictureBoxSizeMode.CenterImage;
 
-            UpdateTimer = new Timer();
-            UpdateTimer.Interval = 100;
-            UpdateTimer.Tick += UpdateControls;
+                Camera = new uEye.Camera();
+                IsLive = false;
+                RenderMode = uEye.Defines.DisplayRenderMode.FitToWindow;
+
+                UpdateTimer = new Timer();
+                UpdateTimer.Interval = 100;
+                UpdateTimer.Tick += UpdateControls;
+            }
+            else
+            {
+                Message.Show(".NET Runtime Version 3.5.0 is required", LoggingLevel.Error);
+            }
+
         }
+
+        private bool CheckRuntimeVersion()
+        {
+            var versionMin = new Version(3, 5);
+            var ok = false;
+
+            foreach (Version version in InstalledDotNetVersions())
+            {
+                if (version >= versionMin)
+                {
+                    ok = true;
+                    break;
+                }
+            }
+
+            return ok;
+        }
+
+        private System.Collections.ObjectModel.Collection<Version> InstalledDotNetVersions()
+        {
+            var versions = new System.Collections.ObjectModel.Collection<Version>();
+            var NDPKey = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\NET Framework Setup\NDP");
+            if (NDPKey != null)
+            {
+                string[] subkeys = NDPKey.GetSubKeyNames();
+                foreach (string subkey in subkeys)
+                {
+                    GetDotNetVersion(NDPKey.OpenSubKey(subkey), subkey, versions);
+                    GetDotNetVersion(NDPKey.OpenSubKey(subkey).OpenSubKey("Client"), subkey, versions);
+                    GetDotNetVersion(NDPKey.OpenSubKey(subkey).OpenSubKey("Full"), subkey, versions);
+                }
+            }
+            return versions;
+        }
+
+        private void GetDotNetVersion(Microsoft.Win32.RegistryKey parentKey,
+                                      string subVersionName,
+                                      System.Collections.ObjectModel.Collection<Version> versions)
+        {
+            if (parentKey != null)
+            {
+                string installed = Convert.ToString(parentKey.GetValue("Install"));
+                if (installed == "1")
+                {
+                    string version = Convert.ToString(parentKey.GetValue("Version"));
+                    if (string.IsNullOrEmpty(version))
+                    {
+                        if (subVersionName.StartsWith("v"))
+                            version = subVersionName.Substring(1);
+                        else
+                            version = subVersionName;
+                    }
+
+                    Version ver = new Version(version);
+
+                    if (!versions.Contains(ver))
+                        versions.Add(ver);
+                }
+            }
+        }
+
 
         public uEye.Defines.Status Init(int deviceId)
         {
