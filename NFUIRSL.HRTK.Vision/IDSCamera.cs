@@ -71,6 +71,19 @@ namespace NFUIRSL.HRTK.Vision
             }
         }
 
+        public void Exit()
+        {
+            UpdateTimer.Stop();
+            IsLive = false;
+            
+            Camera.EventFrame -= FrameEvent;
+            Camera.Exit();
+            
+            PictureBox.Invalidate();
+            PictureBox.SizeMode = PictureBoxSizeMode.CenterImage;
+            RenderMode = uEye.Defines.DisplayRenderMode.FitToWindow;
+        }
+        
         public void ChooseCamera()
         {
             var chooseForm = new CameraChoose();
