@@ -15,7 +15,7 @@ namespace NFUIRSL.HRTK.Vision
         private Boolean IsLive;
         private Int32 FrameCount;
         private Timer UpdateTimer = new Timer();
-        private uEye.Defines.DisplayRenderMode RenderMode;
+        private uEye.Defines.DisplayRenderMode RenderMode = uEye.Defines.DisplayRenderMode.FitToWindow;
         private string SensorName;
         private PictureBox PictureBox;
 
@@ -69,6 +69,7 @@ namespace NFUIRSL.HRTK.Vision
                 uEye.Defines.DisplayMode mode;
                 camera.Display.Mode.Get(out mode);
 
+                // Only display in DiB mode.
                 if (mode == uEye.Defines.DisplayMode.DiB)
                 {
                     Int32 memId;
