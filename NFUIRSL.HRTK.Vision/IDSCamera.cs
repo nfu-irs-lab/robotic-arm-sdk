@@ -103,7 +103,7 @@ namespace NFUIRSL.HRTK.Vision
             Exit();
         }
 
-        public void Open(CaptureMode captureMode = CaptureMode.FreeRun)
+        public void Open(CaptureMode captureMode = CaptureMode.FreeRun, bool autoFeatures = true)
         {
             var status = Init();
             if (status == uEye.Defines.Status.SUCCESS)
@@ -114,6 +114,12 @@ namespace NFUIRSL.HRTK.Vision
             if (status != uEye.Defines.Status.SUCCESS && Camera.IsOpened)
             {
                 Camera.Exit();
+            }
+            else
+            {
+                AutoGain = autoFeatures;
+                AutoShutter = autoFeatures;
+                AutoWhiteBalance = autoFeatures;
             }
         }
 
