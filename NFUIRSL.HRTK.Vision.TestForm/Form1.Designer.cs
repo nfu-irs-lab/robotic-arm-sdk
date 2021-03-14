@@ -31,15 +31,19 @@ namespace NFUIRSL.HRTK.Vision.TestForm
         {
             this.pictureBoxDisplay = new System.Windows.Forms.PictureBox();
             this.buttonOpenFreeRun = new System.Windows.Forms.Button();
-            this.buttonStopFreeRun = new System.Windows.Forms.Button();
             this.buttonExit = new System.Windows.Forms.Button();
             this.buttonChooseCamera = new System.Windows.Forms.Button();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.radioButtonCapModeFreeRun = new System.Windows.Forms.RadioButton();
+            this.radioButtonCapModeStop = new System.Windows.Forms.RadioButton();
+            this.buttonCapModeSnapshot = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDisplay)).BeginInit();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // pictureBoxDisplay
             // 
-            this.pictureBoxDisplay.Location = new System.Drawing.Point(53, 23);
+            this.pictureBoxDisplay.Location = new System.Drawing.Point(28, 12);
             this.pictureBoxDisplay.Name = "pictureBoxDisplay";
             this.pictureBoxDisplay.Size = new System.Drawing.Size(607, 305);
             this.pictureBoxDisplay.TabIndex = 0;
@@ -47,7 +51,7 @@ namespace NFUIRSL.HRTK.Vision.TestForm
             // 
             // buttonOpenFreeRun
             // 
-            this.buttonOpenFreeRun.Location = new System.Drawing.Point(103, 359);
+            this.buttonOpenFreeRun.Location = new System.Drawing.Point(28, 359);
             this.buttonOpenFreeRun.Name = "buttonOpenFreeRun";
             this.buttonOpenFreeRun.Size = new System.Drawing.Size(88, 30);
             this.buttonOpenFreeRun.TabIndex = 1;
@@ -55,19 +59,9 @@ namespace NFUIRSL.HRTK.Vision.TestForm
             this.buttonOpenFreeRun.UseVisualStyleBackColor = true;
             this.buttonOpenFreeRun.Click += new System.EventHandler(this.buttonOpenFreeRun_Click);
             // 
-            // buttonStopFreeRun
-            // 
-            this.buttonStopFreeRun.Location = new System.Drawing.Point(242, 359);
-            this.buttonStopFreeRun.Name = "buttonStopFreeRun";
-            this.buttonStopFreeRun.Size = new System.Drawing.Size(88, 30);
-            this.buttonStopFreeRun.TabIndex = 1;
-            this.buttonStopFreeRun.Text = "Stop";
-            this.buttonStopFreeRun.UseVisualStyleBackColor = true;
-            this.buttonStopFreeRun.Click += new System.EventHandler(this.buttonStopFreeRun_Click);
-            // 
             // buttonExit
             // 
-            this.buttonExit.Location = new System.Drawing.Point(359, 359);
+            this.buttonExit.Location = new System.Drawing.Point(28, 395);
             this.buttonExit.Name = "buttonExit";
             this.buttonExit.Size = new System.Drawing.Size(88, 30);
             this.buttonExit.TabIndex = 1;
@@ -77,7 +71,7 @@ namespace NFUIRSL.HRTK.Vision.TestForm
             // 
             // buttonChooseCamera
             // 
-            this.buttonChooseCamera.Location = new System.Drawing.Point(488, 359);
+            this.buttonChooseCamera.Location = new System.Drawing.Point(28, 323);
             this.buttonChooseCamera.Name = "buttonChooseCamera";
             this.buttonChooseCamera.Size = new System.Drawing.Size(88, 30);
             this.buttonChooseCamera.TabIndex = 1;
@@ -85,19 +79,64 @@ namespace NFUIRSL.HRTK.Vision.TestForm
             this.buttonChooseCamera.UseVisualStyleBackColor = true;
             this.buttonChooseCamera.Click += new System.EventHandler(this.buttonChooseCamera_Click);
             // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.buttonCapModeSnapshot);
+            this.groupBox1.Controls.Add(this.radioButtonCapModeStop);
+            this.groupBox1.Controls.Add(this.radioButtonCapModeFreeRun);
+            this.groupBox1.Location = new System.Drawing.Point(122, 323);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(135, 133);
+            this.groupBox1.TabIndex = 2;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Cap Mode";
+            // 
+            // radioButtonCapModeFreeRun
+            // 
+            this.radioButtonCapModeFreeRun.AutoSize = true;
+            this.radioButtonCapModeFreeRun.Checked = true;
+            this.radioButtonCapModeFreeRun.Location = new System.Drawing.Point(6, 24);
+            this.radioButtonCapModeFreeRun.Name = "radioButtonCapModeFreeRun";
+            this.radioButtonCapModeFreeRun.Size = new System.Drawing.Size(80, 19);
+            this.radioButtonCapModeFreeRun.TabIndex = 0;
+            this.radioButtonCapModeFreeRun.TabStop = true;
+            this.radioButtonCapModeFreeRun.Text = "Free Run";
+            this.radioButtonCapModeFreeRun.UseVisualStyleBackColor = true;
+            // 
+            // radioButtonCapModeStop
+            // 
+            this.radioButtonCapModeStop.AutoSize = true;
+            this.radioButtonCapModeStop.Location = new System.Drawing.Point(6, 49);
+            this.radioButtonCapModeStop.Name = "radioButtonCapModeStop";
+            this.radioButtonCapModeStop.Size = new System.Drawing.Size(54, 19);
+            this.radioButtonCapModeStop.TabIndex = 0;
+            this.radioButtonCapModeStop.Text = "Stop";
+            this.radioButtonCapModeStop.UseVisualStyleBackColor = true;
+            // 
+            // buttonCapModeSnapshot
+            // 
+            this.buttonCapModeSnapshot.Location = new System.Drawing.Point(26, 88);
+            this.buttonCapModeSnapshot.Name = "buttonCapModeSnapshot";
+            this.buttonCapModeSnapshot.Size = new System.Drawing.Size(86, 35);
+            this.buttonCapModeSnapshot.TabIndex = 1;
+            this.buttonCapModeSnapshot.Text = "Snapshot";
+            this.buttonCapModeSnapshot.UseVisualStyleBackColor = true;
+            // 
             // VisionTestForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(940, 622);
+            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.buttonChooseCamera);
             this.Controls.Add(this.buttonExit);
-            this.Controls.Add(this.buttonStopFreeRun);
             this.Controls.Add(this.buttonOpenFreeRun);
             this.Controls.Add(this.pictureBoxDisplay);
             this.Name = "VisionTestForm";
             this.Text = "Vision Test";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDisplay)).EndInit();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -106,9 +145,12 @@ namespace NFUIRSL.HRTK.Vision.TestForm
 
         private System.Windows.Forms.PictureBox pictureBoxDisplay;
         private System.Windows.Forms.Button buttonOpenFreeRun;
-        private System.Windows.Forms.Button buttonStopFreeRun;
         private System.Windows.Forms.Button buttonExit;
         private System.Windows.Forms.Button buttonChooseCamera;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.RadioButton radioButtonCapModeStop;
+        private System.Windows.Forms.RadioButton radioButtonCapModeFreeRun;
+        private System.Windows.Forms.Button buttonCapModeSnapshot;
     }
 }
 

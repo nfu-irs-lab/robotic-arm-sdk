@@ -32,12 +32,7 @@ namespace NFUIRSL.HRTK.Vision.TestForm
 
         private void buttonOpenFreeRun_Click(object sender, EventArgs e)
         {
-            Camera.Open(CaptureMode.Snapshot);
-        }
-
-        private void buttonStopFreeRun_Click(object sender, EventArgs e)
-        {
-            Camera.Open(CaptureMode.FreeRun);
+            Camera.Open(CaptureMode.FreeRun, true);
         }
     }
 }
