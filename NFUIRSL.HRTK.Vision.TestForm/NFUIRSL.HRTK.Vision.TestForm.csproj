@@ -79,5 +79,15 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NFUIRSL.HRTK.Vision\NFUIRSL.HRTK.Vision.csproj">
+      <Project>{a55315ed-7dfb-47fa-8340-d1195ed73626}</Project>
+      <Name>NFUIRSL.HRTK.Vision</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NFUIRSL.HRTK\NFUIRSL.HRTK.csproj">
+      <Project>{23165e8b-d3d9-465a-98b3-ad90e97909c3}</Project>
+      <Name>NFUIRSL.HRTK</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

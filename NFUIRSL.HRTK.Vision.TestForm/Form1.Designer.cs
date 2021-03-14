@@ -1,7 +1,7 @@
 ﻿
 namespace NFUIRSL.HRTK.Vision.TestForm
 {
-    partial class Form1
+    partial class VisionTestForm
     {
         /// <summary>
         /// Required designer variable.
@@ -53,6 +53,7 @@ namespace NFUIRSL.HRTK.Vision.TestForm
             this.buttonOpenFreeRun.TabIndex = 1;
             this.buttonOpenFreeRun.Text = "Open";
             this.buttonOpenFreeRun.UseVisualStyleBackColor = true;
+            this.buttonOpenFreeRun.Click += new System.EventHandler(this.buttonOpenFreeRun_Click);
             // 
             // buttonStopFreeRun
             // 
@@ -62,6 +63,7 @@ namespace NFUIRSL.HRTK.Vision.TestForm
             this.buttonStopFreeRun.TabIndex = 1;
             this.buttonStopFreeRun.Text = "Stop";
             this.buttonStopFreeRun.UseVisualStyleBackColor = true;
+            this.buttonStopFreeRun.Click += new System.EventHandler(this.buttonStopFreeRun_Click);
             // 
             // buttonExit
             // 
@@ -71,6 +73,7 @@ namespace NFUIRSL.HRTK.Vision.TestForm
             this.buttonExit.TabIndex = 1;
             this.buttonExit.Text = "Exit";
             this.buttonExit.UseVisualStyleBackColor = true;
+            this.buttonExit.Click += new System.EventHandler(this.buttonExit_Click);
             // 
             // buttonChooseCamera
             // 
@@ -80,8 +83,9 @@ namespace NFUIRSL.HRTK.Vision.TestForm
             this.buttonChooseCamera.TabIndex = 1;
             this.buttonChooseCamera.Text = "Choose";
             this.buttonChooseCamera.UseVisualStyleBackColor = true;
+            this.buttonChooseCamera.Click += new System.EventHandler(this.buttonChooseCamera_Click);
             // 
-            // Form1
+            // VisionTestForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -91,8 +95,8 @@ namespace NFUIRSL.HRTK.Vision.TestForm
             this.Controls.Add(this.buttonStopFreeRun);
             this.Controls.Add(this.buttonOpenFreeRun);
             this.Controls.Add(this.pictureBoxDisplay);
-            this.Name = "Form1";
-            this.Text = "Form1";
+            this.Name = "VisionTestForm";
+            this.Text = "Vision Test";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDisplay)).EndInit();
             this.ResumeLayout(false);
 
