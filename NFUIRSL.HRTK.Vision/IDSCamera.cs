@@ -4,9 +4,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using uEye.Defines;
 
 namespace NFUIRSL.HRTK.Vision
 {
+    public enum CaptureMode
+    {
+        FreeRun,
+        Stop,
+        Snapshot
+    }
+
     public class IDSCamera
     {
         private uEye.Camera Camera;
@@ -54,22 +62,12 @@ namespace NFUIRSL.HRTK.Vision
             Exit();
         }
 
-        public void OpenFreeRun()
+        public void Open(CaptureMode captureMode = CaptureMode.FreeRun)
         {
             var status = Init();
             if (status == uEye.Defines.Status.SUCCESS)
             {
-                // Start capture.
-                status = Camera.Acquisition.Capture();
-                if (status != uEye.Defines.Status.SUCCESS)
-                {
-                    Message.Show("Starting live video failed",LoggingLevel.Error);
-                }
-                else
-                {
-                    // Everything is ok.
-                    IsLive = true;
-                }
+                status = ChangeCaptureMode(captureMode);
             }
 
             if (status != uEye.Defines.Status.SUCCESS && Camera.IsOpened)
@@ -77,44 +75,61 @@ namespace NFUIRSL.HRTK.Vision
                 Camera.Exit();
             }
         }
-        
-        public void StopFreeRun()
+
+        public uEye.Defines.Status ChangeCaptureMode(CaptureMode captureMode)
         {
-            var status = Init();
-            if (status == uEye.Defines.Status.SUCCESS)
+            Func<uEye.Defines.Status> func;
+            bool expectIsLive;
+
+            switch (captureMode)
             {
-                // Start Freeze.
-                status = Camera.Acquisition.Freeze();
-                if (status != uEye.Defines.Status.SUCCESS)
-                {
-                    Message.Show("Starting live video failed",LoggingLevel.Error);
-                }
-                else
-                {
-                    // Everything is ok.
-                    IsLive = false;
-                }
+                case CaptureMode.FreeRun:
+                    func = Camera.Acquisition.Capture;
+                    expectIsLive = true;
+                    break;
+
+                case CaptureMode.Stop:
+                    func = Camera.Acquisition.Stop;
+                    expectIsLive = false;
+                    break;
+
+                case CaptureMode.Snapshot:
+                    func = Camera.Acquisition.Freeze;
+                    expectIsLive = false;
+                    break;
+
+                default:
+                    func = () => uEye.Defines.Status.NO_SUCCESS;
+                    expectIsLive = false;
+                    break;
             }
 
-            if (status != uEye.Defines.Status.SUCCESS && Camera.IsOpened)
+            var status = func();
+            if (status != uEye.Defines.Status.SUCCESS)
             {
-                Camera.Exit();
+                Message.Show("Starting live video failed", LoggingLevel.Error);
             }
+            else
+            {
+                // Everything is ok.
+                IsLive = expectIsLive;
+            }
+            return status;
         }
 
         public void Exit()
         {
             UpdateTimer.Stop();
             IsLive = false;
-            
+
             Camera.EventFrame -= FrameEvent;
             Camera.Exit();
-            
+
             PictureBox.Invalidate();
             PictureBox.SizeMode = PictureBoxSizeMode.CenterImage;
             RenderMode = uEye.Defines.DisplayRenderMode.FitToWindow;
         }
-        
+
         public void ChooseCamera()
         {
             var chooseForm = new CameraChoose();
