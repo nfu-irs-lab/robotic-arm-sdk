@@ -4,20 +4,25 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using uEye.Types;
 
 namespace NFUIRSL.HRTK.Vision
 {
     public class IDSCamera
     {
         private uEye.Camera Camera;
-        private IMessage Message = null;
+        private IMessage Message;
         private const int CnNumberOfSeqBuffers = 3;
-        private Boolean IsLive;
-        private Int32 FrameCount;
-        private Timer UpdateTimer = new Timer();
-        private uEye.Defines.DisplayRenderMode RenderMode = uEye.Defines.DisplayRenderMode.FitToWindow;
-        private string SensorName;
         private PictureBox PictureBox;
+        private Timer UpdateTimer = new Timer();
+
+        public Boolean IsLive { get; private set; }
+        public uEye.Defines.DisplayRenderMode RenderMode { get; private set; } = uEye.Defines.DisplayRenderMode.FitToWindow;
+        public Int32 FrameCount { get; private set; }
+        public double Fps { get; private set; }
+        public string Failed { get; private set; }
+        public string SensorName { get; private set; }
+
 
         public IDSCamera(PictureBox pictureBox, IMessage message)
         {
@@ -84,6 +89,18 @@ namespace NFUIRSL.HRTK.Vision
                     }
                 }
                 ++FrameCount;
+            }
+        }
+
+        private void UpdateControls(object sender, EventArgs e)
+        {
+            Camera.Timing.Framerate.GetCurrentFps(out var frameRate);
+            Fps = frameRate;
+
+            Camera.Information.GetCaptureStatus(out var captureStatus);
+            if (null != captureStatus)
+            {
+                Failed = "" + captureStatus.Total;
             }
         }
     }
