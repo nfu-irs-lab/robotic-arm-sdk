@@ -41,6 +41,11 @@ namespace NFUIRSL.HRTK.Vision.TestForm
             Camera.Open(mode, true);
         }
 
+        private void buttonShowSettingForm_Click(object sender, EventArgs e)
+        {
+            Camera.ShowSettingForm();
+        }
+
         private void radioButtonCapModeFreeRun_CheckedChanged(object sender, EventArgs e)
         {
             var mode = radioButtonCapModeFreeRun.Checked ? CaptureMode.FreeRun : CaptureMode.Stop;

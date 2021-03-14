@@ -37,6 +37,7 @@ namespace NFUIRSL.HRTK.Vision.TestForm
             this.buttonCapModeSnapshot = new System.Windows.Forms.Button();
             this.radioButtonCapModeStop = new System.Windows.Forms.RadioButton();
             this.radioButtonCapModeFreeRun = new System.Windows.Forms.RadioButton();
+            this.buttonShowSettingForm = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDisplay)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -124,11 +125,22 @@ namespace NFUIRSL.HRTK.Vision.TestForm
             this.radioButtonCapModeFreeRun.UseVisualStyleBackColor = true;
             this.radioButtonCapModeFreeRun.CheckedChanged += new System.EventHandler(this.radioButtonCapModeFreeRun_CheckedChanged);
             // 
+            // buttonShowSettingForm
+            // 
+            this.buttonShowSettingForm.Location = new System.Drawing.Point(46, 466);
+            this.buttonShowSettingForm.Name = "buttonShowSettingForm";
+            this.buttonShowSettingForm.Size = new System.Drawing.Size(75, 23);
+            this.buttonShowSettingForm.TabIndex = 3;
+            this.buttonShowSettingForm.Text = "Setting";
+            this.buttonShowSettingForm.UseVisualStyleBackColor = true;
+            this.buttonShowSettingForm.Click += new System.EventHandler(this.buttonShowSettingForm_Click);
+            // 
             // VisionTestForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(940, 622);
+            this.Controls.Add(this.buttonShowSettingForm);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.buttonChooseCamera);
             this.Controls.Add(this.buttonExit);
@@ -153,6 +165,7 @@ namespace NFUIRSL.HRTK.Vision.TestForm
         private System.Windows.Forms.RadioButton radioButtonCapModeStop;
         private System.Windows.Forms.RadioButton radioButtonCapModeFreeRun;
         private System.Windows.Forms.Button buttonCapModeSnapshot;
+        private System.Windows.Forms.Button buttonShowSettingForm;
     }
 }
 

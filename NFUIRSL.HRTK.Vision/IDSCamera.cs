@@ -185,6 +185,12 @@ namespace NFUIRSL.HRTK.Vision
             }
         }
 
+        public void ShowSettingForm()
+        {
+            var settingForm = new SettingsForm(Camera);
+            settingForm.ShowDialog();
+        }
+
         private bool CheckRuntimeVersion()
         {
             var versionMin = new Version(3, 5);
