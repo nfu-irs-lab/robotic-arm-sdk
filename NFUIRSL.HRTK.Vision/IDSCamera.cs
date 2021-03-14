@@ -28,6 +28,8 @@ namespace NFUIRSL.HRTK.Vision
         {
             PictureBox = pictureBox;
             Message = message;
+
+            UpdateTimer.Tick += UpdateControls;
         }
 
         public uEye.Defines.Status Init(int deviceId)
