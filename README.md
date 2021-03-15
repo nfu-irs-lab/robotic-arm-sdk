@@ -7,8 +7,8 @@
 # 各 Project 功能
 - NFUIRSL.HRTK：主要函式庫。
 - NFUIRSL.HRTK.Vision：視覺系統函式庫。
-- NFUIRSL.HRTK.UnitTests：「NFUIRSL.HRTK」的單元測試。
-- NFUIRSL.HRTK.Vision.TestForm：「NFUIRSL.HRTK.Vision」的測試用視窗程式。
+- NFUIRSL.HRTK.UnitTests：「NFUIRSL.HRTK」的單元測試。不會封裝發行。
+- NFUIRSL.HRTK.Vision.TestForm：「NFUIRSL.HRTK.Vision」的測試用視窗程式。不會封裝發行。
 
 # 其它資源
 - HIWIN 相關文件：[nfu-irs-lab/docs/others/hiwin.md](https://github.com/nfu-irs-lab/docs/blob/main/others/hiwin.md)
