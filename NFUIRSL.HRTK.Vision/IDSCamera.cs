@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -188,6 +189,17 @@ namespace NFUIRSL.HRTK.Vision
             {
                 Message.Show("Camera never initialization.", LoggingLevel.Warn);
             }
+        }
+
+        public Bitmap GetImage()
+        {
+            Bitmap img = null;
+            if (Camera != null)
+            {
+                Camera.Memory.GetLast(out int memoryId);
+                Camera.Memory.ToBitmap(memoryId, out img);
+            }
+            return img;
         }
 
         private bool CheckRuntimeVersion()
