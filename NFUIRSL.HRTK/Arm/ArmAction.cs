@@ -4,31 +4,68 @@ using SDKHrobot;
 
 namespace NFUIRSL.HRTK
 {
+    /// <summary>
+    /// A action of arm.
+    /// </summary>
     public interface IArmAction
     {
+        /// <summary>
+        /// The message of this action.
+        /// </summary>
         string Message { get; }
+
+        /// <summary>
+        /// Enable wait for arm motion complete.
+        /// </summary>
         bool NeedWait { get; set; }
+
+        /// <summary>
+        /// The ID of arm.
+        /// </summary>
         int ArmId { get; set; }
 
+        /// <summary>
+        /// Do the action.
+        /// </summary>
+        /// <returns>Success</returns>
         bool Do();
     }
 
+    /// <summary>
+    /// A motion type of arm.
+    /// </summary>
     public abstract class ArmMotion : IArmAction
     {
-        public ArmMotion(double xj1,
-                         double yj2,
-                         double zj3,
-                         double aj4,
-                         double bj5,
-                         double cj6)
+        protected int SmoothTypeCode;
+
+        protected ArmMotion(double xJ1,
+                            double yJ2,
+                            double zJ3,
+                            double aJ4,
+                            double bJ5,
+                            double cJ6)
         {
-            Position[0] = xj1;
-            Position[1] = yj2;
-            Position[2] = zj3;
-            Position[3] = aj4;
-            Position[4] = bj5;
-            Position[5] = cj6;
+            Position[0] = xJ1;
+            Position[1] = yJ2;
+            Position[2] = zJ3;
+            Position[3] = aJ4;
+            Position[4] = bJ5;
+            Position[5] = cJ6;
         }
+
+        protected ArmMotion(double[] position)
+        {
+            Position = position;
+        }
+
+        public CoordinateType CoordinateType { get; set; } = CoordinateType.Descartes;
+        public PositionType PositionType { get; set; } = PositionType.Absolute;
+        public SmoothType SmoothType { get; set; } = SmoothType.TwoLinesSpeedSmooth;
+
+        /// <summary>
+        /// Target position.
+        /// </summary>
+        public double[] Position { get; } = new double[6];
 
         public virtual string Message
         {
@@ -36,12 +73,7 @@ namespace NFUIRSL.HRTK
         }
 
         public int ArmId { get; set; }
-        protected int SmoothTypeCode;
         public bool NeedWait { get; set; } = true;
-        public CoordinateType CoordinateType { get; set; } = CoordinateType.Descartes;
-        public PositionType PositionType { get; set; } = PositionType.Absolute;
-        public SmoothType SmoothType { get; set; } = SmoothType.TwoLinesSpeedSmooth;
-        public double[] Position { get; } = new double[6];
 
         public abstract bool Do();
 
@@ -55,13 +87,43 @@ namespace NFUIRSL.HRTK
                    $"{position[5]}";
         }
 
-        public virtual bool IsSuccess(int code, int ignoreCode = 0, int successCode = 0)
+        protected virtual bool IsSuccess(int code, int ignoreCode = 0, int successCode = 0)
             => (code == ignoreCode) || (code == successCode);
     }
 
+    /// <summary>
+    /// A Point-To-Point motion of arm.
+    /// </summary>
     public class PointToPointMotion : ArmMotion
     {
-        public string Message
+        /// <summary>
+        /// Point-To-Point motion of arm.
+        /// </summary>
+        /// <param name="xJ1"></param>
+        /// <param name="yJ2"></param>
+        /// <param name="zJ3"></param>
+        /// <param name="aJ4"></param>
+        /// <param name="bJ5"></param>
+        /// <param name="cJ6"></param>
+        public PointToPointMotion(double xJ1,
+                                  double yJ2,
+                                  double zJ3,
+                                  double aJ4,
+                                  double bJ5,
+                                  double cJ6)
+            : base(xJ1, yJ2, zJ3, aJ4, bJ5, cJ6)
+        {
+            SmoothType = SmoothType.TwoLinesSpeedSmooth;
+        }
+
+        /// <summary>
+        /// Point-To-Point motion of arm.
+        /// </summary>
+        /// <param name="position"></param>
+        public PointToPointMotion(double[] position) : base(position)
+        { }
+
+        public override string Message
         {
             get => $"PointToPoint:" +
                    $"\"{GetTextPosition(Position)}\";" +
@@ -103,17 +165,6 @@ namespace NFUIRSL.HRTK
             }
             var returnCode = action(ArmId, SmoothTypeCode, Position);
             return IsSuccess(returnCode);
-        }
-
-        public PointToPointMotion(double x,
-                                  double y,
-                                  double z,
-                                  double a,
-                                  double b,
-                                  double c)
-            : base(x, y, z, a, b, c)
-        {
-            SmoothType = SmoothType.TwoLinesSpeedSmooth;
         }
     }
 }
