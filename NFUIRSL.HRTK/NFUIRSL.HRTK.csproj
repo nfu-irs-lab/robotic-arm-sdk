@@ -64,6 +64,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActionFlowHandler.cs" />
+    <Compile Include="Arm\ArmAction.cs" />
     <Compile Include="Arm\ArmController.cs" />
     <Compile Include="Arm\ArmIntermediateLayer.cs" />
     <Compile Include="Arm\HRobot.cs" />
