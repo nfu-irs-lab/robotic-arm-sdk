@@ -360,7 +360,7 @@ namespace NFUIRSL.HRTK
 
         public void Do(IArmAction armAction)
         {
-            Message.Show(armAction.Message);
+            Message.Log(armAction.Message, LoggingLevel.Info);
             armAction.ArmId = Id;
             var success = armAction.Do();
             if (success && armAction.NeedWait)
