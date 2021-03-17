@@ -60,6 +60,8 @@ namespace NFUIRSL.HRTK
             SmoothType = SmoothType.TwoLinesSpeedSmooth;
         }
 
+        protected abstract PositionType PositionType { get; }
+
         public CoordinateType CoordinateType { get; set; } = CoordinateType.Descartes;
 
         public SmoothType SmoothType
@@ -182,11 +184,7 @@ namespace NFUIRSL.HRTK
                    $"Wait:{NeedWait}";
         }
 
-        public SmoothType SmoothType
-        {
-            get => SmoothTypeCode == 1 ? SmoothType.TwoLinesSpeedSmooth : SmoothType.Disable;
-            set => SmoothTypeCode = value == SmoothType.TwoLinesSpeedSmooth ? 1 : 0;
-        }
+        protected override PositionType PositionType => PositionType.Relative;
 
         public override bool Do()
         {
