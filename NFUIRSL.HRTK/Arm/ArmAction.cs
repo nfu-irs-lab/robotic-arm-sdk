@@ -5,7 +5,7 @@ using SDKHrobot;
 namespace NFUIRSL.HRTK
 {
     /// <summary>
-    /// A action of arm.
+    /// The action of arm.
     /// </summary>
     public interface IArmAction
     {
@@ -27,12 +27,12 @@ namespace NFUIRSL.HRTK
         /// <summary>
         /// Do the action.
         /// </summary>
-        /// <returns>Success</returns>
+        /// <returns>Return true for successful.</returns>
         bool Do();
     }
 
     /// <summary>
-    /// A motion type of arm.
+    /// The motion of arm.
     /// </summary>
     public abstract class ArmMotion : IArmAction
     {
@@ -114,12 +114,12 @@ namespace NFUIRSL.HRTK
         public virtual string Message
         {
             get => "Arm:" +
-                   $"\"{GetTextPosition(Position)}\";" +
-                   $"PT:{PositionType};" +
-                   $"CT:{CoordinateType};" +
-                   $"MT:{MotionType};" +
-                   $"ST:{SmoothTypeCode};" +
-                   $"SV:{SmoothValue};" +
+                   $"\"{GetTextPosition(Position)}\"," +
+                   $"PT:{PositionType}," +
+                   $"CT:{CoordinateType}," +
+                   $"MT:{MotionType}," +
+                   $"ST:{SmoothTypeCode}," +
+                   $"SV:{SmoothValue}," +
                    $"Wait:{NeedWait}";
         }
 
@@ -138,7 +138,7 @@ namespace NFUIRSL.HRTK
                    $"{position[5]}";
         }
 
-        protected virtual bool IsSuccess(int code, int ignoreCode = 0, int successCode = 0)
+        protected virtual bool IsSuccessful(int code, int ignoreCode = 0, int successCode = 0)
             => (code == ignoreCode) || (code == successCode);
     }
 
@@ -147,6 +147,15 @@ namespace NFUIRSL.HRTK
     /// </summary>
     public class RelativeMotion : ArmMotion
     {
+        /// <summary>
+        /// The relative motion of arm.
+        /// </summary>
+        /// <param name="xJ1"></param>
+        /// <param name="yJ2"></param>
+        /// <param name="zJ3"></param>
+        /// <param name="aJ4"></param>
+        /// <param name="bJ5"></param>
+        /// <param name="cJ6"></param>
         public RelativeMotion(double xJ1,
                               double yJ2,
                               double zJ3,
@@ -154,17 +163,12 @@ namespace NFUIRSL.HRTK
                               double bJ5,
                               double cJ6)
             : base(xJ1, yJ2, zJ3, aJ4, bJ5, cJ6)
-        {
-            SmoothType = SmoothType.TwoLinesSpeedSmooth;
-        }
-
-        /// <summary>
-        /// Point-To-Point motion of arm.
-        /// </summary>
-        /// <param name="position"></param>
-        public PointToPointMotion(double[] position) : base(position)
         { }
 
+        /// <summary>
+        /// The relative motion of arm.
+        /// </summary>
+        /// <param name="position"></param>
         public RelativeMotion(double[] position) : base(position)
         { }
 
