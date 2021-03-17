@@ -109,7 +109,14 @@ namespace NFUIRSL.HRTK
 
         public virtual string Message
         {
-            get => "Arm Motion";
+            get => "Arm:" +
+                   $"\"{GetTextPosition(Position)}\";" +
+                   $"PT:{PositionType};" +
+                   $"CT:{CoordinateType};" +
+                   $"MT:{MotionType};" +
+                   $"ST:{SmoothTypeCode};" +
+                   $"SV:{SmoothValue};" +
+                   $"Wait:{NeedWait}";
         }
 
         public int ArmId { get; set; }
