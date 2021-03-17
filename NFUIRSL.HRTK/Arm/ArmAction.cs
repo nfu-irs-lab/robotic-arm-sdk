@@ -143,25 +143,16 @@ namespace NFUIRSL.HRTK
     }
 
     /// <summary>
-    /// A Point-To-Point motion of arm.
+    /// The relative motion of arm.
     /// </summary>
-    public class PointToPointMotion : ArmMotion
+    public class RelativeMotion : ArmMotion
     {
-        /// <summary>
-        /// Point-To-Point motion of arm.
-        /// </summary>
-        /// <param name="xJ1"></param>
-        /// <param name="yJ2"></param>
-        /// <param name="zJ3"></param>
-        /// <param name="aJ4"></param>
-        /// <param name="bJ5"></param>
-        /// <param name="cJ6"></param>
-        public PointToPointMotion(double xJ1,
-                                  double yJ2,
-                                  double zJ3,
-                                  double aJ4,
-                                  double bJ5,
-                                  double cJ6)
+        public RelativeMotion(double xJ1,
+                              double yJ2,
+                              double zJ3,
+                              double aJ4,
+                              double bJ5,
+                              double cJ6)
             : base(xJ1, yJ2, zJ3, aJ4, bJ5, cJ6)
         {
             SmoothType = SmoothType.TwoLinesSpeedSmooth;
@@ -174,15 +165,8 @@ namespace NFUIRSL.HRTK
         public PointToPointMotion(double[] position) : base(position)
         { }
 
-        public override string Message
-        {
-            get => $"PointToPoint:" +
-                   $"\"{GetTextPosition(Position)}\";" +
-                   $"CT:{CoordinateType.ToString()};" +
-                   $"PT:{PositionType.ToString()};" +
-                   $"ST:{SmoothTypeCode};" +
-                   $"Wait:{NeedWait}";
-        }
+        public RelativeMotion(double[] position) : base(position)
+        { }
 
         protected override PositionType PositionType => PositionType.Relative;
 
