@@ -51,11 +51,13 @@ namespace NFUIRSL.HRTK
             Position[3] = aJ4;
             Position[4] = bJ5;
             Position[5] = cJ6;
+            SmoothType = SmoothType.TwoLinesSpeedSmooth;
         }
 
         protected ArmMotion(double[] position)
         {
             Position = position;
+            SmoothType = SmoothType.TwoLinesSpeedSmooth;
         }
 
         public CoordinateType CoordinateType { get; set; } = CoordinateType.Descartes;
