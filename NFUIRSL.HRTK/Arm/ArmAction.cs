@@ -59,8 +59,48 @@ namespace NFUIRSL.HRTK
         }
 
         public CoordinateType CoordinateType { get; set; } = CoordinateType.Descartes;
-        public PositionType PositionType { get; set; } = PositionType.Absolute;
-        public SmoothType SmoothType { get; set; } = SmoothType.TwoLinesSpeedSmooth;
+
+        public SmoothType SmoothType
+        {
+            get
+            {
+                SmoothType type = SmoothType.Disable;
+                switch (MotionType)
+                {
+                    case MotionType.Circle:
+                    case MotionType.PointToPoint:
+                        type = (SmoothTypeCode == 1) ? SmoothType.TwoLinesSpeedSmooth : SmoothType.Disable;
+                        break;
+
+                    case MotionType.Linear:
+                        type = SmoothType;
+                        break;
+                }
+                return type;
+            }
+
+            set
+            {
+                switch (MotionType)
+                {
+                    case MotionType.Circle:
+                    case MotionType.PointToPoint:
+                        SmoothTypeCode = (value == SmoothType.TwoLinesSpeedSmooth) ? 1 : 0;
+                        break;
+
+                    case MotionType.Linear:
+                        SmoothTypeCode = (int)value;
+                        break;
+
+                    default:
+                        SmoothTypeCode = 0;
+                        break;
+                }
+            }
+        }
+
+        public MotionType MotionType { get; set; } = MotionType.PointToPoint;
+        public int SmoothValue { get; set; } = 50;
 
         /// <summary>
         /// Target position.
