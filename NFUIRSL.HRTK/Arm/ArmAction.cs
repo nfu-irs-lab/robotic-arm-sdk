@@ -5,7 +5,7 @@ using SDKHrobot;
 namespace NFUIRSL.HRTK
 {
     /// <summary>
-    /// A action of arm.
+    /// The action of arm.
     /// </summary>
     public interface IArmAction
     {
@@ -27,12 +27,12 @@ namespace NFUIRSL.HRTK
         /// <summary>
         /// Do the action.
         /// </summary>
-        /// <returns>Success</returns>
+        /// <returns>Return true for successful.</returns>
         bool Do();
     }
 
     /// <summary>
-    /// A motion type of arm.
+    /// The motion of arm.
     /// </summary>
     public abstract class ArmMotion : IArmAction
     {
@@ -51,16 +51,60 @@ namespace NFUIRSL.HRTK
             Position[3] = aJ4;
             Position[4] = bJ5;
             Position[5] = cJ6;
+            SmoothType = SmoothType.TwoLinesSpeedSmooth;
         }
 
         protected ArmMotion(double[] position)
         {
             Position = position;
+            SmoothType = SmoothType.TwoLinesSpeedSmooth;
         }
 
+        protected abstract PositionType PositionType { get; }
+
         public CoordinateType CoordinateType { get; set; } = CoordinateType.Descartes;
-        public PositionType PositionType { get; set; } = PositionType.Absolute;
-        public SmoothType SmoothType { get; set; } = SmoothType.TwoLinesSpeedSmooth;
+
+        public SmoothType SmoothType
+        {
+            get
+            {
+                SmoothType type = SmoothType.Disable;
+                switch (MotionType)
+                {
+                    case MotionType.Circle:
+                    case MotionType.PointToPoint:
+                        type = (SmoothTypeCode == 1) ? SmoothType.TwoLinesSpeedSmooth : SmoothType.Disable;
+                        break;
+
+                    case MotionType.Linear:
+                        type = SmoothType;
+                        break;
+                }
+                return type;
+            }
+
+            set
+            {
+                switch (MotionType)
+                {
+                    case MotionType.Circle:
+                    case MotionType.PointToPoint:
+                        SmoothTypeCode = (value == SmoothType.TwoLinesSpeedSmooth) ? 1 : 0;
+                        break;
+
+                    case MotionType.Linear:
+                        SmoothTypeCode = (int)value;
+                        break;
+
+                    default:
+                        SmoothTypeCode = 0;
+                        break;
+                }
+            }
+        }
+
+        public MotionType MotionType { get; set; } = MotionType.PointToPoint;
+        public int SmoothValue { get; set; } = 50;
 
         /// <summary>
         /// Target position.
@@ -69,7 +113,14 @@ namespace NFUIRSL.HRTK
 
         public virtual string Message
         {
-            get => "Arm Motion";
+            get => "Arm:" +
+                   $"\"{GetTextPosition(Position)}\"," +
+                   $"PT:{PositionType}," +
+                   $"CT:{CoordinateType}," +
+                   $"MT:{MotionType}," +
+                   $"ST:{SmoothTypeCode}," +
+                   $"SV:{SmoothValue}," +
+                   $"Wait:{NeedWait}";
         }
 
         public int ArmId { get; set; }
@@ -87,17 +138,17 @@ namespace NFUIRSL.HRTK
                    $"{position[5]}";
         }
 
-        protected virtual bool IsSuccess(int code, int ignoreCode = 0, int successCode = 0)
+        protected virtual bool IsSuccessful(int code, int ignoreCode = 0, int successCode = 0)
             => (code == ignoreCode) || (code == successCode);
     }
 
     /// <summary>
-    /// A Point-To-Point motion of arm.
+    /// The relative motion of arm.
     /// </summary>
-    public class PointToPointMotion : ArmMotion
+    public class RelativeMotion : ArmMotion
     {
         /// <summary>
-        /// Point-To-Point motion of arm.
+        /// The relative motion of arm.
         /// </summary>
         /// <param name="xJ1"></param>
         /// <param name="yJ2"></param>
@@ -105,66 +156,59 @@ namespace NFUIRSL.HRTK
         /// <param name="aJ4"></param>
         /// <param name="bJ5"></param>
         /// <param name="cJ6"></param>
-        public PointToPointMotion(double xJ1,
-                                  double yJ2,
-                                  double zJ3,
-                                  double aJ4,
-                                  double bJ5,
-                                  double cJ6)
+        public RelativeMotion(double xJ1,
+                              double yJ2,
+                              double zJ3,
+                              double aJ4,
+                              double bJ5,
+                              double cJ6)
             : base(xJ1, yJ2, zJ3, aJ4, bJ5, cJ6)
-        {
-            SmoothType = SmoothType.TwoLinesSpeedSmooth;
-        }
-
-        /// <summary>
-        /// Point-To-Point motion of arm.
-        /// </summary>
-        /// <param name="position"></param>
-        public PointToPointMotion(double[] position) : base(position)
         { }
 
-        public override string Message
-        {
-            get => $"PointToPoint:" +
-                   $"\"{GetTextPosition(Position)}\";" +
-                   $"CT:{CoordinateType.ToString()};" +
-                   $"PT:{PositionType.ToString()};" +
-                   $"ST:{SmoothTypeCode};" +
-                   $"Wait:{NeedWait}";
-        }
+        /// <summary>
+        /// The relative motion of arm.
+        /// </summary>
+        /// <param name="position"></param>
+        public RelativeMotion(double[] position) : base(position)
+        { }
 
-        public SmoothType SmoothType
-        {
-            get => SmoothTypeCode == 1 ? SmoothType.TwoLinesSpeedSmooth : SmoothType.Disable;
-            set => SmoothTypeCode = value == SmoothType.TwoLinesSpeedSmooth ? 1 : 0;
-        }
+        protected override PositionType PositionType => PositionType.Relative;
 
         public override bool Do()
         {
-            Func<int, int, double[], int> action;
+            int returnCode;
             switch (CoordinateType)
             {
-                case CoordinateType.Descartes when PositionType == PositionType.Absolute:
-                    action = HRobot.ptp_pos;
+                case CoordinateType.Descartes when MotionType == MotionType.PointToPoint:
+                    returnCode = HRobot.ptp_rel_pos(ArmId,
+                                                    SmoothTypeCode,
+                                                    Position);
                     break;
 
-                case CoordinateType.Descartes when PositionType == PositionType.Relative:
-                    action = HRobot.ptp_rel_pos;
+                case CoordinateType.Descartes when MotionType == MotionType.Linear:
+                    returnCode = HRobot.lin_rel_pos(ArmId,
+                                                    SmoothTypeCode,
+                                                    SmoothValue,
+                                                    Position);
                     break;
 
-                case CoordinateType.Joint when PositionType == PositionType.Absolute:
-                    action = HRobot.ptp_axis;
+                case CoordinateType.Joint when MotionType == MotionType.PointToPoint:
+                    returnCode = HRobot.ptp_rel_axis(ArmId,
+                                                     SmoothTypeCode,
+                                                     Position);
                     break;
 
-                case CoordinateType.Joint when PositionType == PositionType.Relative:
-                    action = HRobot.ptp_rel_axis;
+                case CoordinateType.Joint when MotionType == MotionType.Linear:
+                    returnCode = HRobot.lin_rel_axis(ArmId,
+                                                     SmoothTypeCode,
+                                                     SmoothValue,
+                                                     Position);
                     break;
 
                 default:
                     return false;
             }
-            var returnCode = action(ArmId, SmoothTypeCode, Position);
-            return IsSuccess(returnCode);
+            return IsSuccessful(returnCode);
         }
     }
 }
