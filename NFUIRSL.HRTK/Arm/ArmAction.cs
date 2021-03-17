@@ -31,6 +31,25 @@ namespace NFUIRSL.HRTK
         bool Do();
     }
 
+    public class AbortMotion : IArmAction
+    {
+        public string Message => "Arm Abort.";
+
+        public bool NeedWait
+        {
+            get => false;
+            set { }
+        }
+
+        public int ArmId { get; set; }
+
+        public bool Do()
+        {
+            var returnCode = HRobot.motion_abort(ArmId);
+            return returnCode == 0;
+        }
+    }
+
     /// <summary>
     /// The motion of arm.
     /// </summary>
