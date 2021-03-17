@@ -188,30 +188,39 @@ namespace NFUIRSL.HRTK
 
         public override bool Do()
         {
-            Func<int, int, double[], int> action;
+            int returnCode;
             switch (CoordinateType)
             {
-                case CoordinateType.Descartes when PositionType == PositionType.Absolute:
-                    action = HRobot.ptp_pos;
+                case CoordinateType.Descartes when MotionType == MotionType.PointToPoint:
+                    returnCode = HRobot.ptp_rel_pos(ArmId,
+                                                    SmoothTypeCode,
+                                                    Position);
                     break;
 
-                case CoordinateType.Descartes when PositionType == PositionType.Relative:
-                    action = HRobot.ptp_rel_pos;
+                case CoordinateType.Descartes when MotionType == MotionType.Linear:
+                    returnCode = HRobot.lin_rel_pos(ArmId,
+                                                    SmoothTypeCode,
+                                                    SmoothValue,
+                                                    Position);
                     break;
 
-                case CoordinateType.Joint when PositionType == PositionType.Absolute:
-                    action = HRobot.ptp_axis;
+                case CoordinateType.Joint when MotionType == MotionType.PointToPoint:
+                    returnCode = HRobot.ptp_rel_axis(ArmId,
+                                                     SmoothTypeCode,
+                                                     Position);
                     break;
 
-                case CoordinateType.Joint when PositionType == PositionType.Relative:
-                    action = HRobot.ptp_rel_axis;
+                case CoordinateType.Joint when MotionType == MotionType.Linear:
+                    returnCode = HRobot.lin_rel_axis(ArmId,
+                                                     SmoothTypeCode,
+                                                     SmoothValue,
+                                                     Position);
                     break;
 
                 default:
                     return false;
             }
-            var returnCode = action(ArmId, SmoothTypeCode, Position);
-            return IsSuccess(returnCode);
+            return IsSuccessful(returnCode);
         }
     }
 }
