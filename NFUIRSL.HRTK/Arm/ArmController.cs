@@ -47,14 +47,14 @@ namespace NFUIRSL.HRTK
     public enum MotionType
     {
         /// <summary>
-        /// 直線運動。
-        /// </summary>
-        Linear,
-
-        /// <summary>
         /// 點對點運動。
         /// </summary>
         PointToPoint,
+
+        /// <summary>
+        /// 直線運動。
+        /// </summary>
+        Linear,
 
         /// <summary>
         /// 圓弧運動。
