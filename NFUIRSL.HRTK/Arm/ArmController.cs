@@ -520,11 +520,7 @@ namespace NFUIRSL.HRTK
 
             Waiting = true;
             while (Waiting)
-            {
-                // 等待 EventFun() 將 Waiting 的值改成 false 即跳出迴圈。
-                // 此 Thread.Sleep() 不一定要有。
-                Thread.Sleep(50);
-            }
+            { }
 #elif (USE_MOTION_STATE_WAIT)
             // 使用 HRSDK 中的 method get_motion_state() 來取得手臂 motion_state 來判斷手臂是否還在運動中。
 
