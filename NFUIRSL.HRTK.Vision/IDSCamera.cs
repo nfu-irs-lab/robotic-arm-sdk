@@ -168,6 +168,8 @@ namespace NFUIRSL.HRTK.Vision
             if (_camera != null)
             {
                 _camera.Memory.GetLast(out int memoryId);
+                _camera.Memory.SetActive(memoryId);
+                _camera.Acquisition.Freeze();
                 _camera.Memory.ToBitmap(memoryId, out img);
             }
             return img;
@@ -209,7 +211,6 @@ namespace NFUIRSL.HRTK.Vision
             SensorInfo sensorInfo;
             _camera.Information.GetSensorInfo(out sensorInfo);
             SensorName = sensorInfo.SensorName;
-            _pictureBox.SizeMode = PictureBoxSizeMode.Normal;
             return status;
         }
 
