@@ -289,27 +289,26 @@ namespace NFUIRSL.HRTK.Vision
                 Camera = new uEye.Camera();
             }
 
-            uEye.Defines.Status status;
             var id = DeviceId | (Int32)uEye.Defines.DeviceEnumeration.UseDeviceID;
 
-            status = Camera.Init(id, PictureBox.Handle);
+            var status = PictureBox == null ? Camera.Init(id) : Camera.Init(id, PictureBox.Handle);
             if (status != uEye.Defines.Status.SUCCESS)
             {
-                Message.Show("Initializing the camera failed");
+                Message.Show("Initializing the camera failed", LoggingLevel.Error);
                 return status;
             }
 
             status = MemoryHelper.AllocImageMems(Camera, CnNumberOfSeqBuffers);
             if (status != uEye.Defines.Status.SUCCESS)
             {
-                Message.Show("Allocating memory failed");
+                Message.Show("Allocating memory failed", LoggingLevel.Error);
                 return status;
             }
 
             status = MemoryHelper.InitSequence(Camera);
             if (status != uEye.Defines.Status.SUCCESS)
             {
-                Message.Show("Add to sequence failed");
+                Message.Show("Add to sequence failed", LoggingLevel.Error);
                 return status;
             }
 
