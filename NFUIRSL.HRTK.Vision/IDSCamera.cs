@@ -116,21 +116,23 @@ namespace NFUIRSL.HRTK.Vision
 
         public void Open(CaptureMode captureMode = CaptureMode.FreeRun, bool autoFeatures = true)
         {
-            var status = Init();
-            if (status == uEye.Defines.Status.SUCCESS)
+            if (Camera != null)
             {
-                status = ChangeCaptureMode(captureMode);
-            }
-
-            if (status != uEye.Defines.Status.SUCCESS && Camera.IsOpened)
-            {
-                Camera.Exit();
+                var status = ChangeCaptureMode(captureMode);
+                if (status != uEye.Defines.Status.SUCCESS && Camera.IsOpened)
+                {
+                    Camera.Exit();
+                }
+                else
+                {
+                    AutoGain = autoFeatures;
+                    AutoShutter = autoFeatures;
+                    AutoWhiteBalance = autoFeatures;
+                }
             }
             else
             {
-                AutoGain = autoFeatures;
-                AutoShutter = autoFeatures;
-                AutoWhiteBalance = autoFeatures;
+                Message.Show("Camera never initialization.", LoggingLevel.Warn);
             }
         }
 
