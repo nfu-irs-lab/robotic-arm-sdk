@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using uEye;
 
 namespace NFUIRSL.HRTK.Vision
 {
@@ -32,38 +33,36 @@ namespace NFUIRSL.HRTK.Vision
         public string Failed { get; private set; }
         public string SensorName { get; private set; }
 
+        #region - Auto Features -
+
+        private delegate uEye.Defines.Status GetFunc(out bool enable);
+
+        private bool GetAutoFeatures(GetFunc func)
+        {
+            func(out bool enable);
+            return enable;
+        }
+
+
         public bool AutoShutter
         {
-            get
-            {
-                Camera.AutoFeatures.Software.Shutter.GetEnable(out bool enable);
-                return enable;
-            }
-
-            set { Camera.AutoFeatures.Software.Shutter.SetEnable(value); }
+            get => GetAutoFeatures(Camera.AutoFeatures.Software.Shutter.GetEnable);
+            set => Camera.AutoFeatures.Software.Shutter.SetEnable(value);
         }
 
         public bool AutoWhiteBalance
         {
-            get
-            {
-                Camera.AutoFeatures.Software.WhiteBalance.GetEnable(out bool enable);
-                return enable;
-            }
-
-            set { Camera.AutoFeatures.Software.WhiteBalance.SetEnable(value); }
+            get => GetAutoFeatures(Camera.AutoFeatures.Software.WhiteBalance.GetEnable);
+            set => Camera.AutoFeatures.Software.WhiteBalance.SetEnable(value);
         }
 
         public bool AutoGain
         {
-            get
-            {
-                Camera.AutoFeatures.Software.Gain.GetEnable(out bool enable);
-                return enable;
-            }
-
-            set { Camera.AutoFeatures.Software.Gain.SetEnable(value); }
+            get => GetAutoFeatures(Camera.AutoFeatures.Software.Gain.GetEnable);
+            set => Camera.AutoFeatures.Software.Gain.SetEnable(value);
         }
+
+        #endregion
 
         public IDSCamera(PictureBox pictureBox, IMessage message)
         {
@@ -328,7 +327,7 @@ namespace NFUIRSL.HRTK.Vision
                 ++FrameCount;
             }
         }
-        
+
         private void OnDisplayChanged(object sender, EventArgs e)
         {
             uEye.Defines.DisplayMode displayMode;
