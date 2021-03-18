@@ -64,6 +64,27 @@ namespace NFUIRSL.HRTK.Vision
 
         #endregion
 
+        public IDSCamera(IMessage message)
+        {
+            if (CheckRuntimeVersion())
+            {
+                Message = message;
+
+                DeviceId = 1;
+                CameraId = 1;
+                IsLive = false;
+                RenderMode = uEye.Defines.DisplayRenderMode.FitToWindow;
+
+                UpdateTimer = new Timer();
+                UpdateTimer.Interval = 100;
+                UpdateTimer.Tick += UpdateControls;
+            }
+            else
+            {
+                Message.Show(".NET Runtime Version 3.5.0 is required", LoggingLevel.Error);
+            }
+        }
+
         public IDSCamera(PictureBox pictureBox, IMessage message)
         {
             if (CheckRuntimeVersion())
