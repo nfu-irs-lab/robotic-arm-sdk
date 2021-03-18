@@ -70,13 +70,13 @@ namespace NFUIRSL.HRTK
             Position[3] = aJ4;
             Position[4] = bJ5;
             Position[5] = cJ6;
-            SmoothType = SmoothType.TwoLinesSpeedSmooth;
+            SmoothType = SmoothType.Disable;
         }
 
         protected ArmMotion(double[] position)
         {
             Position = position;
-            SmoothType = SmoothType.TwoLinesSpeedSmooth;
+            SmoothType = SmoothType.Disable;
         }
 
         protected abstract PositionType PositionType { get; }
