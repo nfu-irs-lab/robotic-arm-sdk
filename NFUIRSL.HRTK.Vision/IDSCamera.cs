@@ -175,6 +175,11 @@ namespace NFUIRSL.HRTK.Vision
             return img;
         }
 
+        public void SetAoiSize(int width, int height, int x = 0, int y = 0)
+        {
+            _camera.Size.AOI.Set(x, y, width, height);
+        }
+
         public Status Init()
         {
             if (_camera == null)
