@@ -222,6 +222,8 @@ namespace NFUIRSL.HRTK.Vision
             return img;
         }
 
+        #region - .NET Version -
+
         private bool CheckRuntimeVersion()
         {
             var versionMin = new Version(3, 5);
@@ -281,6 +283,8 @@ namespace NFUIRSL.HRTK.Vision
                 }
             }
         }
+
+        #endregion
 
         public uEye.Defines.Status Init()
         {
@@ -398,7 +402,6 @@ namespace NFUIRSL.HRTK.Vision
                 }
             }
         }
-
 
         private void UpdateControls(object sender, EventArgs e)
         {
