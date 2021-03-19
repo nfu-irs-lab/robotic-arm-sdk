@@ -88,6 +88,46 @@ namespace NFUIRSL.HRTK.Vision
             Exit();
         }
 
+        #region - Open, Exit, Init -
+
+        public bool Init()
+        {
+            if (_camera == null)
+            {
+                _camera = new Camera();
+            }
+
+            var id = DeviceId | (Int32)DeviceEnumeration.UseDeviceID;
+
+            var status = _pictureBox == null ? _camera.Init(id) : _camera.Init(id, _pictureBox.Handle);
+            if (status != Status.SUCCESS)
+            {
+                _message.Show("Initializing the camera failed", LoggingLevel.Error);
+                return false;
+            }
+
+            status = MemoryHelper.AllocImageMems(_camera, _cnNumberOfSeqBuffers);
+            if (status != Status.SUCCESS)
+            {
+                _message.Show("Allocating memory failed", LoggingLevel.Error);
+                return false;
+            }
+
+            status = MemoryHelper.InitSequence(_camera);
+            if (status != Status.SUCCESS)
+            {
+                _message.Show("Add to sequence failed", LoggingLevel.Error);
+                return false;
+            }
+
+            _camera.EventFrame += FrameEvent;
+            FrameCount = 0;
+            _updateTimer.Start();
+            _camera.Information.GetSensorInfo(out var sensorInfo);
+            SensorName = sensorInfo.SensorName;
+            return true;
+        }
+
         public void Open(CaptureMode captureMode = CaptureMode.FreeRun, bool autoFeatures = true)
         {
             if (_camera != null)
@@ -109,6 +149,23 @@ namespace NFUIRSL.HRTK.Vision
                 _message.Show("Camera never initialization.", LoggingLevel.Warn);
             }
         }
+
+        public void Exit()
+        {
+            _updateTimer.Stop();
+            IsLive = false;
+
+            _camera.EventFrame -= FrameEvent;
+            _camera.Exit();
+
+            _pictureBox.Invalidate();
+            _pictureBox.SizeMode = PictureBoxSizeMode.CenterImage;
+            RenderMode = DisplayRenderMode.FitToWindow;
+        }
+
+        #endregion
+
+        #region - General Feature -
 
         public bool ChangeCaptureMode(CaptureMode captureMode)
         {
@@ -150,19 +207,6 @@ namespace NFUIRSL.HRTK.Vision
             return true;
         }
 
-        public void Exit()
-        {
-            _updateTimer.Stop();
-            IsLive = false;
-
-            _camera.EventFrame -= FrameEvent;
-            _camera.Exit();
-
-            _pictureBox.Invalidate();
-            _pictureBox.SizeMode = PictureBoxSizeMode.CenterImage;
-            RenderMode = DisplayRenderMode.FitToWindow;
-        }
-
         public Bitmap GetImage()
         {
             Bitmap img = null;
@@ -181,43 +225,7 @@ namespace NFUIRSL.HRTK.Vision
             _camera.Size.AOI.Set(x, y, width, height);
         }
 
-        public bool Init()
-        {
-            if (_camera == null)
-            {
-                _camera = new Camera();
-            }
-
-            var id = DeviceId | (Int32)DeviceEnumeration.UseDeviceID;
-
-            var status = _pictureBox == null ? _camera.Init(id) : _camera.Init(id, _pictureBox.Handle);
-            if (status != Status.SUCCESS)
-            {
-                _message.Show("Initializing the camera failed", LoggingLevel.Error);
-                return false;
-            }
-
-            status = MemoryHelper.AllocImageMems(_camera, _cnNumberOfSeqBuffers);
-            if (status != Status.SUCCESS)
-            {
-                _message.Show("Allocating memory failed", LoggingLevel.Error);
-                return false;
-            }
-
-            status = MemoryHelper.InitSequence(_camera);
-            if (status != Status.SUCCESS)
-            {
-                _message.Show("Add to sequence failed", LoggingLevel.Error);
-                return false;
-            }
-
-            _camera.EventFrame += FrameEvent;
-            FrameCount = 0;
-            _updateTimer.Start();
-            _camera.Information.GetSensorInfo(out var sensorInfo);
-            SensorName = sensorInfo.SensorName;
-            return true;
-        }
+        #endregion
 
         #region - Auto Features -
 
@@ -228,7 +236,6 @@ namespace NFUIRSL.HRTK.Vision
             func(out bool enable);
             return enable;
         }
-
 
         public bool AutoShutter
         {
