@@ -1,9 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Microsoft.Win32;
+using uEye;
+using uEye.Defines;
+using uEye.Types;
+using DisplayMode = uEye.Defines.DisplayMode;
 
 namespace NFUIRSL.HRTK.Vision
 {
@@ -16,154 +23,241 @@ namespace NFUIRSL.HRTK.Vision
 
     public class IDSCamera
     {
-        private uEye.Camera Camera;
-        private IMessage Message;
-        private const int CnNumberOfSeqBuffers = 3;
-        private PictureBox PictureBox;
-        private Timer UpdateTimer;
+        private const int _cnNumberOfSeqBuffers = 3;
+        private readonly IMessage _message;
+        private readonly Timer _updateTimer;
+        private Camera _camera;
+        private PictureBox _pictureBox;
 
-        public int DeviceId { get; private set; }
-        public int CameraId { get; private set; }
-        public Boolean IsLive { get; private set; }
-        public uEye.Defines.DisplayRenderMode RenderMode { get; private set; }
-        public Int32 FrameCount { get; private set; }
-        public double Fps { get; private set; }
-        public string Failed { get; private set; }
-        public string SensorName { get; private set; }
-
-        public bool AutoShutter
+        public IDSCamera(IMessage message)
         {
-            get
+            if (CheckRuntimeVersion())
             {
-                Camera.AutoFeatures.Software.Shutter.GetEnable(out bool enable);
-                return enable;
+                _message = message;
+
+                DeviceId = 1;
+                CameraId = 1;
+                IsLive = false;
+                RenderMode = DisplayRenderMode.FitToWindow;
+
+                _updateTimer = new Timer();
+                _updateTimer.Interval = 100;
+                _updateTimer.Tick += UpdateControls;
             }
-
-            set { Camera.AutoFeatures.Software.Shutter.SetEnable(value); }
-        }
-
-        public bool AutoWhiteBalance
-        {
-            get
+            else
             {
-                Camera.AutoFeatures.Software.WhiteBalance.GetEnable(out bool enable);
-                return enable;
+                _message.Show(".NET Runtime Version 3.5.0 is required", LoggingLevel.Error);
             }
-
-            set { Camera.AutoFeatures.Software.WhiteBalance.SetEnable(value); }
-        }
-
-        public bool AutoGain
-        {
-            get
-            {
-                Camera.AutoFeatures.Software.Gain.GetEnable(out bool enable);
-                return enable;
-            }
-
-            set { Camera.AutoFeatures.Software.Gain.SetEnable(value); }
         }
 
         public IDSCamera(PictureBox pictureBox, IMessage message)
         {
             if (CheckRuntimeVersion())
             {
-                Message = message;
+                _message = message;
 
-                PictureBox = pictureBox;
-                PictureBox.SizeMode = PictureBoxSizeMode.CenterImage;
+                _pictureBox = pictureBox;
+                _pictureBox.SizeMode = PictureBoxSizeMode.CenterImage;
 
                 DeviceId = 1;
                 CameraId = 1;
                 IsLive = false;
-                RenderMode = uEye.Defines.DisplayRenderMode.FitToWindow;
+                RenderMode = DisplayRenderMode.FitToWindow;
 
-                UpdateTimer = new Timer();
-                UpdateTimer.Interval = 100;
-                UpdateTimer.Tick += UpdateControls;
+                _updateTimer = new Timer();
+                _updateTimer.Interval = 100;
+                _updateTimer.Tick += UpdateControls;
             }
             else
             {
-                Message.Show(".NET Runtime Version 3.5.0 is required", LoggingLevel.Error);
+                _message.Show(".NET Runtime Version 3.5.0 is required", LoggingLevel.Error);
             }
         }
+
+        public int DeviceId { get; private set; }
+        public int CameraId { get; private set; }
+        public Boolean IsLive { get; private set; }
+        public DisplayRenderMode RenderMode { get; private set; }
+        public Int32 FrameCount { get; private set; }
+        public double Fps { get; private set; }
+        public string Failed { get; private set; }
+        public string SensorName { get; private set; }
 
         ~IDSCamera()
         {
             Exit();
         }
 
-        public void Open(CaptureMode captureMode = CaptureMode.FreeRun, bool autoFeatures = true)
+        #region - Open, Exit, Init -
+
+        public bool Init()
         {
-            var status = Init();
-            if (status == uEye.Defines.Status.SUCCESS)
+            if (_camera == null)
             {
-                status = ChangeCaptureMode(captureMode);
+                _camera = new Camera();
             }
 
-            if (status != uEye.Defines.Status.SUCCESS && Camera.IsOpened)
+            var id = DeviceId | (Int32)DeviceEnumeration.UseDeviceID;
+
+            var status = _pictureBox == null ? _camera.Init(id) : _camera.Init(id, _pictureBox.Handle);
+            if (status != Status.SUCCESS)
             {
-                Camera.Exit();
+                _message.Show("Initializing the camera failed", LoggingLevel.Error);
+                return false;
+            }
+
+            status = MemoryHelper.AllocImageMems(_camera, _cnNumberOfSeqBuffers);
+            if (status != Status.SUCCESS)
+            {
+                _message.Show("Allocating memory failed", LoggingLevel.Error);
+                return false;
+            }
+
+            status = MemoryHelper.InitSequence(_camera);
+            if (status != Status.SUCCESS)
+            {
+                _message.Show("Add to sequence failed", LoggingLevel.Error);
+                return false;
+            }
+
+            _camera.EventFrame += FrameEvent;
+            FrameCount = 0;
+            _updateTimer.Start();
+            _camera.Information.GetSensorInfo(out var sensorInfo);
+            SensorName = sensorInfo.SensorName;
+            return true;
+        }
+
+        public void Open(CaptureMode captureMode = CaptureMode.FreeRun, bool autoFeatures = true)
+        {
+            if (_camera != null)
+            {
+                var status = ChangeCaptureMode(captureMode);
+                if (!status && _camera.IsOpened)
+                {
+                    _camera.Exit();
+                }
+                else
+                {
+                    AutoGain = autoFeatures;
+                    AutoShutter = autoFeatures;
+                    AutoWhiteBalance = autoFeatures;
+                }
             }
             else
             {
-                AutoGain = autoFeatures;
-                AutoShutter = autoFeatures;
-                AutoWhiteBalance = autoFeatures;
+                _message.Show("Camera never initialization.", LoggingLevel.Warn);
             }
         }
 
-        public uEye.Defines.Status ChangeCaptureMode(CaptureMode captureMode)
+        public void Exit()
         {
-            Func<uEye.Defines.Status> func;
+            _updateTimer.Stop();
+            IsLive = false;
+
+            _camera.EventFrame -= FrameEvent;
+            _camera.Exit();
+
+            _pictureBox.Invalidate();
+            _pictureBox.SizeMode = PictureBoxSizeMode.CenterImage;
+            RenderMode = DisplayRenderMode.FitToWindow;
+        }
+
+        #endregion
+
+        #region - General Feature -
+
+        public bool ChangeCaptureMode(CaptureMode captureMode)
+        {
+            Func<Status> func;
             bool expectIsLive;
 
             switch (captureMode)
             {
                 case CaptureMode.FreeRun:
-                    func = Camera.Acquisition.Capture;
+                    func = _camera.Acquisition.Capture;
                     expectIsLive = true;
                     break;
 
                 case CaptureMode.Stop:
-                    func = Camera.Acquisition.Stop;
+                    func = _camera.Acquisition.Stop;
                     expectIsLive = false;
                     break;
 
                 case CaptureMode.Snapshot:
-                    func = Camera.Acquisition.Freeze;
+                    func = _camera.Acquisition.Freeze;
                     expectIsLive = false;
                     break;
 
                 default:
-                    return uEye.Defines.Status.NO_SUCCESS;
+                    return false;
             }
 
             var status = func();
-            if (status != uEye.Defines.Status.SUCCESS)
+            if (status != Status.SUCCESS)
             {
-                Message.Show("Starting live video failed", LoggingLevel.Error);
+                _message.Show("Starting live video failed", LoggingLevel.Error);
+                return false;
             }
             else
             {
                 // Everything is ok.
                 IsLive = expectIsLive;
             }
-            return status;
+            return true;
         }
 
-        public void Exit()
+        public Bitmap GetImage()
         {
-            UpdateTimer.Stop();
-            IsLive = false;
-
-            Camera.EventFrame -= FrameEvent;
-            Camera.Exit();
-
-            PictureBox.Invalidate();
-            PictureBox.SizeMode = PictureBoxSizeMode.CenterImage;
-            RenderMode = uEye.Defines.DisplayRenderMode.FitToWindow;
+            Bitmap img = null;
+            if (_camera != null)
+            {
+                _camera.Memory.GetLast(out int memoryId);
+                _camera.Memory.SetActive(memoryId);
+                _camera.Acquisition.Freeze();
+                _camera.Memory.ToBitmap(memoryId, out img);
+            }
+            return img;
         }
+
+        public void SetAoiSize(int width, int height, int x = 0, int y = 0)
+        {
+            _camera.Size.AOI.Set(x, y, width, height);
+        }
+
+        #endregion
+
+        #region - Auto Features -
+
+        private delegate Status GetFunc(out bool enable);
+
+        private bool GetAutoFeatures(GetFunc func)
+        {
+            func(out bool enable);
+            return enable;
+        }
+
+        public bool AutoShutter
+        {
+            get => GetAutoFeatures(_camera.AutoFeatures.Software.Shutter.GetEnable);
+            set => _camera.AutoFeatures.Software.Shutter.SetEnable(value);
+        }
+
+        public bool AutoWhiteBalance
+        {
+            get => GetAutoFeatures(_camera.AutoFeatures.Software.WhiteBalance.GetEnable);
+            set => _camera.AutoFeatures.Software.WhiteBalance.SetEnable(value);
+        }
+
+        public bool AutoGain
+        {
+            get => GetAutoFeatures(_camera.AutoFeatures.Software.Gain.GetEnable);
+            set => _camera.AutoFeatures.Software.Gain.SetEnable(value);
+        }
+
+        #endregion
+
+        #region - Form -
 
         public void ChooseCamera()
         {
@@ -177,18 +271,22 @@ namespace NFUIRSL.HRTK.Vision
 
         public void ShowSettingForm()
         {
-            if (Camera != null)
+            if (_camera != null)
             {
-                var settingForm = new SettingsForm(Camera);
+                var settingForm = new SettingsForm(_camera);
                 settingForm.SizeControl.AOIChanged += OnDisplayChanged;
                 settingForm.FormatControl.DisplayChanged += OnDisplayChanged;
                 settingForm.ShowDialog();
             }
             else
             {
-                Message.Show("Camera never initialization.", LoggingLevel.Warn);
+                _message.Show("Camera never initialization.", LoggingLevel.Warn);
             }
         }
+
+        #endregion
+
+        #region - .NET Version -
 
         private bool CheckRuntimeVersion()
         {
@@ -207,10 +305,10 @@ namespace NFUIRSL.HRTK.Vision
             return ok;
         }
 
-        private System.Collections.ObjectModel.Collection<Version> InstalledDotNetVersions()
+        private Collection<Version> InstalledDotNetVersions()
         {
-            var versions = new System.Collections.ObjectModel.Collection<Version>();
-            var NDPKey = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\NET Framework Setup\NDP");
+            var versions = new Collection<Version>();
+            var NDPKey = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\NET Framework Setup\NDP");
             if (NDPKey != null)
             {
                 string[] subkeys = NDPKey.GetSubKeyNames();
@@ -224,9 +322,9 @@ namespace NFUIRSL.HRTK.Vision
             return versions;
         }
 
-        private void GetDotNetVersion(Microsoft.Win32.RegistryKey parentKey,
+        private void GetDotNetVersion(RegistryKey parentKey,
                                       string subVersionName,
-                                      System.Collections.ObjectModel.Collection<Version> versions)
+                                      Collection<Version> versions)
         {
             if (parentKey != null)
             {
@@ -250,63 +348,26 @@ namespace NFUIRSL.HRTK.Vision
             }
         }
 
-        private uEye.Defines.Status Init()
-        {
-            if (Camera == null)
-            {
-                Camera = new uEye.Camera();
-            }
+        #endregion
 
-            uEye.Defines.Status status;
-            var id = DeviceId | (Int32)uEye.Defines.DeviceEnumeration.UseDeviceID;
-
-            status = Camera.Init(id, PictureBox.Handle);
-            if (status != uEye.Defines.Status.SUCCESS)
-            {
-                Message.Show("Initializing the camera failed");
-                return status;
-            }
-
-            status = MemoryHelper.AllocImageMems(Camera, CnNumberOfSeqBuffers);
-            if (status != uEye.Defines.Status.SUCCESS)
-            {
-                Message.Show("Allocating memory failed");
-                return status;
-            }
-
-            status = MemoryHelper.InitSequence(Camera);
-            if (status != uEye.Defines.Status.SUCCESS)
-            {
-                Message.Show("Add to sequence failed");
-                return status;
-            }
-
-            Camera.EventFrame += FrameEvent;
-            FrameCount = 0;
-            UpdateTimer.Start();
-            uEye.Types.SensorInfo sensorInfo;
-            Camera.Information.GetSensorInfo(out sensorInfo);
-            SensorName = sensorInfo.SensorName;
-            PictureBox.SizeMode = PictureBoxSizeMode.Normal;
-            return status;
-        }
+        #region - Events -
 
         private void FrameEvent(object sender, EventArgs e)
         {
-            var camera = sender as uEye.Camera;
+            var camera = sender as Camera;
             if (camera.IsOpened)
             {
-                uEye.Defines.DisplayMode mode;
+                DisplayMode mode;
                 camera.Display.Mode.Get(out mode);
 
                 // Only display in DiB mode.
-                if (mode == uEye.Defines.DisplayMode.DiB)
+                if (mode == DisplayMode.DiB)
                 {
                     Int32 memId;
                     var status = camera.Memory.GetLast(out memId);
-                    if ((status == uEye.Defines.Status.SUCCESS) && 0 < memId)
+                    if ((status == Status.SUCCESS) && 0 < memId)
                     {
-                        if (camera.Memory.Lock(memId) == uEye.Defines.Status.SUCCESS)
+                        if (camera.Memory.Lock(memId) == Status.SUCCESS)
                         {
                             camera.Display.Render(memId, RenderMode);
                             camera.Memory.Unlock(memId);
@@ -316,69 +377,70 @@ namespace NFUIRSL.HRTK.Vision
                 ++FrameCount;
             }
         }
-        
+
         private void OnDisplayChanged(object sender, EventArgs e)
         {
-            uEye.Defines.DisplayMode displayMode;
-            Camera.Display.Mode.Get(out displayMode);
+            DisplayMode displayMode;
+            _camera.Display.Mode.Get(out displayMode);
 
             // set scaling options
-            if (displayMode != uEye.Defines.DisplayMode.DiB)
+            if (displayMode != DisplayMode.DiB)
             {
-                if (RenderMode == uEye.Defines.DisplayRenderMode.DownScale_1_2)
+                if (RenderMode == DisplayRenderMode.DownScale_1_2)
                 {
-                    RenderMode = uEye.Defines.DisplayRenderMode.Normal;
+                    RenderMode = DisplayRenderMode.Normal;
 
-                    PictureBox.Anchor = AnchorStyles.Top | AnchorStyles.Left;
+                    _pictureBox.Anchor = AnchorStyles.Top | AnchorStyles.Left;
 
                     // get image size
-                    System.Drawing.Rectangle rect;
-                    Camera.Size.AOI.Get(out rect);
+                    Rectangle rect;
+                    _camera.Size.AOI.Get(out rect);
 
-                    PictureBox.Width = rect.Width;
-                    PictureBox.Height = rect.Height;
+                    _pictureBox.Width = rect.Width;
+                    _pictureBox.Height = rect.Height;
                 }
                 else
                 {
-                    Camera.DirectRenderer.SetScaling(RenderMode == uEye.Defines.DisplayRenderMode.FitToWindow);
+                    _camera.DirectRenderer.SetScaling(RenderMode == DisplayRenderMode.FitToWindow);
                 }
             }
             else
             {
-                if (RenderMode != uEye.Defines.DisplayRenderMode.FitToWindow)
+                if (RenderMode != DisplayRenderMode.FitToWindow)
                 {
-                    PictureBox.Anchor = AnchorStyles.Top | AnchorStyles.Left;
+                    _pictureBox.Anchor = AnchorStyles.Top | AnchorStyles.Left;
 
                     // get image size
-                    System.Drawing.Rectangle rect;
-                    Camera.Size.AOI.Get(out rect);
+                    Rectangle rect;
+                    _camera.Size.AOI.Get(out rect);
 
-                    if (RenderMode != uEye.Defines.DisplayRenderMode.Normal)
+                    if (RenderMode != DisplayRenderMode.Normal)
                     {
 
-                        PictureBox.Width = rect.Width / 2;
-                        PictureBox.Height = rect.Height / 2;
+                        _pictureBox.Width = rect.Width / 2;
+                        _pictureBox.Height = rect.Height / 2;
                     }
                     else
                     {
-                        PictureBox.Width = rect.Width;
-                        PictureBox.Height = rect.Height;
+                        _pictureBox.Width = rect.Width;
+                        _pictureBox.Height = rect.Height;
                     }
                 }
             }
         }
 
-
         private void UpdateControls(object sender, EventArgs e)
         {
-            Camera.Timing.Framerate.GetCurrentFps(out var frameRate);
+            _camera.Timing.Framerate.GetCurrentFps(out var frameRate);
             Fps = frameRate;
 
-            Camera.Information.GetCaptureStatus(out var captureStatus);
+            _camera.Information.GetCaptureStatus(out var captureStatus);
             if (null != captureStatus)
             {
                 Failed = "" + captureStatus.Total;
             }
         }
+
+        #endregion
     }
 }

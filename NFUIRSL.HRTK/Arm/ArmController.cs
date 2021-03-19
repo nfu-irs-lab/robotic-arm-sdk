@@ -47,14 +47,14 @@ namespace NFUIRSL.HRTK
     public enum MotionType
     {
         /// <summary>
-        /// 直線運動。
-        /// </summary>
-        Linear,
-
-        /// <summary>
         /// 點對點運動。
         /// </summary>
         PointToPoint,
+
+        /// <summary>
+        /// 直線運動。
+        /// </summary>
+        Linear,
 
         /// <summary>
         /// 圓弧運動。
@@ -162,6 +162,8 @@ namespace NFUIRSL.HRTK
         #endregion - Speed and Acceleration -
 
         #region - Motion -
+
+        void Do(IArmAction armAction);
 
         /// <summary>
         /// 回到指定座標系的原點。預設爲笛卡爾座標。
@@ -356,6 +358,17 @@ namespace NFUIRSL.HRTK
 
         #region - Motion -
 
+        public void Do(IArmAction armAction)
+        {
+            Message.Log(armAction.Message, LoggingLevel.Info);
+            armAction.ArmId = Id;
+            var success = armAction.Do();
+            if (success && armAction.NeedWait)
+            {
+                WaitForMotionComplete();
+            }
+        }
+
         public void Homing(CoordinateType coordinateType = CoordinateType.Descartes,
                            bool waitForMotion = true)
         {
@@ -497,6 +510,26 @@ namespace NFUIRSL.HRTK
                    $"{position[4]}," +
                    $"{position[5]}" +
                    "\"";
+        }
+
+        private void WaitForMotionComplete()
+        {
+#if (USE_CALLBACK_MOTION_STATE_WAIT)
+            // 使用 HRSDK 中的 delegate CallBackFun 來接收從手臂回傳的資訊，
+            // 並從中取得 motion_state 來判斷手臂是否還在運動中。
+
+            Waiting = true;
+            while (Waiting)
+            { }
+#elif (USE_MOTION_STATE_WAIT)
+            // 使用 HRSDK 中的 method get_motion_state() 來取得手臂 motion_state 來判斷手臂是否還在運動中。
+
+            // motion_state = 1: Idle.
+            while (HRobot.get_motion_state(Id) != 1)
+            {
+                Thread.Sleep(200);
+            }
+#endif
         }
 
         /// <summary>

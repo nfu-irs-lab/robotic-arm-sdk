@@ -25,6 +25,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DocumentationFile>bin\Debug\NFUIRSL.HRTK.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -63,6 +64,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActionFlowHandler.cs" />
+    <Compile Include="Arm\ArmAction.cs" />
     <Compile Include="Arm\ArmController.cs" />
     <Compile Include="Arm\ArmIntermediateLayer.cs" />
     <Compile Include="Arm\HRobot.cs" />
