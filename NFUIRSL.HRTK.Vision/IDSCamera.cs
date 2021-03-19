@@ -93,7 +93,7 @@ namespace NFUIRSL.HRTK.Vision
             if (_camera != null)
             {
                 var status = ChangeCaptureMode(captureMode);
-                if (status != Status.SUCCESS && _camera.IsOpened)
+                if (!status && _camera.IsOpened)
                 {
                     _camera.Exit();
                 }
@@ -110,7 +110,7 @@ namespace NFUIRSL.HRTK.Vision
             }
         }
 
-        public Status ChangeCaptureMode(CaptureMode captureMode)
+        public bool ChangeCaptureMode(CaptureMode captureMode)
         {
             Func<Status> func;
             bool expectIsLive;
@@ -133,20 +133,21 @@ namespace NFUIRSL.HRTK.Vision
                     break;
 
                 default:
-                    return Status.NO_SUCCESS;
+                    return false;
             }
 
             var status = func();
             if (status != Status.SUCCESS)
             {
                 _message.Show("Starting live video failed", LoggingLevel.Error);
+                return false;
             }
             else
             {
                 // Everything is ok.
                 IsLive = expectIsLive;
             }
-            return status;
+            return true;
         }
 
         public void Exit()
