@@ -180,7 +180,7 @@ namespace NFUIRSL.HRTK.Vision
             _camera.Size.AOI.Set(x, y, width, height);
         }
 
-        public Status Init()
+        public bool Init()
         {
             if (_camera == null)
             {
@@ -193,30 +193,29 @@ namespace NFUIRSL.HRTK.Vision
             if (status != Status.SUCCESS)
             {
                 _message.Show("Initializing the camera failed", LoggingLevel.Error);
-                return status;
+                return false;
             }
 
             status = MemoryHelper.AllocImageMems(_camera, _cnNumberOfSeqBuffers);
             if (status != Status.SUCCESS)
             {
                 _message.Show("Allocating memory failed", LoggingLevel.Error);
-                return status;
+                return false;
             }
 
             status = MemoryHelper.InitSequence(_camera);
             if (status != Status.SUCCESS)
             {
                 _message.Show("Add to sequence failed", LoggingLevel.Error);
-                return status;
+                return false;
             }
 
             _camera.EventFrame += FrameEvent;
             FrameCount = 0;
             _updateTimer.Start();
-            SensorInfo sensorInfo;
-            _camera.Information.GetSensorInfo(out sensorInfo);
+            _camera.Information.GetSensorInfo(out var sensorInfo);
             SensorName = sensorInfo.SensorName;
-            return status;
+            return true;
         }
 
         #region - Auto Features -
