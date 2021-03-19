@@ -31,6 +31,25 @@ namespace NFUIRSL.HRTK
         bool Do();
     }
 
+    public class AbortMotion : IArmAction
+    {
+        public string Message => "Arm Abort.";
+
+        public bool NeedWait
+        {
+            get => false;
+            set { }
+        }
+
+        public int ArmId { get; set; }
+
+        public bool Do()
+        {
+            var returnCode = HRobot.motion_abort(ArmId);
+            return returnCode == 0;
+        }
+    }
+
     /// <summary>
     /// The motion of arm.
     /// </summary>
@@ -51,13 +70,13 @@ namespace NFUIRSL.HRTK
             Position[3] = aJ4;
             Position[4] = bJ5;
             Position[5] = cJ6;
-            SmoothType = SmoothType.TwoLinesSpeedSmooth;
+            SmoothType = SmoothType.Disable;
         }
 
         protected ArmMotion(double[] position)
         {
             Position = position;
-            SmoothType = SmoothType.TwoLinesSpeedSmooth;
+            SmoothType = SmoothType.Disable;
         }
 
         protected abstract PositionType PositionType { get; }
