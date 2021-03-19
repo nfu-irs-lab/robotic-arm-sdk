@@ -25,9 +25,9 @@ namespace NFUIRSL.HRTK.Vision
     {
         private const int _cnNumberOfSeqBuffers = 3;
         private readonly IMessage _message;
+        private readonly Timer _updateTimer;
         private Camera _camera;
         private PictureBox _pictureBox;
-        private Timer _updateTimer;
 
         public IDSCamera(IMessage message)
         {
