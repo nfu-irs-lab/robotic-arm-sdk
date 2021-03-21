@@ -178,9 +178,9 @@ namespace NFUIRSL.HRTK
         public RelativeMotion(double xJ1,
                               double yJ2,
                               double zJ3,
-                              double aJ4,
-                              double bJ5,
-                              double cJ6)
+                              double aJ4 = 0,
+                              double bJ5 = 0,
+                              double cJ6 = 0)
             : base(xJ1, yJ2, zJ3, aJ4, bJ5, cJ6)
         { }
 
