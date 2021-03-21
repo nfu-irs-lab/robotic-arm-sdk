@@ -131,20 +131,6 @@ namespace NFUIRSL.HRTK
         /// </summary>
         string Ip { get; }
 
-        #region - Default Position -
-
-        /// <summary>
-        /// 笛卡爾座標之原點絕對位置。
-        /// </summary>
-        // double[] DescartesHomePosition { get; }
-
-        /// <summary>
-        /// 關節座標之原點絕對位置。
-        /// </summary>
-        // double[] JointHomePosition { get; }
-
-        #endregion - Default Position -
-
         #region - Speed and Acceleration -
 
         /// <summary>
@@ -163,56 +149,11 @@ namespace NFUIRSL.HRTK
 
         #region - Motion -
 
+        /// <summary>
+        /// 進行手臂動作。
+        /// </summary>
+        /// <param name="armAction"></param>
         void Do(IArmAction armAction);
-
-        /// <summary>
-        /// 回到指定座標系的原點。預設爲笛卡爾座標。
-        /// </summary>
-        /// <param name="coordinateType"></param>
-        /// <param name="waitForMotion"></param>
-        void Homing(CoordinateType coordinateType = CoordinateType.Descartes,
-                    bool waitForMotion = true);
-
-        /// <summary>
-        /// 進行直線運動。<br/>
-        /// ● targetPosition：目標位置。<br/>
-        /// ● positionType：位置類型，絕對或相對位置。預設為絕對位置。<br/>
-        /// ● coordinateType：座標類型，笛卡爾或關節座標。預設為笛卡爾座標。<br/>
-        /// ● smoothType：平滑模式類型。預設為依兩線段速度平滑。<br/>
-        /// ● smoothValue：平滑值。預設為50。<br/>
-        /// ● waitForMotion：是否等待動作完成。預設為true。
-        /// </summary>
-        /// <param name="targetPosition"></param>
-        /// <param name="positionType"></param>
-        /// <param name="coordinateType"></param>
-        /// <param name="smoothType"></param>
-        /// <param name="smoothValue"></param>
-        /// <param name="waitForMotion"></param>
-        void MoveLinear(double[] targetPosition,
-                        PositionType positionType = PositionType.Absolute,
-                        CoordinateType coordinateType = CoordinateType.Descartes,
-                        SmoothType smoothType = SmoothType.TwoLinesSpeedSmooth,
-                        double smoothValue = 50,
-                        bool waitForMotion = true);
-
-        /// <summary>
-        /// 進行點對點運動。<br/>
-        /// ● targetPosition：目標位置。<br/>
-        /// ● positionType：位置類型，絕對或相對位置。預設為絕對位置。<br/>
-        /// ● coordinateType：座標類型，笛卡爾或關節座標。預設為笛卡爾座標。<br/>
-        /// ● smoothType：平滑模式類型。預設為依兩線段速度平滑。<br/>
-        /// ● waitForMotion：是否等待動作完成。預設為true。
-        /// </summary>
-        /// <param name="targetPosition"></param>
-        /// <param name="positionType"></param>
-        /// <param name="coordinateType"></param>
-        /// <param name="smoothType"></param>
-        /// <param name="waitForMotion"></param>
-        void MovePointToPoint(double[] targetPosition,
-                              PositionType positionType = PositionType.Absolute,
-                              CoordinateType coordinateType = CoordinateType.Descartes,
-                              SmoothType smoothType = SmoothType.TwoLinesSpeedSmooth,
-                              bool waitForMotion = true);
 
         #endregion - Motion -
 
@@ -367,149 +308,6 @@ namespace NFUIRSL.HRTK
             {
                 WaitForMotionComplete();
             }
-        }
-
-        public void Homing(CoordinateType coordinateType = CoordinateType.Descartes,
-                           bool waitForMotion = true)
-        {
-            Message.Log($"Arm-Homing.Type:{coordinateType}, Wait:{waitForMotion}",
-                        LoggingLevel.Trace);
-
-            double[] pos;
-            Func<int, int, double[], int> action;
-
-            switch (coordinateType)
-            {
-                case CoordinateType.Descartes:
-                    pos = DescartesHomePosition;
-                    action = HRobot.ptp_pos;
-                    break;
-
-                case CoordinateType.Joint:
-                    pos = JointHomePosition;
-                    action = HRobot.ptp_axis;
-                    break;
-
-                default:
-                    ShowUnknownCoordinateType();
-                    return;
-            }
-
-            var returnCode = action(Id, (int)SmoothType.Disable, pos);
-            if (!IsErrorAndHandler(returnCode) && waitForMotion)
-            {
-                WaitForMotionComplete(pos, coordinateType);
-            }
-        }
-
-        public void MoveLinear(double[] targetPosition,
-                               PositionType positionType = PositionType.Absolute,
-                               CoordinateType coordinateType = CoordinateType.Descartes,
-                               SmoothType smoothType = SmoothType.TwoLinesSpeedSmooth,
-                               double smoothValue = 50,
-                               bool waitForMotion = true)
-        {
-            Message.Log($"Arm-Linear." +
-                        $"Pos:{GetTextPosition(targetPosition)}," +
-                        $"Type:{coordinateType};{positionType}," +
-                        $"Smo:{smoothType};{smoothValue}," +
-                        $"Wait:{waitForMotion}",
-                        LoggingLevel.Trace);
-
-            Func<int, int, double, double[], int> action;
-
-            switch (coordinateType)
-            {
-                case CoordinateType.Descartes when positionType == PositionType.Absolute:
-                    action = HRobot.lin_pos;
-                    break;
-
-                case CoordinateType.Descartes when positionType == PositionType.Relative:
-                    action = HRobot.lin_rel_pos;
-                    break;
-
-                case CoordinateType.Joint when positionType == PositionType.Absolute:
-                    action = HRobot.lin_axis;
-                    break;
-
-                case CoordinateType.Joint when positionType == PositionType.Relative:
-                    action = HRobot.lin_rel_axis;
-                    break;
-
-                case CoordinateType.Unknown:
-                    ShowUnknownCoordinateType();
-                    return;
-
-                default:
-                    return;
-            }
-
-            var returnCode = action(Id, (int)smoothType, smoothValue, targetPosition);
-            if (!IsErrorAndHandler(returnCode) && waitForMotion)
-            {
-                WaitForMotionComplete(targetPosition, coordinateType);
-            }
-        }
-
-        public void MovePointToPoint(double[] targetPosition,
-                                     PositionType positionType = PositionType.Absolute,
-                                     CoordinateType coordinateType = CoordinateType.Descartes,
-                                     SmoothType smoothType = SmoothType.TwoLinesSpeedSmooth,
-                                     bool waitForMotion = true)
-        {
-            Message.Log($"Arm-PointToPoint." +
-                        $"Pos:{GetTextPosition(targetPosition)}," +
-                        $"Type:{coordinateType};{positionType}," +
-                        $"Smo:{smoothType}," +
-                        $"Wait:{waitForMotion}",
-                        LoggingLevel.Trace);
-
-            var smoothTypeCode = (smoothType == SmoothType.TwoLinesSpeedSmooth) ? 1 : 0;
-            Func<int, int, double[], int> action;
-
-            switch (coordinateType)
-            {
-                case CoordinateType.Descartes when positionType == PositionType.Absolute:
-                    action = HRobot.ptp_pos;
-                    break;
-
-                case CoordinateType.Descartes when positionType == PositionType.Relative:
-                    action = HRobot.ptp_rel_pos;
-                    break;
-
-                case CoordinateType.Joint when positionType == PositionType.Absolute:
-                    action = HRobot.ptp_axis;
-                    break;
-
-                case CoordinateType.Joint when positionType == PositionType.Relative:
-                    action = HRobot.ptp_rel_axis;
-                    break;
-
-                case CoordinateType.Unknown:
-                    ShowUnknownCoordinateType();
-                    return;
-
-                default:
-                    return;
-            }
-
-            var returnCode = action(Id, smoothTypeCode, targetPosition);
-            if (!IsErrorAndHandler(returnCode) && waitForMotion)
-            {
-                WaitForMotionComplete(targetPosition, coordinateType);
-            }
-        }
-
-        private string GetTextPosition(double[] position)
-        {
-            return "\"" +
-                   $"{position[0]}," +
-                   $"{position[1]}," +
-                   $"{position[2]}," +
-                   $"{position[3]}," +
-                   $"{position[4]}," +
-                   $"{position[5]}" +
-                   "\"";
         }
 
         private void WaitForMotionComplete()
