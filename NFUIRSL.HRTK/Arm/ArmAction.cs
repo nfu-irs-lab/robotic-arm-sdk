@@ -308,11 +308,11 @@ namespace NFUIRSL.HRTK
     {
         /// <summary>
         /// Arm jog. Input example: +x<br/>
-        /// Input regex: <c>[+-][a-cx-zA-CX-Z]</c>
+        /// Input regex: <c>[+-][a-cx-zA-CX-Z0-5]</c>
         /// </summary>
         /// <param name="axis"></param>
         /// <exception cref="ArgumentException">
-        /// Input regex: <c>[+-][a-cx-zA-CX-Z]</c>
+        /// Input regex: <c>[+-][a-cx-zA-CX-Z0-5]</c>
         /// </exception>
         public Jog(string axis)
         {
@@ -344,7 +344,7 @@ namespace NFUIRSL.HRTK
 
         private bool CheckArgs(string axis)
         {
-            if (Regex.IsMatch(axis, "[+-][a-cx-zA-CX-Z]"))
+            if (Regex.IsMatch(axis, "[+-][a-cx-zA-CX-Z0-5]"))
             {
                 return true;
             }
@@ -357,29 +357,41 @@ namespace NFUIRSL.HRTK
         private void ParseAxis(string axis)
         {
             int val;
-            switch (axis.Substring(1, 1).ToLower())
+            switch (axis.Substring(1, 1))
             {
                 case "x":
+                case "X":
+                case "0":
                     val = 0;
                     break;
 
                 case "y":
+                case "Y":
+                case "1":
                     val = 1;
                     break;
 
                 case "z":
+                case "Z":
+                case "2":
                     val = 2;
                     break;
 
                 case "a":
+                case "A":
+                case "3":
                     val = 3;
                     break;
 
                 case "b":
+                case "B":
+                case "4":
                     val = 4;
                     break;
 
                 case "c":
+                case "C":
+                case "5":
                     val = 5;
                     break;
 
