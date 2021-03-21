@@ -31,6 +31,38 @@ namespace NFUIRSL.HRTK
         bool Do();
     }
 
+    /// <summary>
+    /// Empty arm action.
+    /// </summary>
+    public class EmptyArmAction : IArmAction
+    {
+        /// <summary>
+        /// Empty arm action.
+        /// </summary>
+        /// <param name="returnValue"></param>
+        public EmptyArmAction(bool returnValue = true)
+        {
+            _returnValue = returnValue;
+        }
+
+        public string Message => "Empty arm action.";
+
+        public bool NeedWait
+        {
+            get => false;
+            set { }
+        }
+
+        public int ArmId { get; set; }
+
+        private readonly bool _returnValue;
+
+        public bool Do()
+        {
+            return _returnValue;
+        }
+    }
+
     public class AbortMotion : IArmAction
     {
         public string Message => "Arm Abort.";
@@ -178,9 +210,9 @@ namespace NFUIRSL.HRTK
         public RelativeMotion(double xJ1,
                               double yJ2,
                               double zJ3,
-                              double aJ4,
-                              double bJ5,
-                              double cJ6)
+                              double aJ4 = 0,
+                              double bJ5 = 0,
+                              double cJ6 = 0)
             : base(xJ1, yJ2, zJ3, aJ4, bJ5, cJ6)
         { }
 
@@ -228,6 +260,227 @@ namespace NFUIRSL.HRTK
                     return false;
             }
             return IsSuccessful(returnCode);
+        }
+    }
+
+    /// <summary>
+    /// The absolute motion of arm.
+    /// </summary>
+    public class AbsoluteMotion : ArmMotion
+    {
+        /// <summary>
+        /// The absolute motion of arm.
+        /// </summary>
+        /// <param name="xJ1"></param>
+        /// <param name="yJ2"></param>
+        /// <param name="zJ3"></param>
+        /// <param name="aJ4"></param>
+        /// <param name="bJ5"></param>
+        /// <param name="cJ6"></param>
+        public AbsoluteMotion(double xJ1,
+                              double yJ2,
+                              double zJ3,
+                              double aJ4,
+                              double bJ5,
+                              double cJ6)
+            : base(xJ1, yJ2, zJ3, aJ4, bJ5, cJ6)
+        { }
+
+        /// <summary>
+        /// The absolute motion of arm.
+        /// </summary>
+        /// <param name="position"></param>
+        public AbsoluteMotion(double[] position) : base(position)
+        { }
+
+        protected override PositionType PositionType => PositionType.Absolute;
+
+        public override bool Do()
+        {
+            int returnCode;
+            switch (CoordinateType)
+            {
+                case CoordinateType.Descartes when MotionType == MotionType.PointToPoint:
+                    returnCode = HRobot.ptp_pos(ArmId,
+                                                SmoothTypeCode,
+                                                Position);
+                    break;
+
+                case CoordinateType.Descartes when MotionType == MotionType.Linear:
+                    returnCode = HRobot.lin_pos(ArmId,
+                                                SmoothTypeCode,
+                                                SmoothValue,
+                                                Position);
+                    break;
+
+                case CoordinateType.Joint when MotionType == MotionType.PointToPoint:
+                    returnCode = HRobot.ptp_axis(ArmId,
+                                                 SmoothTypeCode,
+                                                 Position);
+                    break;
+
+                case CoordinateType.Joint when MotionType == MotionType.Linear:
+                    returnCode = HRobot.lin_axis(ArmId,
+                                                 SmoothTypeCode,
+                                                 SmoothValue,
+                                                 Position);
+                    break;
+
+                default:
+                    return false;
+            }
+            return IsSuccessful(returnCode);
+        }
+    }
+
+    /// <summary>
+    /// Arm Homing.
+    /// </summary>
+    public class Homing : AbsoluteMotion
+    {
+        /// <summary>
+        /// Arm Homing.
+        /// </summary>
+        /// <param name="coordinateType"></param>
+        public Homing(CoordinateType coordinateType = CoordinateType.Descartes)
+            : base(coordinateType == CoordinateType.Descartes ?
+                       ArmController.DescartesHomePosition :
+                       coordinateType == CoordinateType.Joint ?
+                           ArmController.JointHomePosition :
+                           throw new AggregateException())
+        {
+            CoordinateType = coordinateType;
+            MotionType = MotionType.PointToPoint;
+            NeedWait = true;
+        }
+
+        public override string Message => "Arm Homing. " +
+                                          $"CT{CoordinateType}," +
+                                          $"MT{MotionType}," +
+                                          $"Wait{NeedWait}.";
+    }
+
+    /// <summary>
+    /// Arm jog.
+    /// </summary>
+    public class Jog : IArmAction
+    {
+        /// <summary>
+        /// Arm jog. Input example: +x<br/>
+        /// Input regex: <c>[+-][a-cx-zA-CX-Z0-5]</c>
+        /// </summary>
+        /// <param name="axis"></param>
+        /// <exception cref="ArgumentException">
+        /// Input regex: <c>[+-][a-cx-zA-CX-Z0-5]</c>
+        /// </exception>
+        public Jog(string axis)
+        {
+            // Remove all whitespace char.
+            axis = Regex.Replace(axis, @"\s", "");
+            if (CheckArgs(axis))
+            {
+                ParseDir(axis);
+                ParseAxis(axis);
+            }
+            else
+            {
+                throw new ArgumentException();
+            }
+
+            Message = $"Arm jog. {axis}.";
+        }
+
+        public string Message { get; private set; }
+
+        public bool NeedWait
+        {
+            get => false;
+            set { }
+        }
+
+        private int _direction;
+        private int _axisIndex;
+
+        private bool CheckArgs(string axis)
+        {
+            if (Regex.IsMatch(axis, "[+-][a-cx-zA-CX-Z0-5]"))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        private void ParseAxis(string axis)
+        {
+            int val;
+            switch (axis.Substring(1, 1))
+            {
+                case "x":
+                case "X":
+                case "0":
+                    val = 0;
+                    break;
+
+                case "y":
+                case "Y":
+                case "1":
+                    val = 1;
+                    break;
+
+                case "z":
+                case "Z":
+                case "2":
+                    val = 2;
+                    break;
+
+                case "a":
+                case "A":
+                case "3":
+                    val = 3;
+                    break;
+
+                case "b":
+                case "B":
+                case "4":
+                    val = 4;
+                    break;
+
+                case "c":
+                case "C":
+                case "5":
+                    val = 5;
+                    break;
+
+                default:
+                    throw new ArgumentException();
+            }
+            _axisIndex = val;
+        }
+
+        private void ParseDir(string axis)
+        {
+            if (axis.Substring(0, 1) == "+")
+            {
+                _direction = 1;
+            }
+            else if (axis.Substring(0, 1) == "-")
+            {
+                _direction = -1;
+            }
+        }
+
+        public int ArmId { get; set; }
+
+        public bool Do()
+        {
+            // type = 0: Base coor.
+            var returnCode = HRobot.jog(ArmId, 0, _axisIndex, _direction);
+
+            // Return 0: successful.
+            return returnCode == 0;
         }
     }
 }
