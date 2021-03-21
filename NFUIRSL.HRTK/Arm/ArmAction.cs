@@ -31,6 +31,38 @@ namespace NFUIRSL.HRTK
         bool Do();
     }
 
+    /// <summary>
+    /// Empty arm action.
+    /// </summary>
+    public class EmptyArmAction : IArmAction
+    {
+        /// <summary>
+        /// Empty arm action.
+        /// </summary>
+        /// <param name="returnValue"></param>
+        public EmptyArmAction(bool returnValue = true)
+        {
+            _returnValue = returnValue;
+        }
+
+        public string Message => "Empty arm action.";
+
+        public bool NeedWait
+        {
+            get => false;
+            set { }
+        }
+
+        public int ArmId { get; set; }
+
+        private readonly bool _returnValue;
+
+        public bool Do()
+        {
+            return _returnValue;
+        }
+    }
+
     public class AbortMotion : IArmAction
     {
         public string Message => "Arm Abort.";
