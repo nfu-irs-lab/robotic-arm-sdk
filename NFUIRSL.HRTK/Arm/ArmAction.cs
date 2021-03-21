@@ -299,117 +299,117 @@ namespace NFUIRSL.HRTK
             }
             return IsSuccessful(returnCode);
         }
+    }
 
+    /// <summary>
+    /// Arm jog.
+    /// </summary>
+    public class Jog : IArmAction
+    {
         /// <summary>
-        /// Arm jog.
+        /// Arm jog. Input example: +x<br/>
+        /// Input regex: <c>[+-][a-cx-zA-CX-Z]</c>
         /// </summary>
-        public class Jog : IArmAction
+        /// <param name="axis"></param>
+        /// <exception cref="ArgumentException">
+        /// Input regex: <c>[+-][a-cx-zA-CX-Z]</c>
+        /// </exception>
+        public Jog(string axis)
         {
-            /// <summary>
-            /// Arm jog. Input example: +x<br/>
-            /// Input regex: <c>[+-][a-cx-zA-CX-Z]</c>
-            /// </summary>
-            /// <param name="axis"></param>
-            /// <exception cref="ArgumentException">
-            /// Input regex: <c>[+-][a-cx-zA-CX-Z]</c>
-            /// </exception>
-            public Jog(string axis)
+            // Remove all whitespace char.
+            axis = Regex.Replace(axis, @"\s", "");
+            if (CheckArgs(axis))
             {
-                // Remove all whitespace char.
-                axis = Regex.Replace(axis, @"\s", "");
-                if (CheckArgs(axis))
-                {
-                    ParseDir(axis);
-                    ParseAxis(axis);
-                }
-                else
-                {
+                ParseDir(axis);
+                ParseAxis(axis);
+            }
+            else
+            {
+                throw new ArgumentException();
+            }
+
+            Message = $"Arm jog. {axis}.";
+        }
+
+        public string Message { get; private set; }
+
+        public bool NeedWait
+        {
+            get => false;
+            set { }
+        }
+
+        private int _direction;
+        private int _axisIndex;
+
+        private bool CheckArgs(string axis)
+        {
+            if (Regex.IsMatch(axis, "[+-][a-cx-zA-CX-Z]"))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        private void ParseAxis(string axis)
+        {
+            int val;
+            switch (axis.Substring(1, 1).ToLower())
+            {
+                case "x":
+                    val = 0;
+                    break;
+
+                case "y":
+                    val = 1;
+                    break;
+
+                case "z":
+                    val = 2;
+                    break;
+
+                case "a":
+                    val = 3;
+                    break;
+
+                case "b":
+                    val = 4;
+                    break;
+
+                case "c":
+                    val = 5;
+                    break;
+
+                default:
                     throw new ArgumentException();
-                }
-
-                Message = $"Arm jog. {axis}.";
             }
+            _axisIndex = val;
+        }
 
-            public string Message { get; private set; }
-
-            public bool NeedWait
+        private void ParseDir(string axis)
+        {
+            if (axis.Substring(0, 1) == "+")
             {
-                get => false;
-                set { }
+                _direction = 1;
             }
-
-            private int _direction;
-            private int _axisIndex;
-
-            private bool CheckArgs(string axis)
+            else if (axis.Substring(0, 1) == "-")
             {
-                if (Regex.IsMatch(axis, "[+-][a-cx-zA-CX-Z]"))
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
+                _direction = -1;
             }
+        }
 
-            private void ParseAxis(string axis)
-            {
-                int val;
-                switch (axis.Substring(1, 1).ToLower())
-                {
-                    case "x":
-                        val = 0;
-                        break;
+        public int ArmId { get; set; }
 
-                    case "y":
-                        val = 1;
-                        break;
+        public bool Do()
+        {
+            // type = 0: Base coor.
+            var returnCode = HRobot.jog(ArmId, 0, _axisIndex, _direction);
 
-                    case "z":
-                        val = 2;
-                        break;
-
-                    case "a":
-                        val = 3;
-                        break;
-
-                    case "b":
-                        val = 4;
-                        break;
-
-                    case "c":
-                        val = 5;
-                        break;
-
-                    default:
-                        throw new ArgumentException();
-                }
-                _axisIndex = val;
-            }
-
-            private void ParseDir(string axis)
-            {
-                if (axis.Substring(0, 1) == "+")
-                {
-                    _direction = 1;
-                }
-                else if (axis.Substring(0, 1) == "-")
-                {
-                    _direction = -1;
-                }
-            }
-
-            public int ArmId { get; set; }
-
-            public bool Do()
-            {
-                // type = 0: Base coor.
-                var returnCode = HRobot.jog(ArmId, 0, _axisIndex, _direction);
-
-                // Return 0: successful.
-                return returnCode == 0;
-            }
+            // Return 0: successful.
+            return returnCode == 0;
         }
     }
 }
