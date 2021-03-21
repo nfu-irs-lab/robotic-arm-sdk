@@ -208,36 +208,37 @@ namespace NFUIRSL.HRTK
             data = data.Trim();
             double value;
 
+            IArmAction act;
             switch (data.Substring(0, 2))
             {
                 case "xr":
                     value = Convert.ToDouble(data.Split('r')[1]);
-                    Arm.MoveLinear(new double[]
-                                   {
-                                       value, 0, 0, 0, 0, 0
-                                   },
-                                   PositionType.Relative,
-                                   CoordinateType.Descartes);
+                    act = new RelativeMotion(value, 0, 0, 0, 0, 0)
+                    {
+                        MotionType = MotionType.Linear,
+                        CoordinateType = CoordinateType.Descartes
+                    };
+                    Arm.Do(act);
                     break;
 
                 case "yr":
                     value = Convert.ToDouble(data.Split('r')[1]);
-                    Arm.MoveLinear(new double[]
-                                   {
-                                       0, value, 0, 0, 0, 0
-                                   },
-                                   PositionType.Relative,
-                                   CoordinateType.Descartes);
+                    act = new RelativeMotion(0, value, 0, 0, 0, 0)
+                    {
+                        MotionType = MotionType.Linear,
+                        CoordinateType = CoordinateType.Descartes
+                    };
+                    Arm.Do(act);
                     break;
 
                 case "zr":
                     value = Convert.ToDouble(data.Split('r')[1]);
-                    Arm.MoveLinear(new double[]
-                                   {
-                                       0, 0, value, 0, 0, 0
-                                   },
-                                   PositionType.Relative,
-                                   CoordinateType.Descartes);
+                    act = new RelativeMotion(0, 0, value, 0, 0, 0)
+                    {
+                        MotionType = MotionType.Linear,
+                        CoordinateType = CoordinateType.Descartes
+                    };
+                    Arm.Do(act);
                     break;
 
                 case "ud":
