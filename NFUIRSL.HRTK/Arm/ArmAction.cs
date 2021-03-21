@@ -326,9 +326,11 @@ namespace NFUIRSL.HRTK
                 {
                     throw new ArgumentException();
                 }
+
+                Message = $"Arm jog. {axis}.";
             }
 
-            public string Message => "Arm Jog.";
+            public string Message { get; private set; }
 
             public bool NeedWait
             {
