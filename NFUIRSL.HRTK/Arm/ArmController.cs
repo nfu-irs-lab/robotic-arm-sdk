@@ -136,12 +136,12 @@ namespace NFUIRSL.HRTK
         /// <summary>
         /// 笛卡爾座標之原點絕對位置。
         /// </summary>
-        double[] DescartesHomePosition { get; }
+        // double[] DescartesHomePosition { get; }
 
         /// <summary>
         /// 關節座標之原點絕對位置。
         /// </summary>
-        double[] JointHomePosition { get; }
+        // double[] JointHomePosition { get; }
 
         #endregion - Default Position -
 
@@ -258,9 +258,9 @@ namespace NFUIRSL.HRTK
 
         #region - Default Position -
 
-        public double[] DescartesHomePosition { get; } = { 0, 368, 294, 180, 0, 90 };
+        public static double[] DescartesHomePosition { get; } = { 0, 368, 294, 180, 0, 90 };
 
-        public double[] JointHomePosition { get; } = { 0, 0, 0, 0, 0, 0 };
+        public static double[] JointHomePosition { get; } = { 0, 0, 0, 0, 0, 0 };
 
         #endregion - Default Position -
 
