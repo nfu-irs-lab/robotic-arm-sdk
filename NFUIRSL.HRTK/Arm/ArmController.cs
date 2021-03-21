@@ -736,7 +736,7 @@ namespace NFUIRSL.HRTK
             // 該 Method 的內容請參考 HRSDK-SampleCode： 11.CallbackNotify。
             // 此處不受 IMessage 影響。
 
-            // Get into.
+            // Get info.
             String info = "";
             unsafe
             {
