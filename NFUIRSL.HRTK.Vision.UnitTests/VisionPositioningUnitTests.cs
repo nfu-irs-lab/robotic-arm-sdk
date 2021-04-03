@@ -12,7 +12,7 @@ namespace NFUIRSL.HRTK.Vision.UnitTests
             // Arrange.
             var vp = MakeVisionPositioning();
             var imagePoint = new double[] { 217, 198 };
-            var exp = new double[] { 0, 0 };
+            var exp = new double[] { -120.299, 520.597 };
             var allowableError = 1;
 
             // Act.
@@ -37,7 +37,11 @@ namespace NFUIRSL.HRTK.Vision.UnitTests
             { 1536.59830718425, 1123.13936955248, 1 }
         };
 
+        // XXX
         private static readonly double[] _armTranslationVector =
-            { 0, 0, 0 };
+            // { -120.299, -520.597 , 0 };
+            // { 120.299, -520.597 , 0 };
+            // { 0, -520.597 ,  -120.299};
+            { 0, -520.597, 120.299 };
     }
 }

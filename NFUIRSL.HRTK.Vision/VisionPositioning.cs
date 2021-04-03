@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using MathNet.Numerics.LinearAlgebra;
 
 namespace NFUIRSL.HRTK.Vision
@@ -17,21 +18,25 @@ namespace NFUIRSL.HRTK.Vision
                                  double[] cameraTranslationVector = null,
                                  double[,] cameraRotationMatrix = null)
         {
+            // XXX
             _cameraIntrinsicMatrix = Matrix<double>.Build.DenseOfArray(cameraIntrinsicMatrix);
+            // _cameraIntrinsicMatrix = _cameraIntrinsicMatrix.Transpose();
 
             _armTranslationVector = armTranslationVector == null
                 ? Vector<double>.Build.Dense(3, 0)
                 : Vector<double>.Build.DenseOfArray(armTranslationVector);
 
+            // XXX
             _armRotationMatrix = armRotationMatrix == null
-                ? Matrix<double>.Build.DenseOfArray(new double[,] { { 1, 0, 0 }, { 0, 1, 0 }, { 0, 0, 1 } })
+                // ? Matrix<double>.Build.DenseOfArray(new double[,] { { 1, 0, 0 }, { 0, 1, 0 }, { 0, 0, 1 } })
+                ? Matrix<double>.Build.DenseOfArray(new double[,] { { 0, 0, 1 }, { 0, 1, 0 }, { 1, 0, 0 } })
                 : Matrix<double>.Build.DenseOfArray(armRotationMatrix);
 
-            _cameraTranslationVector = armTranslationVector == null
+            _cameraTranslationVector = cameraTranslationVector == null
                 ? Vector<double>.Build.Dense(3, 0)
                 : Vector<double>.Build.DenseOfArray(cameraTranslationVector);
 
-            _cameraRotationMatrix = armRotationMatrix == null
+            _cameraRotationMatrix = cameraRotationMatrix == null
                 ? Matrix<double>.Build.DenseOfArray(new double[,] { { 1, 0, 0 }, { 0, 1, 0 }, { 0, 0, 1 } })
                 : Matrix<double>.Build.DenseOfArray(cameraRotationMatrix);
         }
