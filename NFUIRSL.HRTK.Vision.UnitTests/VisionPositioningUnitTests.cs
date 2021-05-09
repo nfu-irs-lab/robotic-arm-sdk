@@ -6,17 +6,18 @@ namespace NFUIRSL.HRTK.Vision.UnitTests
     [TestFixture]
     public class VisionPositioningUnitTests
     {
-        [Test]
-        public void ImageToArm_InputRealData_OutputRealData()
+        // [TestCase(217,198,-120.299, 520.597)]
+        [TestCase(2869, 1863, 102.524, 386.361)]
+        // [TestCase(0,0,0, 0)]
+        public void ImageToArm_InputRealData_OutputRealData(int pixX, int pixY, double armX, double armY)
         {
             // Arrange.
             var vp = MakeVisionPositioning();
-            var imagePoint = new double[] { 217, 198 };
-            var exp = new double[] { -120.299, 520.597 };
+            var exp = new[] { armX, armY };
             var allowableError = 1;
 
             // Act.
-            var actual = vp.ImageToArm(imagePoint[0], imagePoint[1]);
+            var actual = vp.ImageToArm(pixX, pixY);
 
             // Assert.
             var errorX = Math.Abs(actual[0] - exp[0]);

@@ -43,7 +43,8 @@ namespace NFUIRSL.HRTK.Vision
 
         public double[] ImageToArm(double pixelX, double pixelY)
         {
-            var imagePoint = Matrix<double>.Build.DenseOfRowArrays(new[] { pixelX, pixelY, 1 });
+            // var imagePoint = Matrix<double>.Build.DenseOfRowArrays(new[] { pixelX, pixelY, 1 });
+            var imagePoint = Matrix<double>.Build.DenseOfRowArrays(new[] { 1, pixelY, pixelX });
 
             var transformation = _armRotationMatrix.SubMatrix(0, 2, 0, 3);
             transformation = transformation.InsertRow(2, _armTranslationVector);
