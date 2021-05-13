@@ -7,6 +7,9 @@ using Emgu.CV.Util;
 
 namespace NFUIRSL.HRTK.Vision
 {
+    /// <summary>
+    /// Vision positioning interface.
+    /// </summary>
     public interface IVisionPositioning
     {
         /// <summary>
@@ -20,19 +23,22 @@ namespace NFUIRSL.HRTK.Vision
     }
 
     /// <summary>
-    /// Digit-by-digit calculation by Checking Forecast Result with Camera Calibration.<br/>
-    /// 相機標定驗算預測結果逼近算法。
+    /// Vision Positioning by Camera Calibration with Negative Feedback.<br/>
+    /// 負回授相機標定視覺定位法。
     /// </summary>
-    public class DCFRCC : IVisionPositioning
+    public class VPCCNF : IVisionPositioning
     {
         private readonly double _allowableError;
         private readonly CameraParameter _cameraParameter;
 
+        public double OffsetX = 0;
+        public double OffsetY = 0;
+
         /// <summary>
-        /// Digit-by-digit calculation by Checking Forecast Result with Camera Calibration.<br/>
-        /// 相機標定驗算預測結果逼近算法。
+        /// Vision Positioning by Camera Calibration with Negative Feedback.<br/>
+        /// 負回授相機標定視覺定位法。
         /// </summary>
-        public DCFRCC(CameraParameter cameraParameter, double allowableError)
+        public VPCCNF(CameraParameter cameraParameter, double allowableError)
         {
             _cameraParameter = cameraParameter;
             _allowableError = allowableError;
@@ -40,24 +46,24 @@ namespace NFUIRSL.HRTK.Vision
 
         public void ImageToArm(int pixelX, int pixelY, out double armX, out double armY)
         {
-            double forecastArmX = 0;
-            double forecastArmY = 0;
+            double virtualCheckBoardX = 0;
+            double virtualCheckBoardY = 0;
 
             while (true)
             {
-                var forecastPixel = CvInvoke.
-                    ProjectPoints(new[] { new MCvPoint3D32f((float)forecastArmX, (float)forecastArmY, 0) },
-                                  new VectorOfDouble(_cameraParameter.RotationVectors),
-                                  new VectorOfDouble(_cameraParameter.TranslationVectors),
-                                  new Emgu.CV.Matrix<double>(_cameraParameter.IntrinsicMatrix),
-                                  new VectorOfDouble(_cameraParameter.DistortionCoefficients));
+                var forecastPixel = CvInvoke.ProjectPoints(
+                    new[] { new MCvPoint3D32f((float)virtualCheckBoardX, (float)virtualCheckBoardY, 0) },
+                    new VectorOfDouble(_cameraParameter.RotationVectors),
+                    new VectorOfDouble(_cameraParameter.TranslationVectors),
+                    new Emgu.CV.Matrix<double>(_cameraParameter.IntrinsicMatrix),
+                    new VectorOfDouble(_cameraParameter.DistortionCoefficients));
 
                 double errorX = pixelX - forecastPixel[0].X;
                 double errorY = pixelY - forecastPixel[0].Y;
 
                 if (Math.Abs(errorX) > _allowableError || Math.Abs(errorY) > _allowableError)
                 {
-                    CalOffset(errorX, errorY, ref forecastArmX, ref forecastArmY);
+                    CalOffset(errorX, errorY, ref virtualCheckBoardX, ref virtualCheckBoardY);
                 }
                 else
                 {
@@ -65,8 +71,7 @@ namespace NFUIRSL.HRTK.Vision
                 }
             }
 
-            armX = forecastArmX;
-            armY = forecastArmY;
+            VirtualCheckBoardToArm(virtualCheckBoardX, virtualCheckBoardY, out armX, out armY);
         }
 
         private void CalOffset(double errorX, double errorY, ref double armX, ref double armY)
@@ -80,6 +85,12 @@ namespace NFUIRSL.HRTK.Vision
                 armY++;
             else if (errorY < 0)
                 armY--;
+        }
+
+        private void VirtualCheckBoardToArm(double vX, double vY, out double armX, out double armY)
+        {
+            armX = vX + OffsetX;
+            armY = vY + OffsetY + 368;
         }
     }
 

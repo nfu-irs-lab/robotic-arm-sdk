@@ -58,8 +58,8 @@ namespace NFUIRSL.HRTK.Vision
         /// </summary>
         public double P2 = 0;
 
-        public double[] RotationVectors;
-        public double[] TranslationVectors;
+        public double[] RotationVectors = new double[3];
+        public double[] TranslationVectors = new double[3];
 
         /// <summary>
         /// The upper triangular 3*3 matrix of camera intrinsic parameter.
@@ -107,6 +107,5 @@ namespace NFUIRSL.HRTK.Vision
             Array.Copy(rotationVectors, RotationVectors, rotationVectors.Length);
             Array.Copy(translationVectors, TranslationVectors, translationVectors.Length);
         }
-
     }
 }
