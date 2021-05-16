@@ -32,13 +32,12 @@ namespace NFUIRSL.HRTK.Vision.TestForm
 
         private void buttonExit_Click(object sender, EventArgs e)
         {
-            Camera.Exit();
+            Camera.Disconnect();
         }
 
         private void buttonOpenFreeRun_Click(object sender, EventArgs e)
         {
-            var mode = radioButtonCapModeFreeRun.Checked ? CaptureMode.FreeRun : CaptureMode.Stop;
-            Camera.Open(mode, true);
+            Camera.Connect();
         }
 
         private void buttonShowSettingForm_Click(object sender, EventArgs e)

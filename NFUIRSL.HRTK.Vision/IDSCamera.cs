@@ -21,7 +21,7 @@ namespace NFUIRSL.HRTK.Vision
         Snapshot
     }
 
-    public class IDSCamera
+    public class IDSCamera : IDevice
     {
         private const int _cnNumberOfSeqBuffers = 3;
         private readonly IMessage _message;
@@ -85,10 +85,10 @@ namespace NFUIRSL.HRTK.Vision
 
         ~IDSCamera()
         {
-            Exit();
+            Disconnect();
         }
 
-        #region - Open, Exit, Init -
+        #region - Dis/Connect, Init -
 
         public bool Init()
         {
@@ -128,29 +128,31 @@ namespace NFUIRSL.HRTK.Vision
             return true;
         }
 
-        public void Open(CaptureMode captureMode = CaptureMode.FreeRun, bool autoFeatures = true)
+        public bool Connected => _camera.IsOpened;
+
+        public bool Connect()
         {
-            if (_camera != null)
+            if (_camera == null)
             {
-                var status = ChangeCaptureMode(captureMode);
-                if (!status && _camera.IsOpened)
-                {
-                    _camera.Exit();
-                }
-                else
-                {
-                    AutoGain = autoFeatures;
-                    AutoShutter = autoFeatures;
-                    AutoWhiteBalance = autoFeatures;
-                }
+                Init();
+            }
+
+            var status = ChangeCaptureMode(CaptureMode.FreeRun);
+            if (!status && _camera.IsOpened)
+            {
+                _camera.Exit();
             }
             else
             {
-                _message.Show("Camera never initialization.", LoggingLevel.Warn);
+                AutoGain = true;
+                AutoShutter = true;
+                AutoWhiteBalance = true;
             }
+
+            return _camera.IsOpened;
         }
 
-        public void Exit()
+        public bool Disconnect()
         {
             _updateTimer.Stop();
             IsLive = false;
@@ -158,9 +160,14 @@ namespace NFUIRSL.HRTK.Vision
             _camera.EventFrame -= FrameEvent;
             _camera.Exit();
 
-            _pictureBox.Invalidate();
-            _pictureBox.SizeMode = PictureBoxSizeMode.CenterImage;
+            if (_pictureBox != null)
+            {
+                _pictureBox.Invalidate();
+                _pictureBox.SizeMode = PictureBoxSizeMode.CenterImage;
+            }
             RenderMode = DisplayRenderMode.FitToWindow;
+
+            return !_camera.IsOpened;
         }
 
         #endregion
