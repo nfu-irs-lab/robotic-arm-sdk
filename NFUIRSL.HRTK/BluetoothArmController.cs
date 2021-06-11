@@ -32,6 +32,7 @@ namespace NFUIRSL.HRTK
     public class BluetoothArmController : IBluetoothController
     {
         private IArmController Arm = null;
+        private IGripperController Gripper = null;
         private IMessage Message;
         private ISerialPortDevice SerialPortDevice = null;
 
@@ -39,9 +40,10 @@ namespace NFUIRSL.HRTK
         /// 記得要使用 Connect() 進行連線。
         /// </summary>
         /// <param name="comPort"></param>
-        public BluetoothArmController(string comPort, IArmController armControl, IMessage message)
+        public BluetoothArmController(string comPort, IArmController armControl, IGripperController gripperController, IMessage message)
         {
             Arm = armControl;
+            Gripper = gripperController;
             Message = message;
 
             SerialPort sp = new SerialPort()
@@ -211,6 +213,11 @@ namespace NFUIRSL.HRTK
             IArmAction act;
             switch (data.Substring(0, 2))
             {
+                case "gm":
+                    value = Convert.ToDouble(data.Split('m')[1]);
+                    Gripper.Control((int)value*100);
+                    break;
+                
                 case "xr":
                     value = Convert.ToDouble(data.Split('r')[1]);
                     act = new RelativeMotion(value, 0, 0, 0, 0, 0)
