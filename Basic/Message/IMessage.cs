@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Runtime.CompilerServices;
 using System.Windows.Forms;
+using Basic.File;
 
 namespace Basic.Message
 {

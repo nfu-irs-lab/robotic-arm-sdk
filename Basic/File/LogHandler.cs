@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 
-namespace Basic
+namespace Basic.File
 {
     /// <summary>
     /// 日誌等級。<br/>
@@ -96,7 +96,7 @@ namespace Basic
             while (true)
             {
                 var targetFilename = $"{dateTimeNow:MMMdd-HH}_{num}.log";
-                if (File.Exists(Path + targetFilename))
+                if (System.IO.File.Exists(Path + targetFilename))
                 {
                     num++;
                 }
@@ -121,12 +121,12 @@ namespace Basic
         {
             try
             {
-                return File.AppendText(Path + Filename);
+                return System.IO.File.AppendText(Path + Filename);
             }
             catch (DirectoryNotFoundException)
             {
                 Directory.CreateDirectory(Path);
-                return File.AppendText(Path + Filename);
+                return System.IO.File.AppendText(Path + Filename);
             }
         }
     }
