@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using MathNet.Numerics.LinearAlgebra;
 using Emgu.CV;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
@@ -28,11 +27,10 @@ namespace NFUIRSL.HRTK.Vision
     /// </summary>
     public class VPCCNF : IVisionPositioning
     {
-        private readonly double _allowableError;
-        private readonly CameraParameter _cameraParameter;
-
         public double OffsetX = 0;
         public double OffsetY = 0;
+        private readonly double _allowableError;
+        private readonly CameraParameter _cameraParameter;
 
         /// <summary>
         /// Vision Positioning by Camera Calibration with Negative Feedback.<br/>
