@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -33,6 +34,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -49,12 +51,19 @@
     <Compile Include="Action\IArmAction.cs" />
     <Compile Include="Action\Jog.cs" />
     <Compile Include="Action\RelativeMotion.cs" />
+    <Compile Include="ArmController.cs" />
     <Compile Include="HRobot.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Type\CoordinateType.cs" />
     <Compile Include="Type\MotionTypo.cs" />
     <Compile Include="Type\PositionType.cs" />
     <Compile Include="Type\SmoothType.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Basic\Basic.csproj">
+      <Project>{cd68c0c8-e211-4ecc-93ec-ece9054777a3}</Project>
+      <Name>Basic</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
