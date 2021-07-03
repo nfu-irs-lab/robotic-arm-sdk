@@ -7,26 +7,15 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace NFUIRSL.HRTK.Vision
+namespace Vision
 {
     public partial class CameraChoose : Form
     {
-        public delegate void AddCameraListItem();
-
         public AddCameraListItem cameraDelegate;
 
         private Int32 m_CameraIdToOpen;
+
         private Int32 m_DeviceIdToOpen;
-
-        public Int32 CameraID
-        {
-            get { return m_CameraIdToOpen; }
-        }
-
-        public Int32 DeviceID
-        {
-            get { return m_DeviceIdToOpen; }
-        }
 
         public CameraChoose()
         {
@@ -40,6 +29,50 @@ namespace NFUIRSL.HRTK.Vision
 
             InitCameraList();
             UpdateCameraList();
+        }
+
+        public delegate void AddCameraListItem();
+
+        public Int32 CameraID
+        {
+            get { return m_CameraIdToOpen; }
+        }
+
+        public Int32 DeviceID
+        {
+            get { return m_DeviceIdToOpen; }
+        }
+
+        private void buttonCancel_Click(object sender, EventArgs e)
+        {
+            this.DialogResult = DialogResult.Cancel;
+            Close();
+        }
+
+        private void CameraChoose_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            uEye.Info.Camera.EventNewDevice -= onCameraEvent;
+            uEye.Info.Camera.EventDeviceRemoved -= onCameraEvent;
+        }
+
+        private void InitCameraList()
+        {
+            listViewCamera.HideSelection = false;
+        }
+
+        private void listViewCamera_DoubleClick(object sender, EventArgs e)
+        {
+            if (listViewCamera.SelectedItems.Count != 0)
+            {
+                m_CameraIdToOpen = Convert.ToInt32(listViewCamera.SelectedItems[0].SubItems[1].Text);
+                m_DeviceIdToOpen = Convert.ToInt32(listViewCamera.SelectedItems[0].SubItems[2].Text);
+                this.DialogResult = DialogResult.OK;
+                Close();
+            }
+            else
+            {
+                MessageBox.Show("No camera selected...");
+            }
         }
 
         private void onCameraEvent(object sender, EventArgs e)
@@ -84,38 +117,6 @@ namespace NFUIRSL.HRTK.Vision
             listViewCamera.AutoResizeColumn(3, ColumnHeaderAutoResizeStyle.ColumnContent);
             listViewCamera.AutoResizeColumn(4, ColumnHeaderAutoResizeStyle.ColumnContent);
             listViewCamera.Columns[listViewCamera.Columns.Count - 1].Width = -2;
-        }
-
-        private void InitCameraList()
-        {
-            listViewCamera.HideSelection = false;
-        }
-
-        private void listViewCamera_DoubleClick(object sender, EventArgs e)
-        {
-            if (listViewCamera.SelectedItems.Count != 0)
-            {
-                m_CameraIdToOpen = Convert.ToInt32(listViewCamera.SelectedItems[0].SubItems[1].Text);
-                m_DeviceIdToOpen = Convert.ToInt32(listViewCamera.SelectedItems[0].SubItems[2].Text);
-                this.DialogResult = DialogResult.OK;
-                Close();
-            }
-            else
-            {
-                MessageBox.Show("No camera selected...");
-            }
-        }
-
-        private void buttonCancel_Click(object sender, EventArgs e)
-        {
-            this.DialogResult = DialogResult.Cancel;
-            Close();
-        }
-
-        private void CameraChoose_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            uEye.Info.Camera.EventNewDevice -= onCameraEvent;
-            uEye.Info.Camera.EventDeviceRemoved -= onCameraEvent;
         }
     }
 }

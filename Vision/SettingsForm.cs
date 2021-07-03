@@ -7,15 +7,19 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace NFUIRSL.HRTK.Vision
+namespace Vision
 {
+    public class ListViewControlItem : ListViewItem
+    {
+        public object Value { get; set; }
+    }
+
     public partial class SettingsForm : Form
     {
+        private IControl m_ActiveControl = null;
         private uEye.Camera m_Camera;
         private FormatControl m_FormatControl;
         private SizeControl m_SizeControl;
-
-        IControl m_ActiveControl = null;
 
         public SettingsForm(uEye.Camera camera)
         {
@@ -51,7 +55,7 @@ namespace NFUIRSL.HRTK.Vision
             item.Text = "Timing               ";
             item.Value = new CameraControl(m_Camera);
             item.ImageIndex = 0;
-            
+
             listViewSettings.Items.Add(item);
 
             item = new ListViewControlItem();
@@ -66,7 +70,6 @@ namespace NFUIRSL.HRTK.Vision
             item.ImageIndex = 2;
             listViewSettings.Items.Add(item);
 
-            
             item = new ListViewControlItem();
             item.Text = "Format                         ";
             item.Value = m_FormatControl;
@@ -76,11 +79,6 @@ namespace NFUIRSL.HRTK.Vision
             listViewSettings.Items[0].Selected = true;
             listViewSettings.FullRowSelect = true;
             listViewSettings.HideSelection = false;
-        }
-
-        private void SettingsForm_Load(object sender, EventArgs e)
-        {
-            InitSettingsList();
         }
 
         private void listViewSettings_SelectedIndexChanged(object sender, EventArgs e)
@@ -106,10 +104,9 @@ namespace NFUIRSL.HRTK.Vision
             }
         }
 
-    }
-
-    public class ListViewControlItem : ListViewItem
-    {
-        public object Value { get; set; }
+        private void SettingsForm_Load(object sender, EventArgs e)
+        {
+            InitSettingsList();
+        }
     }
 }

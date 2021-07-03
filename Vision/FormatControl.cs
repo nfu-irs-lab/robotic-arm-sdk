@@ -7,13 +7,11 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace NFUIRSL.HRTK.Vision
+namespace Vision
 {
     public partial class FormatControl : IControl
     {
-        public event EventHandler<EventArgs> DisplayChanged;
-
-        public FormatControl(uEye.Camera camera) 
+        public FormatControl(uEye.Camera camera)
             : base(camera)
         {
             InitializeComponent();
@@ -24,6 +22,8 @@ namespace NFUIRSL.HRTK.Vision
             InitializeComponent();
         }
 
+        public event EventHandler<EventArgs> DisplayChanged;
+
         public override void OnControlFocusActive()
         {
             InitPixelformat();
@@ -32,19 +32,6 @@ namespace NFUIRSL.HRTK.Vision
 
         public override void OnControlFocusLost()
         {
-        }
-
-        private void tabControlFormat_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            switch (tabControlFormat.SelectedIndex)
-            {
-                case 0:
-                    InitPixelformat();
-                    break;
-                case 1:
-                    UpdateDisplay();
-                    break;
-            }
         }
 
         private void InitPixelformat()
@@ -121,7 +108,6 @@ namespace NFUIRSL.HRTK.Vision
             statusRet = m_Camera.PixelFormat.Get(out colorMode);
             statusRet = m_Camera.Color.Converter.Get(colorMode, out convertMode);
 
-
             radioButtonGray8Normal.Checked = colorMode == uEye.Defines.ColorMode.Mono8 && convertMode == uEye.Defines.ColorConvertMode.Software3X3;
             radioButtonGray8High.Checked = colorMode == uEye.Defines.ColorMode.Mono8 && convertMode == uEye.Defines.ColorConvertMode.Software5X5;
             radioButtonGray8Hardware.Checked = colorMode == uEye.Defines.ColorMode.Mono8 && convertMode == uEye.Defines.ColorConvertMode.Hardware3X3;
@@ -133,7 +119,6 @@ namespace NFUIRSL.HRTK.Vision
             radioButtonGray16Normal.Checked = colorMode == uEye.Defines.ColorMode.Mono16 && convertMode == uEye.Defines.ColorConvertMode.Software3X3;
             radioButtonGray16High.Checked = colorMode == uEye.Defines.ColorMode.Mono16 && convertMode == uEye.Defines.ColorConvertMode.Software5X5;
             radioButtonGray16Hardware.Checked = colorMode == uEye.Defines.ColorMode.Mono16 && convertMode == uEye.Defines.ColorConvertMode.Hardware3X3;
-
 
             radioButtonRaw8Normal.Checked = colorMode == uEye.Defines.ColorMode.SensorRaw8 && convertMode == uEye.Defines.ColorConvertMode.Software3X3;
             radioButtonRaw8High.Checked = colorMode == uEye.Defines.ColorMode.SensorRaw8 && convertMode == uEye.Defines.ColorConvertMode.Software5X5;
@@ -147,7 +132,6 @@ namespace NFUIRSL.HRTK.Vision
             radioButtonRaw16High.Checked = colorMode == uEye.Defines.ColorMode.SensorRaw16 && convertMode == uEye.Defines.ColorConvertMode.Software5X5;
             radioButtonRaw16Hardware.Checked = colorMode == uEye.Defines.ColorMode.SensorRaw16 && convertMode == uEye.Defines.ColorConvertMode.Hardware3X3;
 
-
             radioButtonRGB24Normal.Checked = colorMode == uEye.Defines.ColorMode.BGR8Packed && convertMode == uEye.Defines.ColorConvertMode.Software3X3;
             radioButtonRGB24High.Checked = colorMode == uEye.Defines.ColorMode.BGR8Packed && convertMode == uEye.Defines.ColorConvertMode.Software5X5;
             radioButtonRGB24Hardware.Checked = colorMode == uEye.Defines.ColorMode.BGR8Packed && convertMode == uEye.Defines.ColorConvertMode.Hardware3X3;
@@ -155,7 +139,6 @@ namespace NFUIRSL.HRTK.Vision
             radioButtonRGB32Normal.Checked = colorMode == uEye.Defines.ColorMode.BGRA8Packed && convertMode == uEye.Defines.ColorConvertMode.Software3X3;
             radioButtonRGB32High.Checked = colorMode == uEye.Defines.ColorMode.BGRA8Packed && convertMode == uEye.Defines.ColorConvertMode.Software5X5;
             radioButtonRGB32Hardware.Checked = colorMode == uEye.Defines.ColorMode.BGRA8Packed && convertMode == uEye.Defines.ColorConvertMode.Hardware3X3;
-
         }
 
         private Boolean isColorModeSupported(uEye.Defines.ColorMode colorMode, uEye.Defines.ColorConvertMode colorConvertMode)
@@ -338,32 +321,6 @@ namespace NFUIRSL.HRTK.Vision
             }
         }
 
-        private void UpdateDisplay()
-        {
-            uEye.Defines.DisplayMode displayMode;
-
-            // check supported
-            m_Camera.DirectRenderer.GetSupported(out displayMode);
-
-            radioButtonDisplayOpenGL.Enabled = (displayMode & uEye.Defines.DisplayMode.OpenGL) == uEye.Defines.DisplayMode.OpenGL;
-            radioButtonDisplayDirect3D.Enabled = (displayMode & uEye.Defines.DisplayMode.Direct3D) == uEye.Defines.DisplayMode.Direct3D;
-
-            m_Camera.Display.Mode.Get(out displayMode);
-
-            switch (displayMode)
-            {
-                case uEye.Defines.DisplayMode.DiB:
-                    radioButtonDisplayDIB.Checked = true;
-                    break;
-                case uEye.Defines.DisplayMode.Direct3D:
-                    radioButtonDisplayDirect3D.Checked = true;
-                    break;
-                case uEye.Defines.DisplayMode.OpenGL:
-                    radioButtonDisplayOpenGL.Checked = true;
-                    break;
-            }
-        }
-
         private void radioButtonDisplayDIB_CheckedChanged(object sender, EventArgs e)
         {
             if (radioButtonDisplayDIB.Checked && radioButtonDisplayDIB.Focused)
@@ -426,6 +383,48 @@ namespace NFUIRSL.HRTK.Vision
                         DisplayChanged(this, EventArgs.Empty);
                     }
                 }
+            }
+        }
+
+        private void tabControlFormat_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            switch (tabControlFormat.SelectedIndex)
+            {
+                case 0:
+                    InitPixelformat();
+                    break;
+
+                case 1:
+                    UpdateDisplay();
+                    break;
+            }
+        }
+
+        private void UpdateDisplay()
+        {
+            uEye.Defines.DisplayMode displayMode;
+
+            // check supported
+            m_Camera.DirectRenderer.GetSupported(out displayMode);
+
+            radioButtonDisplayOpenGL.Enabled = (displayMode & uEye.Defines.DisplayMode.OpenGL) == uEye.Defines.DisplayMode.OpenGL;
+            radioButtonDisplayDirect3D.Enabled = (displayMode & uEye.Defines.DisplayMode.Direct3D) == uEye.Defines.DisplayMode.Direct3D;
+
+            m_Camera.Display.Mode.Get(out displayMode);
+
+            switch (displayMode)
+            {
+                case uEye.Defines.DisplayMode.DiB:
+                    radioButtonDisplayDIB.Checked = true;
+                    break;
+
+                case uEye.Defines.DisplayMode.Direct3D:
+                    radioButtonDisplayDirect3D.Checked = true;
+                    break;
+
+                case uEye.Defines.DisplayMode.OpenGL:
+                    radioButtonDisplayOpenGL.Checked = true;
+                    break;
             }
         }
     }

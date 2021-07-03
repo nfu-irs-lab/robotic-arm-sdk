@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace NFUIRSL.HRTK.Vision
+namespace Vision
 {
     public partial class PictureControl : IControl
     {
@@ -33,9 +33,9 @@ namespace NFUIRSL.HRTK.Vision
 
             if (activeMode != uEye.Defines.ActivateMode.Disable)
             {
-                radioButtonWhitebalanceOnce.Checked = (activeMode & uEye.Defines.ActivateMode.Enable) 
+                radioButtonWhitebalanceOnce.Checked = (activeMode & uEye.Defines.ActivateMode.Enable)
                     == uEye.Defines.ActivateMode.Enable;
-                radioButtonWhitebalanceAuto.Checked = (activeMode & uEye.Defines.ActivateMode.Once) 
+                radioButtonWhitebalanceAuto.Checked = (activeMode & uEye.Defines.ActivateMode.Once)
                     == uEye.Defines.ActivateMode.Once;
             }
             else
@@ -49,6 +49,93 @@ namespace NFUIRSL.HRTK.Vision
         public override void OnControlFocusLost()
         {
             m_UpdateTimer.Stop();
+        }
+
+        private void checkBoxGammaEnable_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBoxGammaEnable.Checked)
+            {
+                trackBarGamma.Enabled = true;
+                numericUpDownGamma.Enabled = true;
+            }
+            else
+            {
+                trackBarGamma.Enabled = false;
+                numericUpDownGamma.Enabled = false;
+
+                numericUpDownGamma.Value = new Decimal(1.0);
+                trackBarGamma.Value = 100;
+                m_Camera.Gamma.Software.Set(100);
+            }
+        }
+
+        private void checkBoxHardwareGamma_CheckedChanged(object sender, EventArgs e)
+        {
+            m_Camera.Gamma.Hardware.SetEnable(checkBoxGammaEnable.Checked);
+        }
+
+        private void checkBoxMasterGainAuto_CheckedChanged(object sender, EventArgs e)
+        {
+            trackBarGainMaster.Enabled = !checkBoxMasterGainAuto.Checked;
+            numericUpDownGainMaster.Enabled = !checkBoxMasterGainAuto.Checked;
+
+            m_Camera.AutoFeatures.Software.Gain.SetEnable(checkBoxMasterGainAuto.Checked);
+        }
+
+        private void checkBoxMasterGainBoost_CheckedChanged(object sender, EventArgs e)
+        {
+            m_Camera.Gain.Hardware.Boost.SetEnable(checkBoxMasterGainBoost.Checked);
+        }
+
+        private void numericUpDownGainBlue_ValueChanged(object sender, EventArgs e)
+        {
+            if (numericUpDownGainBlue.Focused)
+            {
+                Int32 s32Value = Convert.ToInt32(numericUpDownGainBlue.Value);
+                m_Camera.Gain.Hardware.Scaled.SetBlue(s32Value);
+                trackBarGainBlue.Value = s32Value;
+            }
+        }
+
+        private void numericUpDownGainGreen_ValueChanged(object sender, EventArgs e)
+        {
+            if (numericUpDownGainGreen.Focused)
+            {
+                Int32 s32Value = Convert.ToInt32(numericUpDownGainGreen.Value);
+                m_Camera.Gain.Hardware.Scaled.SetGreen(s32Value);
+                trackBarGainGreen.Value = s32Value;
+            }
+        }
+
+        private void numericUpDownGainMaster_ValueChanged(object sender, EventArgs e)
+        {
+            if (numericUpDownGainMaster.Focused)
+            {
+                Int32 s32Value = Convert.ToInt32(numericUpDownGainMaster.Value);
+                m_Camera.Gain.Hardware.Scaled.SetMaster(s32Value);
+                trackBarGainMaster.Value = s32Value;
+            }
+        }
+
+        private void numericUpDownGainRed_ValueChanged(object sender, EventArgs e)
+        {
+            if (numericUpDownGainRed.Focused)
+            {
+                Int32 s32Value = Convert.ToInt32(numericUpDownGainRed.Value);
+                m_Camera.Gain.Hardware.Scaled.SetRed(s32Value);
+                trackBarGainRed.Value = s32Value;
+            }
+        }
+
+        private void numericUpDownGamma_ValueChanged(object sender, EventArgs e)
+        {
+            if (numericUpDownGamma.Focused)
+            {
+                Int32 s32Value = Convert.ToInt32(numericUpDownGamma.Value * 100);
+                trackBarGamma.Value = s32Value;
+
+                m_Camera.Gamma.Software.Set(s32Value);
+            }
         }
 
         private void OnUpdateControls(object sender, EventArgs e)
@@ -77,6 +164,103 @@ namespace NFUIRSL.HRTK.Vision
                 m_Camera.Gain.Hardware.Scaled.GetBlue(out s32Value);
                 trackBarGainBlue.Value = s32Value;
                 numericUpDownGainBlue.Value = s32Value;
+            }
+        }
+
+        private void radioButtonWhitebalanceAuto_CheckedChanged(object sender, EventArgs e)
+        {
+            m_Camera.AutoFeatures.Software.WhiteBalance.SetEnable(true);
+
+            trackBarGainBlue.Enabled = false;
+            numericUpDownGainBlue.Enabled = false;
+
+            trackBarGainGreen.Enabled = false;
+            numericUpDownGainGreen.Enabled = false;
+
+            trackBarGainRed.Enabled = false;
+            numericUpDownGainRed.Enabled = false;
+        }
+
+        private void radioButtonWhitebalanceDisabled_CheckedChanged(object sender, EventArgs e)
+        {
+            m_Camera.AutoFeatures.Software.WhiteBalance.SetEnable(false);
+
+            trackBarGainBlue.Enabled = true;
+            numericUpDownGainBlue.Enabled = true;
+
+            trackBarGainGreen.Enabled = true;
+            numericUpDownGainGreen.Enabled = true;
+
+            trackBarGainRed.Enabled = true;
+            numericUpDownGainRed.Enabled = true;
+        }
+
+        private void radioButtonWhitebalanceOnce_CheckedChanged(object sender, EventArgs e)
+        {
+            m_Camera.AutoFeatures.Software.WhiteBalance.SetEnable(uEye.Defines.ActivateMode.Once);
+
+            trackBarGainBlue.Enabled = false;
+            numericUpDownGainBlue.Enabled = false;
+
+            trackBarGainGreen.Enabled = false;
+            numericUpDownGainGreen.Enabled = false;
+
+            trackBarGainRed.Enabled = false;
+            numericUpDownGainRed.Enabled = false;
+        }
+
+        private void trackBarGainBlue_Scroll(object sender, EventArgs e)
+        {
+            if (trackBarGainBlue.Focused)
+            {
+                Int32 s32Value = trackBarGainBlue.Value;
+
+                m_Camera.Gain.Hardware.Scaled.SetBlue(s32Value);
+                numericUpDownGainBlue.Value = s32Value;
+            }
+        }
+
+        private void trackBarGainGreen_Scroll(object sender, EventArgs e)
+        {
+            if (trackBarGainGreen.Focused)
+            {
+                Int32 s32Value = trackBarGainGreen.Value;
+
+                m_Camera.Gain.Hardware.Scaled.SetGreen(s32Value);
+                numericUpDownGainGreen.Value = s32Value;
+            }
+        }
+
+        private void trackBarGainMaster_Scroll(object sender, EventArgs e)
+        {
+            if (trackBarGainMaster.Focused)
+            {
+                Int32 s32Value = trackBarGainMaster.Value;
+
+                m_Camera.Gain.Hardware.Scaled.SetMaster(s32Value);
+                numericUpDownGainMaster.Value = s32Value;
+            }
+        }
+
+        private void trackBarGainRed_Scroll(object sender, EventArgs e)
+        {
+            if (trackBarGainRed.Focused)
+            {
+                Int32 s32Value = trackBarGainRed.Value;
+
+                m_Camera.Gain.Hardware.Scaled.SetRed(s32Value);
+                numericUpDownGainRed.Value = s32Value;
+            }
+        }
+
+        private void trackBarGamma_Scroll(object sender, EventArgs e)
+        {
+            if (trackBarGamma.Focused)
+            {
+                Int32 s32Value = trackBarGamma.Value;
+                numericUpDownGamma.Value = Convert.ToDecimal(s32Value / 100.0);
+
+                m_Camera.Gamma.Software.Set(s32Value);
             }
         }
 
@@ -147,13 +331,11 @@ namespace NFUIRSL.HRTK.Vision
             statusRet = m_Camera.Gain.Hardware.Scaled.GetBlue(out s32Gain);
             numericUpDownGainBlue.Value = s32Gain;
             trackBarGainBlue.Value = s32Gain;
-            
         }
 
         private void UpdateGammaControls()
         {
             checkBoxHardwareGamma.Enabled = m_Camera.Gamma.Hardware.Supported;
-            
 
             trackBarGamma.SetRange(100, 220);
             numericUpDownGamma.Minimum = new Decimal(1.0);
@@ -162,191 +344,6 @@ namespace NFUIRSL.HRTK.Vision
 
             labelGammaMin.Text = "1.0";
             labelGammaMax.Text = "2.2";
-        }
-
-        private void trackBarGainMaster_Scroll(object sender, EventArgs e)
-        {
-            if (trackBarGainMaster.Focused)
-            {
-                Int32 s32Value = trackBarGainMaster.Value;
-
-                m_Camera.Gain.Hardware.Scaled.SetMaster(s32Value);
-                numericUpDownGainMaster.Value = s32Value;
-            }
-        }
-
-        private void trackBarGainRed_Scroll(object sender, EventArgs e)
-        {
-            if (trackBarGainRed.Focused)
-            {
-                Int32 s32Value = trackBarGainRed.Value;
-
-                m_Camera.Gain.Hardware.Scaled.SetRed(s32Value);
-                numericUpDownGainRed.Value = s32Value;
-            }
-        }
-
-        private void trackBarGainGreen_Scroll(object sender, EventArgs e)
-        {
-            if (trackBarGainGreen.Focused)
-            {
-                Int32 s32Value = trackBarGainGreen.Value;
-
-                m_Camera.Gain.Hardware.Scaled.SetGreen(s32Value);
-                numericUpDownGainGreen.Value = s32Value;
-            }
-        }
-
-        private void trackBarGainBlue_Scroll(object sender, EventArgs e)
-        {
-            if (trackBarGainBlue.Focused)
-            {
-                Int32 s32Value = trackBarGainBlue.Value;
-
-                m_Camera.Gain.Hardware.Scaled.SetBlue(s32Value);
-                numericUpDownGainBlue.Value = s32Value;
-            }
-        }
-
-        private void numericUpDownGainRed_ValueChanged(object sender, EventArgs e)
-        {
-            if (numericUpDownGainRed.Focused)
-            {
-                Int32 s32Value = Convert.ToInt32(numericUpDownGainRed.Value);
-                m_Camera.Gain.Hardware.Scaled.SetRed(s32Value);
-                trackBarGainRed.Value = s32Value;
-            }
-        }
-
-        private void numericUpDownGainGreen_ValueChanged(object sender, EventArgs e)
-        {
-            if (numericUpDownGainGreen.Focused)
-            {
-                Int32 s32Value = Convert.ToInt32(numericUpDownGainGreen.Value);
-                m_Camera.Gain.Hardware.Scaled.SetGreen(s32Value);
-                trackBarGainGreen.Value = s32Value;
-            }
-        }
-
-        private void numericUpDownGainBlue_ValueChanged(object sender, EventArgs e)
-        {
-            if (numericUpDownGainBlue.Focused)
-            {
-                Int32 s32Value = Convert.ToInt32(numericUpDownGainBlue.Value);
-                m_Camera.Gain.Hardware.Scaled.SetBlue(s32Value);
-                trackBarGainBlue.Value = s32Value;
-            }
-        }
-
-        private void numericUpDownGainMaster_ValueChanged(object sender, EventArgs e)
-        {
-            if (numericUpDownGainMaster.Focused)
-            {
-                Int32 s32Value = Convert.ToInt32(numericUpDownGainMaster.Value);
-                m_Camera.Gain.Hardware.Scaled.SetMaster(s32Value);
-                trackBarGainMaster.Value = s32Value;
-            }
-        }
-
-        private void checkBoxGammaEnable_CheckedChanged(object sender, EventArgs e)
-        {
-
-            if (checkBoxGammaEnable.Checked)
-            {
-                trackBarGamma.Enabled = true;
-                numericUpDownGamma.Enabled = true;
-            }
-            else
-            {
-                trackBarGamma.Enabled = false;
-                numericUpDownGamma.Enabled = false;
-
-                numericUpDownGamma.Value = new Decimal(1.0);
-                trackBarGamma.Value = 100;
-                m_Camera.Gamma.Software.Set(100);
-            }
-        }
-
-        private void trackBarGamma_Scroll(object sender, EventArgs e)
-        {
-            if (trackBarGamma.Focused)
-            {
-                Int32 s32Value = trackBarGamma.Value;
-                numericUpDownGamma.Value = Convert.ToDecimal(s32Value / 100.0);
-
-                m_Camera.Gamma.Software.Set(s32Value);
-            }
-        }
-
-        private void numericUpDownGamma_ValueChanged(object sender, EventArgs e)
-        {
-            if (numericUpDownGamma.Focused)
-            {
-                Int32 s32Value = Convert.ToInt32(numericUpDownGamma.Value * 100);
-                trackBarGamma.Value = s32Value;
-
-                m_Camera.Gamma.Software.Set(s32Value);
-            }
-        }
-
-        private void checkBoxHardwareGamma_CheckedChanged(object sender, EventArgs e)
-        {
-            m_Camera.Gamma.Hardware.SetEnable(checkBoxGammaEnable.Checked);
-        }
-
-        private void checkBoxMasterGainAuto_CheckedChanged(object sender, EventArgs e)
-        {
-            trackBarGainMaster.Enabled = !checkBoxMasterGainAuto.Checked;
-            numericUpDownGainMaster.Enabled = !checkBoxMasterGainAuto.Checked;
-
-            m_Camera.AutoFeatures.Software.Gain.SetEnable(checkBoxMasterGainAuto.Checked);
-        }
-
-        private void checkBoxMasterGainBoost_CheckedChanged(object sender, EventArgs e)
-        {
-            m_Camera.Gain.Hardware.Boost.SetEnable(checkBoxMasterGainBoost.Checked);
-        }
-
-        private void radioButtonWhitebalanceDisabled_CheckedChanged(object sender, EventArgs e)
-        {
-            m_Camera.AutoFeatures.Software.WhiteBalance.SetEnable(false);
-
-            trackBarGainBlue.Enabled = true;
-            numericUpDownGainBlue.Enabled = true;
-
-            trackBarGainGreen.Enabled = true;
-            numericUpDownGainGreen.Enabled = true;
-
-            trackBarGainRed.Enabled = true;
-            numericUpDownGainRed.Enabled = true;
-        }
-
-        private void radioButtonWhitebalanceAuto_CheckedChanged(object sender, EventArgs e)
-        {
-            m_Camera.AutoFeatures.Software.WhiteBalance.SetEnable(true);
-
-            trackBarGainBlue.Enabled = false;
-            numericUpDownGainBlue.Enabled = false;
-
-            trackBarGainGreen.Enabled = false;
-            numericUpDownGainGreen.Enabled = false;
-
-            trackBarGainRed.Enabled = false;
-            numericUpDownGainRed.Enabled = false;
-        }
-
-        private void radioButtonWhitebalanceOnce_CheckedChanged(object sender, EventArgs e)
-        {
-            m_Camera.AutoFeatures.Software.WhiteBalance.SetEnable(uEye.Defines.ActivateMode.Once);
-
-            trackBarGainBlue.Enabled = false;
-            numericUpDownGainBlue.Enabled = false;
-
-            trackBarGainGreen.Enabled = false;
-            numericUpDownGainGreen.Enabled = false;
-
-            trackBarGainRed.Enabled = false;
-            numericUpDownGainRed.Enabled = false;
         }
     }
 }

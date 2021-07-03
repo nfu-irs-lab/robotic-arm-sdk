@@ -7,17 +7,17 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace NFUIRSL.HRTK.Vision
+namespace Vision
 {
     public partial class SizeControl : IControl
     {
-        public event EventHandler<EventArgs> AOIChanged;
-
         public SizeControl(uEye.Camera camera)
             : base(camera)
         {
             InitializeComponent();
         }
+
+        public event EventHandler<EventArgs> AOIChanged;
 
         public override void OnControlFocusActive()
         {
@@ -29,288 +29,182 @@ namespace NFUIRSL.HRTK.Vision
         {
         }
 
-        private void tabControlSize_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            switch (tabControlSize.SelectedIndex)
-            {
-                case 0:
-                    UpdateAoiControls();
-                    break;
-                case 1:
-                    UpdateBinningSubsamplingControls();
-                    break;
-            }
-        }
-
-        private void UpdateAoiControls()
+        private void checkBoxFormatMirrorLeftRight_CheckedChanged(object sender, EventArgs e)
         {
             uEye.Defines.Status statusRet;
 
-            // get camera aoi range size
-            uEye.Types.Range<Int32> rangeWidth, rangeHeight;
-            statusRet = m_Camera.Size.AOI.GetSizeRange(out rangeWidth, out rangeHeight);
-
-            // set control ranges
-            trackBarAoiHeight.SetRange(rangeHeight.Minimum, rangeHeight.Maximum);
-
-            numericUpDownAoiHeight.Minimum = rangeHeight.Minimum;
-            numericUpDownAoiHeight.Maximum = rangeHeight.Maximum;
-            numericUpDownAoiHeight.Increment = rangeHeight.Increment;
-
-            labelAoiHeightMin.Text = rangeHeight.Minimum.ToString();
-            labelAoiHeightMax.Text = rangeHeight.Maximum.ToString();
-
-            trackBarAoiWidth.SetRange(rangeWidth.Minimum, rangeWidth.Maximum);
-            trackBarAoiWidth.TickFrequency = rangeHeight.Increment;
-
-            numericUpDownAoiWidth.Minimum = rangeWidth.Minimum;
-            numericUpDownAoiWidth.Maximum = rangeWidth.Maximum;
-            numericUpDownAoiWidth.Increment = rangeWidth.Increment;
-
-            labelAoiWidthMin.Text = rangeWidth.Minimum.ToString();
-            labelAoiWidthMax.Text = rangeWidth.Maximum.ToString();
-
-            // get actual aoi
-            System.Drawing.Rectangle rect;
-            statusRet = m_Camera.Size.AOI.Get(out rect);
-
-            // set aoi values
-            trackBarAoiHeight.Value = rect.Height;
-            numericUpDownAoiHeight.Value = rect.Height;
-
-            trackBarAoiWidth.Value = rect.Width;
-            numericUpDownAoiWidth.Value = rect.Width;
-
-            uEye.Types.Range<Int32> rangePosX, rangePosY;
-            statusRet = m_Camera.Size.AOI.GetPosRange(out rangePosX, out rangePosY);
-
-            // update top aoi
-            numericUpDownAoiTop.Minimum = 0;
-            numericUpDownAoiTop.Maximum = trackBarAoiHeight.Maximum - trackBarAoiHeight.Value;
-            numericUpDownAoiTop.Increment = rangePosY.Increment;
-            trackBarAoiTop.SetRange((int)numericUpDownAoiTop.Minimum, (int)numericUpDownAoiTop.Maximum);
-
-            labelAoiTopMin.Text = trackBarAoiTop.Minimum.ToString();
-            labelAoiTopMax.Text = trackBarAoiTop.Maximum.ToString();
-
-            // update left aoi
-            numericUpDownAoiLeft.Minimum = 0;
-            numericUpDownAoiLeft.Maximum = trackBarAoiWidth.Maximum - trackBarAoiWidth.Value;
-            numericUpDownAoiLeft.Increment = rangePosX.Increment;
-            trackBarAoiLeft.SetRange((int)numericUpDownAoiLeft.Minimum, (int)numericUpDownAoiLeft.Maximum);
-
-            labelAoiLeftMin.Text = trackBarAoiLeft.Minimum.ToString();
-            labelAoiLeftMax.Text = trackBarAoiLeft.Maximum.ToString();
+            statusRet = m_Camera.RopEffect.Set(uEye.Defines.RopEffectMode.LeftRight, checkBoxFormatMirrorLeftRight.Checked);
         }
 
-        private void UpdateBinningSubsamplingControls()
+        private void checkBoxFormatMirrorUpDown_CheckedChanged(object sender, EventArgs e)
         {
-            // subsampling && binning
-            updateHorizontalBinning();
-            updateVerticalBinning();
+            uEye.Defines.Status statusRet;
 
-            updateHorizontalSubsampling();
-            updateVerticalSubsampling();
+            statusRet = m_Camera.RopEffect.Set(uEye.Defines.RopEffectMode.UpDown, checkBoxFormatMirrorUpDown.Checked);
         }
 
-        private void updateHorizontalBinning()
+        private void comboBoxFormatBinningHorizontal_SelectedIndexChanged(object sender, EventArgs e)
         {
-            // horizontal binning
-            comboBoxFormatBinningHorizontal.Items.Clear();
-            comboBoxFormatBinningHorizontal.Items.Add("1x");
-
-            uEye.Defines.BinningMode mode;
-            m_Camera.Size.Binning.GetSupported(out mode);
-            if ((mode & uEye.Defines.BinningMode.Disable) == mode)
+            if (comboBoxFormatBinningHorizontal.Focused)
             {
-                comboBoxFormatBinningHorizontal.Enabled = false;
-            }
-            else
-            {
-                if (m_Camera.Size.Binning.IsSupported(uEye.Defines.BinningMode.Horizontal2X))
-                {
-                    comboBoxFormatBinningHorizontal.Items.Add("2x");
-                }
-                if (m_Camera.Size.Binning.IsSupported(uEye.Defines.BinningMode.Horizontal3X))
-                {
-                    comboBoxFormatBinningHorizontal.Items.Add("3x");
-                }
-                if (m_Camera.Size.Binning.IsSupported(uEye.Defines.BinningMode.Horizontal4X))
-                {
-                    comboBoxFormatBinningHorizontal.Items.Add("4x");
-                }
-                if (m_Camera.Size.Binning.IsSupported(uEye.Defines.BinningMode.Horizontal5X))
-                {
-                    comboBoxFormatBinningHorizontal.Items.Add("5x");
-                }
-                if (m_Camera.Size.Binning.IsSupported(uEye.Defines.BinningMode.Horizontal6X))
-                {
-                    comboBoxFormatBinningHorizontal.Items.Add("6x");
-                }
-                if (m_Camera.Size.Binning.IsSupported(uEye.Defines.BinningMode.Horizontal8X))
-                {
-                    comboBoxFormatBinningHorizontal.Items.Add("8x");
-                }
-                if (m_Camera.Size.Binning.IsSupported(uEye.Defines.BinningMode.Horizontal16X))
-                {
-                    comboBoxFormatBinningHorizontal.Items.Add("16x");
-                }
-            }
+                uEye.Defines.Status statusRet;
 
-            Int32 s32Factor;
+                Boolean isLive;
+                statusRet = m_Camera.Acquisition.HasStarted(out isLive);
 
-            m_Camera.Size.Binning.GetFactorHorizontal(out s32Factor);
-            comboBoxFormatBinningHorizontal.SelectedItem = s32Factor + "x";
+                if (isLive)
+                {
+                    statusRet = m_Camera.Acquisition.Stop(uEye.Defines.DeviceParameter.Wait);
+                }
+
+                uEye.Defines.BinningMode mode = GetBinningMode();
+                statusRet = m_Camera.Size.Binning.Set(mode);
+
+                // memory reallocation
+                int[] idList;
+                m_Camera.Memory.GetList(out idList);
+
+                statusRet = MemoryHelper.ClearSequence(m_Camera);
+                statusRet = MemoryHelper.FreeImageMems(m_Camera);
+
+                statusRet = MemoryHelper.AllocImageMems(m_Camera, idList.Count());
+                statusRet = MemoryHelper.InitSequence(m_Camera);
+
+                if (isLive)
+                {
+                    statusRet = m_Camera.Acquisition.Capture();
+                }
+
+                updateVerticalBinning();
+                updateHorizontalSubsampling();
+                updateVerticalSubsampling();
+
+                // inform our main form
+                AOIChanged?.Invoke(this, EventArgs.Empty);
+            }
         }
 
-        private void updateVerticalBinning()
+        private void comboBoxFormatBinningVertical_SelectedIndexChanged(object sender, EventArgs e)
         {
-            // vertical binning
-            comboBoxFormatBinningVertical.Items.Clear();
-            comboBoxFormatBinningVertical.Items.Add("1x");
-
-            uEye.Defines.BinningMode mode;
-            m_Camera.Size.Binning.GetSupported(out mode);
-            if ((mode & uEye.Defines.BinningMode.Disable) == mode)
+            if (comboBoxFormatBinningVertical.Focused)
             {
-                comboBoxFormatBinningVertical.Enabled = false;
-            }
-            else
-            {
-                if (m_Camera.Size.Binning.IsSupported(uEye.Defines.BinningMode.Vertical2X))
-                {
-                    comboBoxFormatBinningVertical.Items.Add("2x");
-                }
-                if (m_Camera.Size.Binning.IsSupported(uEye.Defines.BinningMode.Vertical3X))
-                {
-                    comboBoxFormatBinningVertical.Items.Add("3x");
-                }
-                if (m_Camera.Size.Binning.IsSupported(uEye.Defines.BinningMode.Vertical4X))
-                {
-                    comboBoxFormatBinningVertical.Items.Add("4x");
-                }
-                if (m_Camera.Size.Binning.IsSupported(uEye.Defines.BinningMode.Vertical5X))
-                {
-                    comboBoxFormatBinningVertical.Items.Add("5x");
-                }
-                if (m_Camera.Size.Binning.IsSupported(uEye.Defines.BinningMode.Vertical6X))
-                {
-                    comboBoxFormatBinningVertical.Items.Add("6x");
-                }
-                if (m_Camera.Size.Binning.IsSupported(uEye.Defines.BinningMode.Vertical8X))
-                {
-                    comboBoxFormatBinningVertical.Items.Add("8x");
-                }
-                if (m_Camera.Size.Binning.IsSupported(uEye.Defines.BinningMode.Vertical16X))
-                {
-                    comboBoxFormatBinningVertical.Items.Add("16x");
-                }
-            }
+                uEye.Defines.Status statusRet;
 
-            Int32 s32Factor;
+                Boolean isLive;
+                statusRet = m_Camera.Acquisition.HasStarted(out isLive);
 
-            m_Camera.Size.Binning.GetFactorVertical(out s32Factor);
-            comboBoxFormatBinningVertical.SelectedItem = s32Factor + "x";
+                if (isLive)
+                {
+                    statusRet = m_Camera.Acquisition.Stop(uEye.Defines.DeviceParameter.Wait);
+                }
+
+                uEye.Defines.BinningMode mode = GetBinningMode();
+                statusRet = m_Camera.Size.Binning.Set(mode);
+
+                // memory reallocation
+                int[] idList;
+                m_Camera.Memory.GetList(out idList);
+
+                statusRet = MemoryHelper.ClearSequence(m_Camera);
+                statusRet = MemoryHelper.FreeImageMems(m_Camera);
+
+                statusRet = MemoryHelper.AllocImageMems(m_Camera, idList.Count());
+                statusRet = MemoryHelper.InitSequence(m_Camera);
+
+                if (isLive)
+                {
+                    statusRet = m_Camera.Acquisition.Capture();
+                }
+
+                updateHorizontalBinning();
+                updateVerticalSubsampling();
+                updateHorizontalSubsampling();
+
+                // inform our main form
+                AOIChanged?.Invoke(this, EventArgs.Empty);
+            }
         }
 
-        private void updateHorizontalSubsampling()
+        private void comboBoxFormatSubsamplingHorizontal_SelectedIndexChanged(object sender, EventArgs e)
         {
-            // horizontal binning
-            comboBoxFormatSubsamplingHorizontal.Items.Clear();
-            comboBoxFormatSubsamplingHorizontal.Items.Add("1x");
-
-            uEye.Defines.SubsamplingMode mode;
-            m_Camera.Size.Subsampling.GetSupported(out mode);
-            if ((mode & uEye.Defines.SubsamplingMode.Disable) == mode)
+            if (comboBoxFormatSubsamplingHorizontal.Focused)
             {
-                comboBoxFormatSubsamplingHorizontal.Enabled = false;
-            }
-            else
-            {
-                if (m_Camera.Size.Subsampling.IsSupported(uEye.Defines.SubsamplingMode.Horizontal2X))
-                {
-                    comboBoxFormatSubsamplingHorizontal.Items.Add("2x");
-                }
-                if (m_Camera.Size.Subsampling.IsSupported(uEye.Defines.SubsamplingMode.Horizontal3X))
-                {
-                    comboBoxFormatSubsamplingHorizontal.Items.Add("3x");
-                }
-                if (m_Camera.Size.Subsampling.IsSupported(uEye.Defines.SubsamplingMode.Horizontal4X))
-                {
-                    comboBoxFormatSubsamplingHorizontal.Items.Add("4x");
-                }
-                if (m_Camera.Size.Subsampling.IsSupported(uEye.Defines.SubsamplingMode.Horizontal5X))
-                {
-                    comboBoxFormatSubsamplingHorizontal.Items.Add("5x");
-                }
-                if (m_Camera.Size.Subsampling.IsSupported(uEye.Defines.SubsamplingMode.Horizontal6X))
-                {
-                    comboBoxFormatSubsamplingHorizontal.Items.Add("6x");
-                }
-                if (m_Camera.Size.Subsampling.IsSupported(uEye.Defines.SubsamplingMode.Horizontal8X))
-                {
-                    comboBoxFormatSubsamplingHorizontal.Items.Add("8x");
-                }
-                if (m_Camera.Size.Subsampling.IsSupported(uEye.Defines.SubsamplingMode.Horizontal16X))
-                {
-                    comboBoxFormatSubsamplingHorizontal.Items.Add("16x");
-                }
-            }
+                uEye.Defines.Status statusRet;
 
-            Int32 s32Factor;
+                Boolean isLive;
+                statusRet = m_Camera.Acquisition.HasStarted(out isLive);
 
-            m_Camera.Size.Subsampling.GetFactorHorizontal(out s32Factor);
-            comboBoxFormatSubsamplingHorizontal.SelectedItem = s32Factor + "x";
+                if (isLive)
+                {
+                    statusRet = m_Camera.Acquisition.Stop(uEye.Defines.DeviceParameter.Wait);
+                }
+
+                uEye.Defines.SubsamplingMode mode = GetSubsamplingMode();
+                statusRet = m_Camera.Size.Subsampling.Set(mode);
+
+                // memory reallocation
+                int[] idList;
+                m_Camera.Memory.GetList(out idList);
+
+                statusRet = MemoryHelper.ClearSequence(m_Camera);
+                statusRet = MemoryHelper.FreeImageMems(m_Camera);
+
+                statusRet = MemoryHelper.AllocImageMems(m_Camera, idList.Count());
+                statusRet = MemoryHelper.InitSequence(m_Camera);
+
+                if (isLive)
+                {
+                    statusRet = m_Camera.Acquisition.Capture();
+                }
+
+                updateVerticalSubsampling();
+                updateHorizontalBinning();
+                updateVerticalBinning();
+
+                // inform our main form
+                AOIChanged?.Invoke(this, EventArgs.Empty);
+            }
         }
 
-        private void updateVerticalSubsampling()
+        private void comboBoxFormatSubsamplingVertical_SelectedIndexChanged(object sender, EventArgs e)
         {
-            // vertical Subsampling
-            comboBoxFormatSubsamplingVertical.Items.Clear();
-            comboBoxFormatSubsamplingVertical.Items.Add("1x");
-
-            uEye.Defines.SubsamplingMode mode;
-            m_Camera.Size.Subsampling.GetSupported(out mode);
-            if ((mode & uEye.Defines.SubsamplingMode.Disable) == mode)
+            if (comboBoxFormatSubsamplingVertical.Focused)
             {
-                comboBoxFormatSubsamplingVertical.Enabled = false;
-            }
-            else
-            {
-                if (m_Camera.Size.Subsampling.IsSupported(uEye.Defines.SubsamplingMode.Vertical2X))
-                {
-                    comboBoxFormatSubsamplingVertical.Items.Add("2x");
-                }
-                if (m_Camera.Size.Subsampling.IsSupported(uEye.Defines.SubsamplingMode.Vertical3X))
-                {
-                    comboBoxFormatSubsamplingVertical.Items.Add("3x");
-                }
-                if (m_Camera.Size.Subsampling.IsSupported(uEye.Defines.SubsamplingMode.Vertical4X))
-                {
-                    comboBoxFormatSubsamplingVertical.Items.Add("4x");
-                }
-                if (m_Camera.Size.Subsampling.IsSupported(uEye.Defines.SubsamplingMode.Vertical5X))
-                {
-                    comboBoxFormatSubsamplingVertical.Items.Add("5x");
-                }
-                if (m_Camera.Size.Subsampling.IsSupported(uEye.Defines.SubsamplingMode.Vertical6X))
-                {
-                    comboBoxFormatSubsamplingVertical.Items.Add("6x");
-                }
-                if (m_Camera.Size.Subsampling.IsSupported(uEye.Defines.SubsamplingMode.Vertical8X))
-                {
-                    comboBoxFormatSubsamplingVertical.Items.Add("8x");
-                }
-                if (m_Camera.Size.Subsampling.IsSupported(uEye.Defines.SubsamplingMode.Vertical16X))
-                {
-                    comboBoxFormatSubsamplingVertical.Items.Add("16x");
-                }
-            }
+                uEye.Defines.Status statusRet;
 
-            Int32 s32Factor;
+                Boolean isLive;
+                statusRet = m_Camera.Acquisition.HasStarted(out isLive);
 
-            m_Camera.Size.Subsampling.GetFactorVertical(out s32Factor);
-            comboBoxFormatSubsamplingVertical.SelectedItem = s32Factor + "x";
+                if (isLive)
+                {
+                    statusRet = m_Camera.Acquisition.Stop(uEye.Defines.DeviceParameter.Wait);
+                }
+
+                uEye.Defines.SubsamplingMode mode = GetSubsamplingMode();
+                statusRet = m_Camera.Size.Subsampling.Set(mode);
+
+                // memory reallocation
+                int[] idList;
+                m_Camera.Memory.GetList(out idList);
+
+                statusRet = MemoryHelper.ClearSequence(m_Camera);
+                statusRet = MemoryHelper.FreeImageMems(m_Camera);
+
+                statusRet = MemoryHelper.AllocImageMems(m_Camera, idList.Count());
+                statusRet = MemoryHelper.InitSequence(m_Camera);
+
+                if (isLive)
+                {
+                    statusRet = m_Camera.Acquisition.Capture();
+                }
+
+                updateHorizontalSubsampling();
+                updateVerticalBinning();
+                updateHorizontalBinning();
+
+                // inform our main form
+                AOIChanged?.Invoke(this, EventArgs.Empty);
+            }
         }
 
         private uEye.Defines.BinningMode GetBinningMode()
@@ -482,80 +376,35 @@ namespace NFUIRSL.HRTK.Vision
             return modeVertical | modeHorizontal;
         }
 
-        private void checkBoxFormatMirrorLeftRight_CheckedChanged(object sender, EventArgs e)
+        private void numericUpDownAoiHeight_ValueChanged(object sender, EventArgs e)
         {
-            uEye.Defines.Status statusRet;
-
-            statusRet = m_Camera.RopEffect.Set(uEye.Defines.RopEffectMode.LeftRight, checkBoxFormatMirrorLeftRight.Checked);
+            if (numericUpDownAoiHeight.Focused)
+            {
+                SetAoiHeight(Convert.ToInt32(numericUpDownAoiHeight.Value));
+            }
         }
 
-        private void checkBoxFormatMirrorUpDown_CheckedChanged(object sender, EventArgs e)
+        private void numericUpDownAoiLeft_ValueChanged(object sender, EventArgs e)
         {
-            uEye.Defines.Status statusRet;
-
-            statusRet = m_Camera.RopEffect.Set(uEye.Defines.RopEffectMode.UpDown, checkBoxFormatMirrorUpDown.Checked);
+            if (numericUpDownAoiLeft.Focused)
+            {
+                SetAoiLeft(Convert.ToInt32(numericUpDownAoiLeft.Value));
+            }
         }
 
-        private void SetAoiWidth(Int32 s32Value)
+        private void numericUpDownAoiTop_ValueChanged(object sender, EventArgs e)
         {
-            uEye.Defines.Status statusRet;
-            System.Drawing.Rectangle rect;
-
-            uEye.Types.Range<Int32> rangeWidth, rangeHeight;
-            m_Camera.Size.AOI.GetPosRange(out rangeWidth, out rangeHeight);
-
-            while ((s32Value % rangeWidth.Increment) != 0)
+            if (numericUpDownAoiTop.Focused)
             {
-                --s32Value;
+                SetAoiTop(Convert.ToInt32(numericUpDownAoiTop.Value));
             }
-
-            statusRet = m_Camera.Size.AOI.Get(out rect);
-            rect.Width = s32Value;
-            numericUpDownAoiWidth.Value = s32Value;
-            trackBarAoiWidth.Value = s32Value;
-
-            Boolean isLive;
-            statusRet = m_Camera.Acquisition.HasStarted(out isLive);
-
-            if (isLive)
-            {
-                statusRet = m_Camera.Acquisition.Stop(uEye.Defines.DeviceParameter.Wait);
-            }
-
-            statusRet = m_Camera.Size.AOI.Set(rect);
-
-            // update left aoi
-            numericUpDownAoiLeft.Minimum = 0;
-            numericUpDownAoiLeft.Maximum = numericUpDownAoiLeft.Value + trackBarAoiWidth.Maximum - trackBarAoiWidth.Value;
-            trackBarAoiLeft.SetRange((int)numericUpDownAoiLeft.Minimum, (int)numericUpDownAoiLeft.Maximum);
-
-            labelAoiLeftMin.Text = trackBarAoiLeft.Minimum.ToString();
-            labelAoiLeftMax.Text = trackBarAoiLeft.Maximum.ToString();
-
-            // memory reallocation
-            int[] idList;
-            m_Camera.Memory.GetList(out idList);
-
-            statusRet = MemoryHelper.ClearSequence(m_Camera);
-            statusRet = MemoryHelper.FreeImageMems(m_Camera);
-
-            statusRet = MemoryHelper.AllocImageMems(m_Camera, idList.Count());
-            statusRet = MemoryHelper.InitSequence(m_Camera);
-
-            if (isLive)
-            {
-                statusRet = m_Camera.Acquisition.Capture();
-            }
-
-            // inform our main form
-            AOIChanged?.Invoke(this, EventArgs.Empty);
         }
 
-        private void trackBarAoiWidth_Scroll(object sender, EventArgs e)
+        private void numericUpDownAoiWidth_ValueChanged(object sender, EventArgs e)
         {
-            if (trackBarAoiWidth.Focused)
+            if (numericUpDownAoiWidth.Focused)
             {
-                SetAoiWidth(trackBarAoiWidth.Value);
+                SetAoiWidth(Convert.ToInt32(numericUpDownAoiWidth.Value));
             }
         }
 
@@ -614,14 +463,6 @@ namespace NFUIRSL.HRTK.Vision
             AOIChanged?.Invoke(this, EventArgs.Empty);
         }
 
-        private void trackBarAoiHeight_Scroll(object sender, EventArgs e)
-        {
-            if (trackBarAoiHeight.Focused)
-            {
-                SetAoiHeight(trackBarAoiHeight.Value);
-            }
-        }
-
         private void SetAoiLeft(Int32 s32Value)
         {
             uEye.Defines.Status statusRet;
@@ -653,14 +494,6 @@ namespace NFUIRSL.HRTK.Vision
 
             // inform our main form
             AOIChanged?.Invoke(this, EventArgs.Empty);
-        }
-
-        private void trackBarAoiLeft_Scroll(object sender, EventArgs e)
-        {
-            if (trackBarAoiLeft.Focused)
-            {
-                SetAoiLeft(trackBarAoiLeft.Value);
-            }
         }
 
         private void SetAoiTop(Int32 s32Value)
@@ -696,6 +529,91 @@ namespace NFUIRSL.HRTK.Vision
             AOIChanged?.Invoke(this, EventArgs.Empty);
         }
 
+        private void SetAoiWidth(Int32 s32Value)
+        {
+            uEye.Defines.Status statusRet;
+            System.Drawing.Rectangle rect;
+
+            uEye.Types.Range<Int32> rangeWidth, rangeHeight;
+            m_Camera.Size.AOI.GetPosRange(out rangeWidth, out rangeHeight);
+
+            while ((s32Value % rangeWidth.Increment) != 0)
+            {
+                --s32Value;
+            }
+
+            statusRet = m_Camera.Size.AOI.Get(out rect);
+            rect.Width = s32Value;
+            numericUpDownAoiWidth.Value = s32Value;
+            trackBarAoiWidth.Value = s32Value;
+
+            Boolean isLive;
+            statusRet = m_Camera.Acquisition.HasStarted(out isLive);
+
+            if (isLive)
+            {
+                statusRet = m_Camera.Acquisition.Stop(uEye.Defines.DeviceParameter.Wait);
+            }
+
+            statusRet = m_Camera.Size.AOI.Set(rect);
+
+            // update left aoi
+            numericUpDownAoiLeft.Minimum = 0;
+            numericUpDownAoiLeft.Maximum = numericUpDownAoiLeft.Value + trackBarAoiWidth.Maximum - trackBarAoiWidth.Value;
+            trackBarAoiLeft.SetRange((int)numericUpDownAoiLeft.Minimum, (int)numericUpDownAoiLeft.Maximum);
+
+            labelAoiLeftMin.Text = trackBarAoiLeft.Minimum.ToString();
+            labelAoiLeftMax.Text = trackBarAoiLeft.Maximum.ToString();
+
+            // memory reallocation
+            int[] idList;
+            m_Camera.Memory.GetList(out idList);
+
+            statusRet = MemoryHelper.ClearSequence(m_Camera);
+            statusRet = MemoryHelper.FreeImageMems(m_Camera);
+
+            statusRet = MemoryHelper.AllocImageMems(m_Camera, idList.Count());
+            statusRet = MemoryHelper.InitSequence(m_Camera);
+
+            if (isLive)
+            {
+                statusRet = m_Camera.Acquisition.Capture();
+            }
+
+            // inform our main form
+            AOIChanged?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void tabControlSize_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            switch (tabControlSize.SelectedIndex)
+            {
+                case 0:
+                    UpdateAoiControls();
+                    break;
+
+                case 1:
+                    UpdateBinningSubsamplingControls();
+                    break;
+            }
+        }
+
+        private void trackBarAoiHeight_Scroll(object sender, EventArgs e)
+        {
+            if (trackBarAoiHeight.Focused)
+            {
+                SetAoiHeight(trackBarAoiHeight.Value);
+            }
+        }
+
+        private void trackBarAoiLeft_Scroll(object sender, EventArgs e)
+        {
+            if (trackBarAoiLeft.Focused)
+            {
+                SetAoiLeft(trackBarAoiLeft.Value);
+            }
+        }
+
         private void trackBarAoiTop_Scroll(object sender, EventArgs e)
         {
             if (trackBarAoiTop.Focused)
@@ -704,200 +622,283 @@ namespace NFUIRSL.HRTK.Vision
             }
         }
 
-        private void comboBoxFormatBinningHorizontal_SelectedIndexChanged(object sender, EventArgs e)
+        private void trackBarAoiWidth_Scroll(object sender, EventArgs e)
         {
-            if (comboBoxFormatBinningHorizontal.Focused)
+            if (trackBarAoiWidth.Focused)
             {
-                uEye.Defines.Status statusRet;
-
-                Boolean isLive;
-                statusRet = m_Camera.Acquisition.HasStarted(out isLive);
-
-                if (isLive)
-                {
-                    statusRet = m_Camera.Acquisition.Stop(uEye.Defines.DeviceParameter.Wait);
-                }
-
-                uEye.Defines.BinningMode mode = GetBinningMode();
-                statusRet = m_Camera.Size.Binning.Set(mode);
-
-                // memory reallocation
-                int[] idList;
-                m_Camera.Memory.GetList(out idList);
-
-                statusRet = MemoryHelper.ClearSequence(m_Camera);
-                statusRet = MemoryHelper.FreeImageMems(m_Camera);
-
-                statusRet = MemoryHelper.AllocImageMems(m_Camera, idList.Count());
-                statusRet = MemoryHelper.InitSequence(m_Camera);
-
-                if (isLive)
-                {
-                    statusRet = m_Camera.Acquisition.Capture();
-                }
-
-                updateVerticalBinning();
-                updateHorizontalSubsampling();
-                updateVerticalSubsampling();
-
-                // inform our main form
-                AOIChanged?.Invoke(this, EventArgs.Empty);
+                SetAoiWidth(trackBarAoiWidth.Value);
             }
         }
 
-        private void comboBoxFormatBinningVertical_SelectedIndexChanged(object sender, EventArgs e)
+        private void UpdateAoiControls()
         {
-            if (comboBoxFormatBinningVertical.Focused)
-            {
-                uEye.Defines.Status statusRet;
+            uEye.Defines.Status statusRet;
 
-                Boolean isLive;
-                statusRet = m_Camera.Acquisition.HasStarted(out isLive);
+            // get camera aoi range size
+            uEye.Types.Range<Int32> rangeWidth, rangeHeight;
+            statusRet = m_Camera.Size.AOI.GetSizeRange(out rangeWidth, out rangeHeight);
 
-                if (isLive)
-                {
-                    statusRet = m_Camera.Acquisition.Stop(uEye.Defines.DeviceParameter.Wait);
-                }
+            // set control ranges
+            trackBarAoiHeight.SetRange(rangeHeight.Minimum, rangeHeight.Maximum);
 
-                uEye.Defines.BinningMode mode = GetBinningMode();
-                statusRet = m_Camera.Size.Binning.Set(mode);
+            numericUpDownAoiHeight.Minimum = rangeHeight.Minimum;
+            numericUpDownAoiHeight.Maximum = rangeHeight.Maximum;
+            numericUpDownAoiHeight.Increment = rangeHeight.Increment;
 
-                // memory reallocation
-                int[] idList;
-                m_Camera.Memory.GetList(out idList);
+            labelAoiHeightMin.Text = rangeHeight.Minimum.ToString();
+            labelAoiHeightMax.Text = rangeHeight.Maximum.ToString();
 
-                statusRet = MemoryHelper.ClearSequence(m_Camera);
-                statusRet = MemoryHelper.FreeImageMems(m_Camera);
+            trackBarAoiWidth.SetRange(rangeWidth.Minimum, rangeWidth.Maximum);
+            trackBarAoiWidth.TickFrequency = rangeHeight.Increment;
 
-                statusRet = MemoryHelper.AllocImageMems(m_Camera, idList.Count());
-                statusRet = MemoryHelper.InitSequence(m_Camera);
+            numericUpDownAoiWidth.Minimum = rangeWidth.Minimum;
+            numericUpDownAoiWidth.Maximum = rangeWidth.Maximum;
+            numericUpDownAoiWidth.Increment = rangeWidth.Increment;
 
-                if (isLive)
-                {
-                    statusRet = m_Camera.Acquisition.Capture();
-                }
+            labelAoiWidthMin.Text = rangeWidth.Minimum.ToString();
+            labelAoiWidthMax.Text = rangeWidth.Maximum.ToString();
 
-                updateHorizontalBinning();
-                updateVerticalSubsampling();
-                updateHorizontalSubsampling();
+            // get actual aoi
+            System.Drawing.Rectangle rect;
+            statusRet = m_Camera.Size.AOI.Get(out rect);
 
-                // inform our main form
-                AOIChanged?.Invoke(this, EventArgs.Empty);
-            }
+            // set aoi values
+            trackBarAoiHeight.Value = rect.Height;
+            numericUpDownAoiHeight.Value = rect.Height;
+
+            trackBarAoiWidth.Value = rect.Width;
+            numericUpDownAoiWidth.Value = rect.Width;
+
+            uEye.Types.Range<Int32> rangePosX, rangePosY;
+            statusRet = m_Camera.Size.AOI.GetPosRange(out rangePosX, out rangePosY);
+
+            // update top aoi
+            numericUpDownAoiTop.Minimum = 0;
+            numericUpDownAoiTop.Maximum = trackBarAoiHeight.Maximum - trackBarAoiHeight.Value;
+            numericUpDownAoiTop.Increment = rangePosY.Increment;
+            trackBarAoiTop.SetRange((int)numericUpDownAoiTop.Minimum, (int)numericUpDownAoiTop.Maximum);
+
+            labelAoiTopMin.Text = trackBarAoiTop.Minimum.ToString();
+            labelAoiTopMax.Text = trackBarAoiTop.Maximum.ToString();
+
+            // update left aoi
+            numericUpDownAoiLeft.Minimum = 0;
+            numericUpDownAoiLeft.Maximum = trackBarAoiWidth.Maximum - trackBarAoiWidth.Value;
+            numericUpDownAoiLeft.Increment = rangePosX.Increment;
+            trackBarAoiLeft.SetRange((int)numericUpDownAoiLeft.Minimum, (int)numericUpDownAoiLeft.Maximum);
+
+            labelAoiLeftMin.Text = trackBarAoiLeft.Minimum.ToString();
+            labelAoiLeftMax.Text = trackBarAoiLeft.Maximum.ToString();
         }
 
-        private void comboBoxFormatSubsamplingHorizontal_SelectedIndexChanged(object sender, EventArgs e)
+        private void UpdateBinningSubsamplingControls()
         {
-            if (comboBoxFormatSubsamplingHorizontal.Focused)
+            // subsampling && binning
+            updateHorizontalBinning();
+            updateVerticalBinning();
+
+            updateHorizontalSubsampling();
+            updateVerticalSubsampling();
+        }
+
+        private void updateHorizontalBinning()
+        {
+            // horizontal binning
+            comboBoxFormatBinningHorizontal.Items.Clear();
+            comboBoxFormatBinningHorizontal.Items.Add("1x");
+
+            uEye.Defines.BinningMode mode;
+            m_Camera.Size.Binning.GetSupported(out mode);
+            if ((mode & uEye.Defines.BinningMode.Disable) == mode)
             {
-                uEye.Defines.Status statusRet;
-
-                Boolean isLive;
-                statusRet = m_Camera.Acquisition.HasStarted(out isLive);
-
-                if (isLive)
+                comboBoxFormatBinningHorizontal.Enabled = false;
+            }
+            else
+            {
+                if (m_Camera.Size.Binning.IsSupported(uEye.Defines.BinningMode.Horizontal2X))
                 {
-                    statusRet = m_Camera.Acquisition.Stop(uEye.Defines.DeviceParameter.Wait);
+                    comboBoxFormatBinningHorizontal.Items.Add("2x");
                 }
-
-                uEye.Defines.SubsamplingMode mode = GetSubsamplingMode();
-                statusRet = m_Camera.Size.Subsampling.Set(mode);
-
-                // memory reallocation
-                int[] idList;
-                m_Camera.Memory.GetList(out idList);
-
-                statusRet = MemoryHelper.ClearSequence(m_Camera);
-                statusRet = MemoryHelper.FreeImageMems(m_Camera);
-
-                statusRet = MemoryHelper.AllocImageMems(m_Camera, idList.Count());
-                statusRet = MemoryHelper.InitSequence(m_Camera);
-
-                if (isLive)
+                if (m_Camera.Size.Binning.IsSupported(uEye.Defines.BinningMode.Horizontal3X))
                 {
-                    statusRet = m_Camera.Acquisition.Capture();
+                    comboBoxFormatBinningHorizontal.Items.Add("3x");
                 }
-
-                updateVerticalSubsampling();
-                updateHorizontalBinning();
-                updateVerticalBinning();
-
-                // inform our main form
-                AOIChanged?.Invoke(this, EventArgs.Empty);
-            }
-        }
-
-        private void comboBoxFormatSubsamplingVertical_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (comboBoxFormatSubsamplingVertical.Focused)
-            {
-                uEye.Defines.Status statusRet;
-
-                Boolean isLive;
-                statusRet = m_Camera.Acquisition.HasStarted(out isLive);
-
-                if (isLive)
+                if (m_Camera.Size.Binning.IsSupported(uEye.Defines.BinningMode.Horizontal4X))
                 {
-                    statusRet = m_Camera.Acquisition.Stop(uEye.Defines.DeviceParameter.Wait);
+                    comboBoxFormatBinningHorizontal.Items.Add("4x");
                 }
-
-                uEye.Defines.SubsamplingMode mode = GetSubsamplingMode();
-                statusRet = m_Camera.Size.Subsampling.Set(mode);
-
-                // memory reallocation
-                int[] idList;
-                m_Camera.Memory.GetList(out idList);
-
-                statusRet = MemoryHelper.ClearSequence(m_Camera);
-                statusRet = MemoryHelper.FreeImageMems(m_Camera);
-
-                statusRet = MemoryHelper.AllocImageMems(m_Camera, idList.Count());
-                statusRet = MemoryHelper.InitSequence(m_Camera);
-
-                if (isLive)
+                if (m_Camera.Size.Binning.IsSupported(uEye.Defines.BinningMode.Horizontal5X))
                 {
-                    statusRet = m_Camera.Acquisition.Capture();
+                    comboBoxFormatBinningHorizontal.Items.Add("5x");
                 }
-
-                updateHorizontalSubsampling();
-                updateVerticalBinning();
-                updateHorizontalBinning();
-
-                // inform our main form
-                AOIChanged?.Invoke(this, EventArgs.Empty);
+                if (m_Camera.Size.Binning.IsSupported(uEye.Defines.BinningMode.Horizontal6X))
+                {
+                    comboBoxFormatBinningHorizontal.Items.Add("6x");
+                }
+                if (m_Camera.Size.Binning.IsSupported(uEye.Defines.BinningMode.Horizontal8X))
+                {
+                    comboBoxFormatBinningHorizontal.Items.Add("8x");
+                }
+                if (m_Camera.Size.Binning.IsSupported(uEye.Defines.BinningMode.Horizontal16X))
+                {
+                    comboBoxFormatBinningHorizontal.Items.Add("16x");
+                }
             }
+
+            Int32 s32Factor;
+
+            m_Camera.Size.Binning.GetFactorHorizontal(out s32Factor);
+            comboBoxFormatBinningHorizontal.SelectedItem = s32Factor + "x";
         }
 
-        private void numericUpDownAoiWidth_ValueChanged(object sender, EventArgs e)
+        private void updateHorizontalSubsampling()
         {
-            if (numericUpDownAoiWidth.Focused)
+            // horizontal binning
+            comboBoxFormatSubsamplingHorizontal.Items.Clear();
+            comboBoxFormatSubsamplingHorizontal.Items.Add("1x");
+
+            uEye.Defines.SubsamplingMode mode;
+            m_Camera.Size.Subsampling.GetSupported(out mode);
+            if ((mode & uEye.Defines.SubsamplingMode.Disable) == mode)
             {
-                SetAoiWidth(Convert.ToInt32(numericUpDownAoiWidth.Value));
+                comboBoxFormatSubsamplingHorizontal.Enabled = false;
             }
+            else
+            {
+                if (m_Camera.Size.Subsampling.IsSupported(uEye.Defines.SubsamplingMode.Horizontal2X))
+                {
+                    comboBoxFormatSubsamplingHorizontal.Items.Add("2x");
+                }
+                if (m_Camera.Size.Subsampling.IsSupported(uEye.Defines.SubsamplingMode.Horizontal3X))
+                {
+                    comboBoxFormatSubsamplingHorizontal.Items.Add("3x");
+                }
+                if (m_Camera.Size.Subsampling.IsSupported(uEye.Defines.SubsamplingMode.Horizontal4X))
+                {
+                    comboBoxFormatSubsamplingHorizontal.Items.Add("4x");
+                }
+                if (m_Camera.Size.Subsampling.IsSupported(uEye.Defines.SubsamplingMode.Horizontal5X))
+                {
+                    comboBoxFormatSubsamplingHorizontal.Items.Add("5x");
+                }
+                if (m_Camera.Size.Subsampling.IsSupported(uEye.Defines.SubsamplingMode.Horizontal6X))
+                {
+                    comboBoxFormatSubsamplingHorizontal.Items.Add("6x");
+                }
+                if (m_Camera.Size.Subsampling.IsSupported(uEye.Defines.SubsamplingMode.Horizontal8X))
+                {
+                    comboBoxFormatSubsamplingHorizontal.Items.Add("8x");
+                }
+                if (m_Camera.Size.Subsampling.IsSupported(uEye.Defines.SubsamplingMode.Horizontal16X))
+                {
+                    comboBoxFormatSubsamplingHorizontal.Items.Add("16x");
+                }
+            }
+
+            Int32 s32Factor;
+
+            m_Camera.Size.Subsampling.GetFactorHorizontal(out s32Factor);
+            comboBoxFormatSubsamplingHorizontal.SelectedItem = s32Factor + "x";
         }
 
-        private void numericUpDownAoiHeight_ValueChanged(object sender, EventArgs e)
+        private void updateVerticalBinning()
         {
-            if (numericUpDownAoiHeight.Focused)
+            // vertical binning
+            comboBoxFormatBinningVertical.Items.Clear();
+            comboBoxFormatBinningVertical.Items.Add("1x");
+
+            uEye.Defines.BinningMode mode;
+            m_Camera.Size.Binning.GetSupported(out mode);
+            if ((mode & uEye.Defines.BinningMode.Disable) == mode)
             {
-                SetAoiHeight(Convert.ToInt32(numericUpDownAoiHeight.Value));
+                comboBoxFormatBinningVertical.Enabled = false;
             }
+            else
+            {
+                if (m_Camera.Size.Binning.IsSupported(uEye.Defines.BinningMode.Vertical2X))
+                {
+                    comboBoxFormatBinningVertical.Items.Add("2x");
+                }
+                if (m_Camera.Size.Binning.IsSupported(uEye.Defines.BinningMode.Vertical3X))
+                {
+                    comboBoxFormatBinningVertical.Items.Add("3x");
+                }
+                if (m_Camera.Size.Binning.IsSupported(uEye.Defines.BinningMode.Vertical4X))
+                {
+                    comboBoxFormatBinningVertical.Items.Add("4x");
+                }
+                if (m_Camera.Size.Binning.IsSupported(uEye.Defines.BinningMode.Vertical5X))
+                {
+                    comboBoxFormatBinningVertical.Items.Add("5x");
+                }
+                if (m_Camera.Size.Binning.IsSupported(uEye.Defines.BinningMode.Vertical6X))
+                {
+                    comboBoxFormatBinningVertical.Items.Add("6x");
+                }
+                if (m_Camera.Size.Binning.IsSupported(uEye.Defines.BinningMode.Vertical8X))
+                {
+                    comboBoxFormatBinningVertical.Items.Add("8x");
+                }
+                if (m_Camera.Size.Binning.IsSupported(uEye.Defines.BinningMode.Vertical16X))
+                {
+                    comboBoxFormatBinningVertical.Items.Add("16x");
+                }
+            }
+
+            Int32 s32Factor;
+
+            m_Camera.Size.Binning.GetFactorVertical(out s32Factor);
+            comboBoxFormatBinningVertical.SelectedItem = s32Factor + "x";
         }
 
-        private void numericUpDownAoiLeft_ValueChanged(object sender, EventArgs e)
+        private void updateVerticalSubsampling()
         {
-            if (numericUpDownAoiLeft.Focused)
-            {
-                SetAoiLeft(Convert.ToInt32(numericUpDownAoiLeft.Value));
-            }
-        }
+            // vertical Subsampling
+            comboBoxFormatSubsamplingVertical.Items.Clear();
+            comboBoxFormatSubsamplingVertical.Items.Add("1x");
 
-        private void numericUpDownAoiTop_ValueChanged(object sender, EventArgs e)
-        {
-            if (numericUpDownAoiTop.Focused)
+            uEye.Defines.SubsamplingMode mode;
+            m_Camera.Size.Subsampling.GetSupported(out mode);
+            if ((mode & uEye.Defines.SubsamplingMode.Disable) == mode)
             {
-                SetAoiTop(Convert.ToInt32(numericUpDownAoiTop.Value));
+                comboBoxFormatSubsamplingVertical.Enabled = false;
             }
+            else
+            {
+                if (m_Camera.Size.Subsampling.IsSupported(uEye.Defines.SubsamplingMode.Vertical2X))
+                {
+                    comboBoxFormatSubsamplingVertical.Items.Add("2x");
+                }
+                if (m_Camera.Size.Subsampling.IsSupported(uEye.Defines.SubsamplingMode.Vertical3X))
+                {
+                    comboBoxFormatSubsamplingVertical.Items.Add("3x");
+                }
+                if (m_Camera.Size.Subsampling.IsSupported(uEye.Defines.SubsamplingMode.Vertical4X))
+                {
+                    comboBoxFormatSubsamplingVertical.Items.Add("4x");
+                }
+                if (m_Camera.Size.Subsampling.IsSupported(uEye.Defines.SubsamplingMode.Vertical5X))
+                {
+                    comboBoxFormatSubsamplingVertical.Items.Add("5x");
+                }
+                if (m_Camera.Size.Subsampling.IsSupported(uEye.Defines.SubsamplingMode.Vertical6X))
+                {
+                    comboBoxFormatSubsamplingVertical.Items.Add("6x");
+                }
+                if (m_Camera.Size.Subsampling.IsSupported(uEye.Defines.SubsamplingMode.Vertical8X))
+                {
+                    comboBoxFormatSubsamplingVertical.Items.Add("8x");
+                }
+                if (m_Camera.Size.Subsampling.IsSupported(uEye.Defines.SubsamplingMode.Vertical16X))
+                {
+                    comboBoxFormatSubsamplingVertical.Items.Add("16x");
+                }
+            }
+
+            Int32 s32Factor;
+
+            m_Camera.Size.Subsampling.GetFactorVertical(out s32Factor);
+            comboBoxFormatSubsamplingVertical.SelectedItem = s32Factor + "x";
         }
     }
 }

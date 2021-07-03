@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NFUIRSL.HRTK.Vision
+namespace Vision
 {
     public class CameraParameter
     {
@@ -27,11 +27,6 @@ namespace NFUIRSL.HRTK.Vision
         /// Y of focal length.
         /// </summary>
         public double Fy;
-
-        /// <summary>
-        /// Skew parameter.
-        /// </summary>
-        public double Skew;
 
         /// <summary>
         /// Radial Distortion.
@@ -59,7 +54,35 @@ namespace NFUIRSL.HRTK.Vision
         public double P2 = 0;
 
         public double[] RotationVectors = new double[3];
+
+        /// <summary>
+        /// Skew parameter.
+        /// </summary>
+        public double Skew;
+
         public double[] TranslationVectors = new double[3];
+
+        public CameraParameter(double cx,
+                                       double cy,
+                                       double fx,
+                                       double fy,
+                                       double skew,
+                                       double[] rotationVectors,
+                                       double[] translationVectors)
+        {
+            Cx = cx;
+            Cy = cy;
+            Fx = fx;
+            Fy = fy;
+            Skew = skew;
+            Array.Copy(rotationVectors, RotationVectors, rotationVectors.Length);
+            Array.Copy(translationVectors, TranslationVectors, translationVectors.Length);
+        }
+
+        public double[] DistortionCoefficients
+        {
+            get { return new double[] { K1, K2, P1, P2 }; }
+        }
 
         /// <summary>
         /// The upper triangular 3*3 matrix of camera intrinsic parameter.
@@ -84,28 +107,6 @@ namespace NFUIRSL.HRTK.Vision
                 Fy = value[1, 1];
                 Cy = value[1, 2];
             }
-        }
-
-        public double[] DistortionCoefficients
-        {
-            get { return new double[] { K1, K2, P1, P2 }; }
-        }
-
-        public CameraParameter(double cx,
-                               double cy,
-                               double fx,
-                               double fy,
-                               double skew,
-                               double[] rotationVectors,
-                               double[] translationVectors)
-        {
-            Cx = cx;
-            Cy = cy;
-            Fx = fx;
-            Fy = fy;
-            Skew = skew;
-            Array.Copy(rotationVectors, RotationVectors, rotationVectors.Length);
-            Array.Copy(translationVectors, TranslationVectors, translationVectors.Length);
         }
     }
 }

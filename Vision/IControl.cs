@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace NFUIRSL.HRTK.Vision
+namespace Vision
 {
     public class IControl : UserControl
     {
@@ -12,15 +12,9 @@ namespace NFUIRSL.HRTK.Vision
 
         public IControl()
         {
-
         }
 
         public IControl(uEye.Camera camera)
-        {
-            m_Camera = camera;
-        }
-
-        public void SetCameraObject(uEye.Camera camera)
         {
             m_Camera = camera;
         }
@@ -31,6 +25,11 @@ namespace NFUIRSL.HRTK.Vision
 
         public virtual void OnControlFocusLost()
         {
+        }
+
+        public void SetCameraObject(uEye.Camera camera)
+        {
+            m_Camera = camera;
         }
     }
 }

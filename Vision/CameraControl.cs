@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace NFUIRSL.HRTK.Vision
+namespace Vision
 {
     public partial class CameraControl : IControl
     {
@@ -50,6 +50,105 @@ namespace NFUIRSL.HRTK.Vision
         public override void OnControlFocusLost()
         {
             m_UpdateTimer.Stop();
+        }
+
+        private void checkBoxExposureAuto_CheckedChanged(object sender, EventArgs e)
+        {
+            checkBoxFramerateAuto.Enabled = checkBoxExposureAuto.Checked;
+            checkBoxFramerateAuto.Checked = false;
+
+            trackBarExposure.Enabled = !checkBoxExposureAuto.Checked;
+            numericUpDownExposure.Enabled = !checkBoxExposureAuto.Checked;
+            checkBoxExposureMax.Enabled = !checkBoxExposureAuto.Checked;
+            trackBarPixelclock.Enabled = !checkBoxExposureAuto.Checked;
+            numericUpDownPixelclock.Enabled = !checkBoxExposureAuto.Checked;
+
+            m_Camera.AutoFeatures.Software.Shutter.SetEnable(checkBoxExposureAuto.Checked);
+        }
+
+        private void checkBoxExposureMax_CheckedChanged(object sender, EventArgs e)
+        {
+            trackBarExposure.Enabled = !checkBoxExposureMax.Checked;
+            numericUpDownExposure.Enabled = !checkBoxExposureMax.Checked;
+
+            checkBoxExposureAuto.Enabled = !checkBoxExposureMax.Checked;
+
+            UpdateExposure();
+        }
+
+        private void checkBoxFineIncrement_CheckedChanged(object sender, EventArgs e)
+        {
+            UpdateExposure();
+        }
+
+        private void checkBoxFramerateAuto_CheckedChanged(object sender, EventArgs e)
+        {
+            checkBoxFramerateMax.Enabled = !checkBoxFramerateAuto.Checked;
+            trackBarFramerate.Enabled = !checkBoxFramerateAuto.Checked;
+            numericUpDownFramerate.Enabled = !checkBoxFramerateAuto.Checked;
+
+            m_Camera.AutoFeatures.Software.Framerate.SetEnable(checkBoxFramerateAuto.Checked);
+        }
+
+        private void checkBoxFramerateMax_CheckedChanged(object sender, EventArgs e)
+        {
+            trackBarFramerate.Enabled = !checkBoxFramerateMax.Checked;
+            numericUpDownFramerate.Enabled = !checkBoxFramerateMax.Checked;
+
+            UpdateFramerate();
+        }
+
+        private void numericUpDownExposure_ValueChanged(object sender, EventArgs e)
+        {
+            if (numericUpDownExposure.Focused)
+            {
+                uEye.Defines.Status statusRet;
+                uEye.Types.Range<Double> range;
+
+                statusRet = m_Camera.Timing.Exposure.GetRange(out range);
+
+                // calculate exposure
+                Double dValue = Convert.ToDouble(numericUpDownExposure.Value);
+                dValue = (dValue - range.Minimum) / range.Increment;
+                // update numeric
+                trackBarExposure.Value = Convert.ToInt32(dValue > trackBarExposure.Maximum ? trackBarExposure.Maximum : dValue);
+
+                // set exposure
+                statusRet = m_Camera.Timing.Exposure.Set(dValue);
+            }
+        }
+
+        private void numericUpDownFramerate_ValueChanged(object sender, EventArgs e)
+        {
+            if (numericUpDownFramerate.Focused)
+            {
+                uEye.Defines.Status statusRet;
+                uEye.Types.Range<Double> range;
+
+                statusRet = m_Camera.Timing.Framerate.GetFrameRateRange(out range);
+                Double dValue = Convert.ToDouble(numericUpDownFramerate.Value);
+
+                // update numeric
+                trackBarFramerate.Value = Convert.ToInt32((dValue - range.Minimum) / range.Increment);
+
+                // set framerate
+                statusRet = m_Camera.Timing.Framerate.Set(dValue);
+
+                // update exposure
+                UpdateExposure();
+            }
+        }
+
+        private void numericUpDownPixelclock_ValueChanged(object sender, EventArgs e)
+        {
+            if (numericUpDownPixelclock.Focused)
+            {
+                trackBarPixelclock.Value = Convert.ToInt32(numericUpDownPixelclock.Value);
+                m_Camera.Timing.PixelClock.Set(trackBarPixelclock.Value);
+
+                UpdateFramerate();
+                UpdateExposure();
+            }
         }
 
         private void OnUpdateControls(object sender, EventArgs e)
@@ -102,9 +201,69 @@ namespace NFUIRSL.HRTK.Vision
                     UpdateFramerate();
                     UpdateExposure();
                     break;
+
                 case 1:
                     UpdateBandwidth();
                     break;
+            }
+        }
+
+        private void trackBarExposure_Scroll(object sender, EventArgs e)
+        {
+            if (trackBarExposure.Focused)
+            {
+                uEye.Defines.Status statusRet;
+                uEye.Types.Range<Double> range;
+
+                statusRet = m_Camera.Timing.Exposure.GetRange(out range);
+
+                // calculate exposure
+                Double dValue = range.Minimum + trackBarExposure.Value * range.Increment;
+
+                // update numeric
+                numericUpDownExposure.Value = Convert.ToDecimal(dValue > range.Maximum ?
+                    Convert.ToDecimal(range.Maximum) : Convert.ToDecimal(dValue));
+
+                // set exposure
+                statusRet = m_Camera.Timing.Exposure.Set(dValue);
+            }
+        }
+
+        private void trackBarFramerate_Scroll(object sender, EventArgs e)
+        {
+            if (trackBarFramerate.Focused)
+            {
+                uEye.Defines.Status statusRet;
+                uEye.Types.Range<Double> range;
+
+                statusRet = m_Camera.Timing.Framerate.GetFrameRateRange(out range);
+                Double dValue = range.Minimum + trackBarFramerate.Value * range.Increment;
+
+                if (dValue > range.Maximum)
+                {
+                    dValue = range.Maximum;
+                }
+
+                // update numeric
+                numericUpDownFramerate.Value = Convert.ToDecimal(dValue);
+
+                // set framerate
+                statusRet = m_Camera.Timing.Framerate.Set(dValue);
+
+                // update exposure
+                UpdateExposure();
+            }
+        }
+
+        private void trackBarPixelclock_Scroll(object sender, EventArgs e)
+        {
+            if (trackBarPixelclock.Focused)
+            {
+                m_Camera.Timing.PixelClock.Set(trackBarPixelclock.Value);
+                numericUpDownPixelclock.Value = trackBarPixelclock.Value;
+
+                UpdateFramerate();
+                UpdateExposure();
             }
         }
 
@@ -121,61 +280,6 @@ namespace NFUIRSL.HRTK.Vision
             Int32 s32SensorBandwidth;
             m_Camera.Timing.PixelClock.Get(out s32SensorBandwidth);
             labelSensorBandwidth.Text = s32SensorBandwidth + " Mp/s";
-        }
-
-        private void UpdatePixelclock()
-        {
-            uEye.Defines.Status statusRet;
-
-            uEye.Types.Range<Int32> range;
-            statusRet = m_Camera.Timing.PixelClock.GetRange(out range);
-
-            labelPixelclockMin.Text = range.Minimum.ToString() + " MHz";
-            labelPixelclockMax.Text = range.Maximum.ToString() + " MHz";
-
-            trackBarPixelclock.SetRange(range.Minimum, range.Maximum);
-
-            numericUpDownPixelclock.Minimum = range.Minimum;
-            numericUpDownPixelclock.Maximum = range.Maximum;
-
-            Int32 s32Value;
-            statusRet = m_Camera.Timing.PixelClock.Get(out s32Value);
-
-            trackBarPixelclock.Value = s32Value;
-            numericUpDownPixelclock.Value = s32Value;
-        }
-
-        private void UpdateFramerate()
-        {
-            uEye.Defines.Status statusRet;
-            uEye.Types.Range<Double> range;
-
-            statusRet = m_Camera.Timing.Framerate.GetFrameRateRange(out range);
-
-            labelFramerateMin.Text = Math.Round(range.Minimum, 2) + " fps";
-            labelFramerateMax.Text = Math.Round(range.Maximum, 2) + " fps";
-
-            Int32 s32Steps = Convert.ToInt32((range.Maximum - range.Minimum) / range.Increment);
-            trackBarFramerate.SetRange(0, s32Steps);
-
-            numericUpDownFramerate.Minimum = Convert.ToDecimal(range.Minimum);
-            numericUpDownFramerate.Maximum = Convert.ToDecimal(range.Maximum);
-
-            Double dValue;
-            statusRet = m_Camera.Timing.Framerate.Get(out dValue);
-
-            numericUpDownFramerate.Value = Convert.ToDecimal(dValue);
-            Int32 s32Value = Convert.ToInt32((dValue - range.Minimum) / range.Increment);
-
-            trackBarFramerate.Value = s32Value;
-
-            if (checkBoxFramerateMax.Checked)
-            {
-                m_Camera.Timing.Framerate.Set(Convert.ToDouble(numericUpDownFramerate.Maximum));
-
-                numericUpDownFramerate.Value = numericUpDownFramerate.Maximum;
-                trackBarFramerate.Value = trackBarFramerate.Maximum;
-            }
         }
 
         private void UpdateExposure()
@@ -218,162 +322,59 @@ namespace NFUIRSL.HRTK.Vision
             }
         }
 
-        private void trackBarPixelclock_Scroll(object sender, EventArgs e)
+        private void UpdateFramerate()
         {
-            if (trackBarPixelclock.Focused)
-            {
-                m_Camera.Timing.PixelClock.Set(trackBarPixelclock.Value);
-                numericUpDownPixelclock.Value = trackBarPixelclock.Value;
+            uEye.Defines.Status statusRet;
+            uEye.Types.Range<Double> range;
 
-                UpdateFramerate();
-                UpdateExposure();
+            statusRet = m_Camera.Timing.Framerate.GetFrameRateRange(out range);
+
+            labelFramerateMin.Text = Math.Round(range.Minimum, 2) + " fps";
+            labelFramerateMax.Text = Math.Round(range.Maximum, 2) + " fps";
+
+            Int32 s32Steps = Convert.ToInt32((range.Maximum - range.Minimum) / range.Increment);
+            trackBarFramerate.SetRange(0, s32Steps);
+
+            numericUpDownFramerate.Minimum = Convert.ToDecimal(range.Minimum);
+            numericUpDownFramerate.Maximum = Convert.ToDecimal(range.Maximum);
+
+            Double dValue;
+            statusRet = m_Camera.Timing.Framerate.Get(out dValue);
+
+            numericUpDownFramerate.Value = Convert.ToDecimal(dValue);
+            Int32 s32Value = Convert.ToInt32((dValue - range.Minimum) / range.Increment);
+
+            trackBarFramerate.Value = s32Value;
+
+            if (checkBoxFramerateMax.Checked)
+            {
+                m_Camera.Timing.Framerate.Set(Convert.ToDouble(numericUpDownFramerate.Maximum));
+
+                numericUpDownFramerate.Value = numericUpDownFramerate.Maximum;
+                trackBarFramerate.Value = trackBarFramerate.Maximum;
             }
         }
 
-        private void trackBarFramerate_Scroll(object sender, EventArgs e)
+        private void UpdatePixelclock()
         {
-            if (trackBarFramerate.Focused)
-            {
-                uEye.Defines.Status statusRet;
-                uEye.Types.Range<Double> range;
+            uEye.Defines.Status statusRet;
 
-                statusRet = m_Camera.Timing.Framerate.GetFrameRateRange(out range);
-                Double dValue = range.Minimum + trackBarFramerate.Value * range.Increment;
+            uEye.Types.Range<Int32> range;
+            statusRet = m_Camera.Timing.PixelClock.GetRange(out range);
 
-                if(dValue > range.Maximum)
-                {
-                    dValue = range.Maximum;
-                }
+            labelPixelclockMin.Text = range.Minimum.ToString() + " MHz";
+            labelPixelclockMax.Text = range.Maximum.ToString() + " MHz";
 
-                // update numeric
-                numericUpDownFramerate.Value = Convert.ToDecimal(dValue);
+            trackBarPixelclock.SetRange(range.Minimum, range.Maximum);
 
-                // set framerate
-                statusRet = m_Camera.Timing.Framerate.Set(dValue);
+            numericUpDownPixelclock.Minimum = range.Minimum;
+            numericUpDownPixelclock.Maximum = range.Maximum;
 
-                // update exposure
-                UpdateExposure();
-            }
-        }
+            Int32 s32Value;
+            statusRet = m_Camera.Timing.PixelClock.Get(out s32Value);
 
-        private void trackBarExposure_Scroll(object sender, EventArgs e)
-        {
-            if (trackBarExposure.Focused)
-            {
-                uEye.Defines.Status statusRet;
-                uEye.Types.Range<Double> range;
-
-                statusRet = m_Camera.Timing.Exposure.GetRange(out range);
-
-                // calculate exposure
-                Double dValue = range.Minimum + trackBarExposure.Value * range.Increment;
-
-                // update numeric
-                numericUpDownExposure.Value = Convert.ToDecimal(dValue > range.Maximum ? 
-                    Convert.ToDecimal(range.Maximum) : Convert.ToDecimal(dValue));
-
-                // set exposure
-                statusRet = m_Camera.Timing.Exposure.Set(dValue);
-            }
-        }
-
-        private void checkBoxFramerateAuto_CheckedChanged(object sender, EventArgs e)
-        {
-            checkBoxFramerateMax.Enabled = !checkBoxFramerateAuto.Checked;
-            trackBarFramerate.Enabled = !checkBoxFramerateAuto.Checked;
-            numericUpDownFramerate.Enabled = !checkBoxFramerateAuto.Checked;
-
-            m_Camera.AutoFeatures.Software.Framerate.SetEnable(checkBoxFramerateAuto.Checked);
-        }
-
-        private void checkBoxFramerateMax_CheckedChanged(object sender, EventArgs e)
-        {
-            trackBarFramerate.Enabled = !checkBoxFramerateMax.Checked;
-            numericUpDownFramerate.Enabled = !checkBoxFramerateMax.Checked;
-
-            UpdateFramerate();
-        }
-
-        private void checkBoxExposureAuto_CheckedChanged(object sender, EventArgs e)
-        {
-            checkBoxFramerateAuto.Enabled = checkBoxExposureAuto.Checked;
-            checkBoxFramerateAuto.Checked = false;
-
-            trackBarExposure.Enabled = !checkBoxExposureAuto.Checked;
-            numericUpDownExposure.Enabled = !checkBoxExposureAuto.Checked;
-            checkBoxExposureMax.Enabled = !checkBoxExposureAuto.Checked;
-            trackBarPixelclock.Enabled = !checkBoxExposureAuto.Checked;
-            numericUpDownPixelclock.Enabled = !checkBoxExposureAuto.Checked;
-
-            m_Camera.AutoFeatures.Software.Shutter.SetEnable(checkBoxExposureAuto.Checked);
-        }
-
-        private void checkBoxExposureMax_CheckedChanged(object sender, EventArgs e)
-        {
-            trackBarExposure.Enabled = !checkBoxExposureMax.Checked;
-            numericUpDownExposure.Enabled = !checkBoxExposureMax.Checked;
-
-            checkBoxExposureAuto.Enabled = !checkBoxExposureMax.Checked;
-
-            UpdateExposure();
-        }
-
-        private void checkBoxFineIncrement_CheckedChanged(object sender, EventArgs e)
-        {
-            UpdateExposure();
-        }
-
-        private void numericUpDownPixelclock_ValueChanged(object sender, EventArgs e)
-        {
-            if (numericUpDownPixelclock.Focused)
-            {
-                trackBarPixelclock.Value = Convert.ToInt32(numericUpDownPixelclock.Value);
-                m_Camera.Timing.PixelClock.Set(trackBarPixelclock.Value);
-
-                UpdateFramerate();
-                UpdateExposure();
-            }
-        }
-
-        private void numericUpDownFramerate_ValueChanged(object sender, EventArgs e)
-        {
-            if (numericUpDownFramerate.Focused)
-            {
-                uEye.Defines.Status statusRet;
-                uEye.Types.Range<Double> range;
-
-                statusRet = m_Camera.Timing.Framerate.GetFrameRateRange(out range);
-                Double dValue = Convert.ToDouble(numericUpDownFramerate.Value);
-
-                // update numeric
-                trackBarFramerate.Value = Convert.ToInt32((dValue - range.Minimum) / range.Increment);
-
-                // set framerate
-                statusRet = m_Camera.Timing.Framerate.Set(dValue);
-
-                // update exposure
-                UpdateExposure();
-            }
-        }
-
-        private void numericUpDownExposure_ValueChanged(object sender, EventArgs e)
-        {
-            if (numericUpDownExposure.Focused)
-            {
-                uEye.Defines.Status statusRet;
-                uEye.Types.Range<Double> range;
-
-                statusRet = m_Camera.Timing.Exposure.GetRange(out range);
-
-                // calculate exposure
-                Double dValue = Convert.ToDouble(numericUpDownExposure.Value);
-                dValue = (dValue - range.Minimum) / range.Increment;
-                // update numeric
-                trackBarExposure.Value = Convert.ToInt32(dValue > trackBarExposure.Maximum ? trackBarExposure.Maximum : dValue);
-
-                // set exposure
-                statusRet = m_Camera.Timing.Exposure.Set(dValue);
-            }
+            trackBarPixelclock.Value = s32Value;
+            numericUpDownPixelclock.Value = s32Value;
         }
     }
 }

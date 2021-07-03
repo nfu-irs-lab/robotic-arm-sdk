@@ -4,7 +4,7 @@ using Emgu.CV;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
 
-namespace NFUIRSL.HRTK.Vision
+namespace Vision
 {
     /// <summary>
     /// Vision positioning interface.

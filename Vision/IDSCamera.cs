@@ -12,7 +12,7 @@ using uEye.Defines;
 using uEye.Types;
 using DisplayMode = uEye.Defines.DisplayMode;
 
-namespace NFUIRSL.HRTK.Vision
+namespace Vision
 {
     public enum CaptureMode
     {
@@ -74,59 +74,21 @@ namespace NFUIRSL.HRTK.Vision
             }
         }
 
-        public int DeviceId { get; private set; }
-        public int CameraId { get; private set; }
-        public Boolean IsLive { get; private set; }
-        public DisplayRenderMode RenderMode { get; private set; }
-        public Int32 FrameCount { get; private set; }
-        public double Fps { get; private set; }
-        public string Failed { get; private set; }
-        public string SensorName { get; private set; }
-
         ~IDSCamera()
         {
             Disconnect();
         }
 
+        public int CameraId { get; private set; }
+        public int DeviceId { get; private set; }
+        public string Failed { get; private set; }
+        public double Fps { get; private set; }
+        public Int32 FrameCount { get; private set; }
+        public Boolean IsLive { get; private set; }
+        public DisplayRenderMode RenderMode { get; private set; }
+        public string SensorName { get; private set; }
+
         #region - Dis/Connect, Init -
-
-        public bool Init()
-        {
-            if (_camera == null)
-            {
-                _camera = new Camera();
-            }
-
-            var id = DeviceId | (Int32)DeviceEnumeration.UseDeviceID;
-
-            var status = _pictureBox == null ? _camera.Init(id) : _camera.Init(id, _pictureBox.Handle);
-            if (status != Status.SUCCESS)
-            {
-                _message.Show("Initializing the camera failed", LoggingLevel.Error);
-                return false;
-            }
-
-            status = MemoryHelper.AllocImageMems(_camera, _cnNumberOfSeqBuffers);
-            if (status != Status.SUCCESS)
-            {
-                _message.Show("Allocating memory failed", LoggingLevel.Error);
-                return false;
-            }
-
-            status = MemoryHelper.InitSequence(_camera);
-            if (status != Status.SUCCESS)
-            {
-                _message.Show("Add to sequence failed", LoggingLevel.Error);
-                return false;
-            }
-
-            _camera.EventFrame += FrameEvent;
-            FrameCount = 0;
-            _updateTimer.Start();
-            _camera.Information.GetSensorInfo(out var sensorInfo);
-            SensorName = sensorInfo.SensorName;
-            return true;
-        }
 
         public bool Connected => _camera.IsOpened;
 
@@ -170,7 +132,45 @@ namespace NFUIRSL.HRTK.Vision
             return !_camera.IsOpened;
         }
 
-        #endregion
+        public bool Init()
+        {
+            if (_camera == null)
+            {
+                _camera = new Camera();
+            }
+
+            var id = DeviceId | (Int32)DeviceEnumeration.UseDeviceID;
+
+            var status = _pictureBox == null ? _camera.Init(id) : _camera.Init(id, _pictureBox.Handle);
+            if (status != Status.SUCCESS)
+            {
+                _message.Show("Initializing the camera failed", LoggingLevel.Error);
+                return false;
+            }
+
+            status = MemoryHelper.AllocImageMems(_camera, _cnNumberOfSeqBuffers);
+            if (status != Status.SUCCESS)
+            {
+                _message.Show("Allocating memory failed", LoggingLevel.Error);
+                return false;
+            }
+
+            status = MemoryHelper.InitSequence(_camera);
+            if (status != Status.SUCCESS)
+            {
+                _message.Show("Add to sequence failed", LoggingLevel.Error);
+                return false;
+            }
+
+            _camera.EventFrame += FrameEvent;
+            FrameCount = 0;
+            _updateTimer.Start();
+            _camera.Information.GetSensorInfo(out var sensorInfo);
+            SensorName = sensorInfo.SensorName;
+            return true;
+        }
+
+        #endregion - Dis/Connect, Init -
 
         #region - General Feature -
 
@@ -232,16 +232,16 @@ namespace NFUIRSL.HRTK.Vision
             _camera.Size.AOI.Set(x, y, width, height);
         }
 
-        #endregion
+        #endregion - General Feature -
 
         #region - Auto Features -
 
         private delegate Status GetFunc(out bool enable);
 
-        private bool GetAutoFeatures(GetFunc func)
+        public bool AutoGain
         {
-            func(out bool enable);
-            return enable;
+            get => GetAutoFeatures(_camera.AutoFeatures.Software.Gain.GetEnable);
+            set => _camera.AutoFeatures.Software.Gain.SetEnable(value);
         }
 
         public bool AutoShutter
@@ -256,13 +256,13 @@ namespace NFUIRSL.HRTK.Vision
             set => _camera.AutoFeatures.Software.WhiteBalance.SetEnable(value);
         }
 
-        public bool AutoGain
+        private bool GetAutoFeatures(GetFunc func)
         {
-            get => GetAutoFeatures(_camera.AutoFeatures.Software.Gain.GetEnable);
-            set => _camera.AutoFeatures.Software.Gain.SetEnable(value);
+            func(out bool enable);
+            return enable;
         }
 
-        #endregion
+        #endregion - Auto Features -
 
         #region - Form -
 
@@ -291,7 +291,7 @@ namespace NFUIRSL.HRTK.Vision
             }
         }
 
-        #endregion
+        #endregion - Form -
 
         #region - .NET Version -
 
@@ -310,23 +310,6 @@ namespace NFUIRSL.HRTK.Vision
             }
 
             return ok;
-        }
-
-        private Collection<Version> InstalledDotNetVersions()
-        {
-            var versions = new Collection<Version>();
-            var NDPKey = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\NET Framework Setup\NDP");
-            if (NDPKey != null)
-            {
-                string[] subkeys = NDPKey.GetSubKeyNames();
-                foreach (string subkey in subkeys)
-                {
-                    GetDotNetVersion(NDPKey.OpenSubKey(subkey), subkey, versions);
-                    GetDotNetVersion(NDPKey.OpenSubKey(subkey).OpenSubKey("Client"), subkey, versions);
-                    GetDotNetVersion(NDPKey.OpenSubKey(subkey).OpenSubKey("Full"), subkey, versions);
-                }
-            }
-            return versions;
         }
 
         private void GetDotNetVersion(RegistryKey parentKey,
@@ -355,7 +338,24 @@ namespace NFUIRSL.HRTK.Vision
             }
         }
 
-        #endregion
+        private Collection<Version> InstalledDotNetVersions()
+        {
+            var versions = new Collection<Version>();
+            var NDPKey = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\NET Framework Setup\NDP");
+            if (NDPKey != null)
+            {
+                string[] subkeys = NDPKey.GetSubKeyNames();
+                foreach (string subkey in subkeys)
+                {
+                    GetDotNetVersion(NDPKey.OpenSubKey(subkey), subkey, versions);
+                    GetDotNetVersion(NDPKey.OpenSubKey(subkey).OpenSubKey("Client"), subkey, versions);
+                    GetDotNetVersion(NDPKey.OpenSubKey(subkey).OpenSubKey("Full"), subkey, versions);
+                }
+            }
+            return versions;
+        }
+
+        #endregion - .NET Version -
 
         #region - Events -
 
@@ -423,7 +423,6 @@ namespace NFUIRSL.HRTK.Vision
 
                     if (RenderMode != DisplayRenderMode.Normal)
                     {
-
                         _pictureBox.Width = rect.Width / 2;
                         _pictureBox.Height = rect.Height / 2;
                     }
@@ -448,6 +447,6 @@ namespace NFUIRSL.HRTK.Vision
             }
         }
 
-        #endregion
+        #endregion - Events -
     }
 }

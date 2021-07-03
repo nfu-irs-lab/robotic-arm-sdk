@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 
-namespace NFUIRSL.HRTK.Vision
+namespace Vision
 {
     public static class MemoryHelper
     {
@@ -23,6 +23,11 @@ namespace NFUIRSL.HRTK.Vision
             }
 
             return statusRet;
+        }
+
+        public static uEye.Defines.Status ClearSequence(uEye.Camera Camera)
+        {
+            return Camera.Memory.Sequence.Clear();
         }
 
         public static uEye.Defines.Status FreeImageMems(uEye.Camera Camera)
@@ -69,11 +74,6 @@ namespace NFUIRSL.HRTK.Vision
             }
 
             return statusRet;
-        }
-
-        public static uEye.Defines.Status ClearSequence(uEye.Camera Camera)
-        {
-            return Camera.Memory.Sequence.Clear();
         }
     }
 }

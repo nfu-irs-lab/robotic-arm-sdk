@@ -1,4 +1,4 @@
-﻿namespace NFUIRSL.HRTK.Vision
+﻿namespace Vision
 {
     partial class FormatControl
     {
