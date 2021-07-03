@@ -21,7 +21,7 @@ using Arm.Action;
 using Arm.Type;
 using SDKHrobot;
 
-namespace NFUIRSL.HRTK
+namespace Arm
 {
     /// <summary>
     /// 上銀機械手臂控制介面。
