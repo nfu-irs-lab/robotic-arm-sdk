@@ -34,10 +34,10 @@ namespace Vision.IDS
 
         public IDSCamera(IMessage message)
         {
+            _message = message;
+
             if (CheckRuntimeVersion())
             {
-                _message = message;
-
                 DeviceId = 1;
                 CameraId = 1;
                 IsLive = false;
@@ -55,10 +55,10 @@ namespace Vision.IDS
 
         public IDSCamera(PictureBox pictureBox, IMessage message)
         {
+            _message = message;
+
             if (CheckRuntimeVersion())
             {
-                _message = message;
-
                 _pictureBox = pictureBox;
                 _pictureBox.SizeMode = PictureBoxSizeMode.CenterImage;
 
