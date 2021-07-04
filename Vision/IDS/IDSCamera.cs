@@ -86,7 +86,16 @@ namespace Vision.IDS
 
         #region - Dis/Connect, Init -
 
-        public bool Connected => _camera.IsOpened;
+        public bool Connected
+        {
+            get
+            {
+                if (_camera == null)
+                    return false;
+                else
+                    return _camera.IsOpened;
+            }
+        }
 
         public bool Connect()
         {
