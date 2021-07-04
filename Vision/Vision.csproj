@@ -84,6 +84,8 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="PictureControl.Designer.cs" />
+    <Compile Include="Positioning\CCNF.cs" />
+    <Compile Include="Positioning\IVisionPositioning.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SettingsForm.cs" />
     <Compile Include="SettingsForm.Designer.cs" />
@@ -91,7 +93,7 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="SizeControl.Designer.cs" />
-    <Compile Include="VisionPositioning.cs" />
+    <Compile Include="Positioning\VisionPositioning.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="CameraChoose.resx" />
