@@ -62,46 +62,46 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CameraChoose.cs">
+    <Compile Include="IDS\CameraChoose.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="CameraChoose.Designer.cs" />
-    <Compile Include="CameraControl.cs">
+    <Compile Include="IDS\CameraChoose.Designer.cs" />
+    <Compile Include="IDS\CameraControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="CameraControl.Designer.cs" />
+    <Compile Include="IDS\CameraControl.Designer.cs" />
     <Compile Include="CameraParameter.cs" />
-    <Compile Include="FormatControl.cs">
+    <Compile Include="IDS\FormatControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="FormatControl.Designer.cs" />
-    <Compile Include="IControl.cs">
+    <Compile Include="IDS\FormatControl.Designer.cs" />
+    <Compile Include="IDS\IControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="IDSCamera.cs" />
-    <Compile Include="MemoryHelper.cs" />
-    <Compile Include="PictureControl.cs">
+    <Compile Include="IDS\IDSCamera.cs" />
+    <Compile Include="IDS\MemoryHelper.cs" />
+    <Compile Include="IDS\PictureControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="PictureControl.Designer.cs" />
+    <Compile Include="IDS\PictureControl.Designer.cs" />
     <Compile Include="Positioning\CCNF.cs" />
     <Compile Include="Positioning\IVisionPositioning.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SettingsForm.cs" />
-    <Compile Include="SettingsForm.Designer.cs" />
-    <Compile Include="SizeControl.cs">
+    <Compile Include="IDS\SettingsForm.cs" />
+    <Compile Include="IDS\SettingsForm.Designer.cs" />
+    <Compile Include="IDS\SizeControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="SizeControl.Designer.cs" />
+    <Compile Include="IDS\SizeControl.Designer.cs" />
     <Compile Include="Positioning\VisionPositioning.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="CameraChoose.resx" />
-    <EmbeddedResource Include="CameraControl.resx" />
-    <EmbeddedResource Include="FormatControl.resx" />
-    <EmbeddedResource Include="PictureControl.resx" />
-    <EmbeddedResource Include="SettingsForm.resx" />
-    <EmbeddedResource Include="SizeControl.resx" />
+    <EmbeddedResource Include="IDS\CameraChoose.resx" />
+    <EmbeddedResource Include="IDS\CameraControl.resx" />
+    <EmbeddedResource Include="IDS\FormatControl.resx" />
+    <EmbeddedResource Include="IDS\PictureControl.resx" />
+    <EmbeddedResource Include="IDS\SettingsForm.resx" />
+    <EmbeddedResource Include="IDS\SizeControl.resx" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -1,4 +1,4 @@
-﻿namespace Vision
+﻿namespace Vision.IDS
 {
     partial class CameraControl
     {

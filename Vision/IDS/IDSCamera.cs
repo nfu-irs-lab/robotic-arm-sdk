@@ -15,7 +15,7 @@ using uEye.Defines;
 using uEye.Types;
 using DisplayMode = uEye.Defines.DisplayMode;
 
-namespace Vision
+namespace Vision.IDS
 {
     public enum CaptureMode
     {

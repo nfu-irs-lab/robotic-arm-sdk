@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace Vision
+namespace Vision.IDS
 {
     public class ListViewControlItem : ListViewItem
     {
