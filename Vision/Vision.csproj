@@ -74,6 +74,7 @@
     </Compile>
     <Compile Include="IDS\CameraControl.Designer.cs" />
     <Compile Include="CameraParameter.cs" />
+    <Compile Include="IDS\CaptureMode.cs" />
     <Compile Include="IDS\FormatControl.cs">
       <SubType>UserControl</SubType>
     </Compile>

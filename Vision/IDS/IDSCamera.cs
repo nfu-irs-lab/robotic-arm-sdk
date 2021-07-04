@@ -17,13 +17,6 @@ using DisplayMode = uEye.Defines.DisplayMode;
 
 namespace Vision.IDS
 {
-    public enum CaptureMode
-    {
-        FreeRun,
-        Stop,
-        Snapshot
-    }
-
     public class IDSCamera : IDevice
     {
         private const int _cnNumberOfSeqBuffers = 3;
