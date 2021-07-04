@@ -53,7 +53,7 @@ namespace Vision.IDS
             }
         }
 
-        public IDSCamera(PictureBox pictureBox, IMessage message)
+        public IDSCamera(IMessage message, PictureBox pictureBox)
         {
             _message = message;
 
