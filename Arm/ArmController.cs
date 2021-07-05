@@ -28,6 +28,12 @@ namespace Arm
     public interface IArm : IDevice
     {
         /// <summary>
+        /// 整體加速度比例。<br/>
+        /// 正常數值爲 1 ~ 100，-1 代表取得數值時出錯。
+        /// </summary>
+        int Acceleration { get; set; }
+
+        /// <summary>
         /// 手臂ID。
         /// </summary>
         int Id { get; }
@@ -37,33 +43,17 @@ namespace Arm
         /// </summary>
         string Ip { get; }
 
-        #region - Speed and Acceleration -
-
-        /// <summary>
-        /// 整體加速度比例。<br/>
-        /// 正常數值爲 1 ~ 100，-1 代表取得數值時出錯。
-        /// </summary>
-        int Acceleration { get; set; }
-
         /// <summary>
         /// 整體速度比例。<br/>
         /// 正常數值爲 1 ~ 100，-1 代表取得數值時出錯。
         /// </summary>
         int Speed { get; set; }
 
-        #endregion - Speed and Acceleration -
-
-        #region - Motion -
-
         /// <summary>
         /// 進行手臂動作。
         /// </summary>
         /// <param name="armAction"></param>
         void Do(IArmAction armAction);
-
-        #endregion - Motion -
-
-        #region - Others -
 
         /// <summary>
         /// 取得手臂目前的位置座標數值。<br/>
@@ -72,8 +62,6 @@ namespace Arm
         /// <param name="coordinateType"></param>
         /// <returns>目前的手臂位置座標數值。</returns>
         double[] GetPosition(CoordinateType coordinateType = CoordinateType.Descartes);
-
-        #endregion - Others -
     }
 
     /// <summary>
