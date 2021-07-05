@@ -18,9 +18,9 @@ namespace Arm.Action
         /// <param name="coordinateType"></param>
         public Homing(CoordinateType coordinateType = CoordinateType.Descartes)
             : base(coordinateType == CoordinateType.Descartes ?
-                       ArmController.DescartesHomePosition :
+                       HiwinArm.DescartesHomePosition :
                        coordinateType == CoordinateType.Joint ?
-                           ArmController.JointHomePosition :
+                           HiwinArm.JointHomePosition :
                            throw new AggregateException())
         {
             CoordinateType = coordinateType;
