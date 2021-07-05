@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 
-namespace Basic.File
+namespace Basic
 {
     /// <summary>
     /// 日誌等級。<br/>

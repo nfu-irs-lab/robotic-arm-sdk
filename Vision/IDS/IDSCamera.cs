@@ -7,7 +7,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Basic;
-using Basic.File;
 using Basic.Message;
 using Microsoft.Win32;
 using uEye;

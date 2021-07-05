@@ -15,7 +15,6 @@ using System.Threading;
 using System.Windows.Forms;
 using Timer = System.Windows.Forms.Timer;
 using Basic;
-using Basic.File;
 using Basic.Message;
 using Arm.Action;
 using Arm.Type;
