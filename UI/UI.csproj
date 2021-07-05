@@ -48,12 +48,21 @@
     <Compile Include="BasicArmController.Designer.cs">
       <DependentUpon>BasicArmController.cs</DependentUpon>
     </Compile>
+    <Compile Include="ConnectionButton.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ConnectionButton.Designer.cs">
+      <DependentUpon>ConnectionButton.cs</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Service Include="{94E38DFF-614B-4cbd-B67C-F211BB35CE8B}" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="BasicArmController.resx">
       <DependentUpon>BasicArmController.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConnectionButton.resx">
+      <DependentUpon>ConnectionButton.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
