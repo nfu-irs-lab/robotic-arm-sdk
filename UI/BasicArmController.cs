@@ -18,7 +18,7 @@ namespace UI
 {
     public partial class BasicArmController : UserControl
     {
-        private IArmController _arm;
+        private IArm _arm;
         private IMessage _message;
 
         public BasicArmController()
@@ -40,7 +40,7 @@ namespace UI
                                                            numericUpDownArmTargetPositionZJ6 };
         }
 
-        public void DependencyInjection(IArmController armController, IMessage message)
+        public void DependencyInjection(IArm armController, IMessage message)
         {
             _message = message;
             _arm = armController;

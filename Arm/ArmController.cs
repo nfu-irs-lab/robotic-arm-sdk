@@ -25,7 +25,7 @@ namespace Arm
     /// <summary>
     /// 上銀機械手臂控制介面。
     /// </summary>
-    public interface IArmController : IDevice
+    public interface IArm : IDevice
     {
         /// <summary>
         /// 手臂ID。
@@ -84,7 +84,7 @@ namespace Arm
     /// <summary>
     /// 上銀機械手臂控制實作。
     /// </summary>
-    public class ArmController : IArmController
+    public class ArmController : IArm
     {
 #if (USE_CALLBACK_MOTION_STATE_WAIT)
         private static bool Waiting = false;
