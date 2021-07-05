@@ -66,11 +66,6 @@ namespace Arm
         #region - Others -
 
         /// <summary>
-        /// 清除警報。
-        /// </summary>
-        void ClearAlarm();
-
-        /// <summary>
         /// 取得手臂目前的位置座標數值。<br/>
         /// 須選擇是笛卡爾還是關節座標。預設爲笛卡爾座標。
         /// </summary>
