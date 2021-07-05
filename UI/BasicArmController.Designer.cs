@@ -30,9 +30,6 @@ namespace UI
         private void InitializeComponent()
         {
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.textBoxArmNowPositionXJ1 = new System.Windows.Forms.TextBox();
             this.textBoxArmNowPositionYJ2 = new System.Windows.Forms.TextBox();
@@ -48,7 +45,6 @@ namespace UI
             this.label6 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
-            this.buttonArmCopyPositionFromNowToTarget = new System.Windows.Forms.Button();
             this.numericUpDownArmTargetPositionXJ1 = new System.Windows.Forms.NumericUpDown();
             this.numericUpDownArmTargetPositionYJ2 = new System.Windows.Forms.NumericUpDown();
             this.numericUpDownArmTargetPositionZJ3 = new System.Windows.Forms.NumericUpDown();
@@ -56,32 +52,33 @@ namespace UI
             this.numericUpDownArmTargetPositionBJ5 = new System.Windows.Forms.NumericUpDown();
             this.numericUpDownArmTargetPositionZJ6 = new System.Windows.Forms.NumericUpDown();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
+            this.buttonArmCopyPositionFromNowToTarget = new System.Windows.Forms.Button();
             this.buttonArmUpdateNowPosition = new System.Windows.Forms.Button();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.groupBox5 = new System.Windows.Forms.GroupBox();
-            this.groupBox6 = new System.Windows.Forms.GroupBox();
-            this.groupBox7 = new System.Windows.Forms.GroupBox();
-            this.radioButtonPositionTypeAbsolute = new System.Windows.Forms.RadioButton();
             this.radioButtonPositionTypeRelative = new System.Windows.Forms.RadioButton();
-            this.radioButtonCoordinateTypeDescartes = new System.Windows.Forms.RadioButton();
+            this.radioButtonPositionTypeAbsolute = new System.Windows.Forms.RadioButton();
+            this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.radioButtonCoordinateTypeJoint = new System.Windows.Forms.RadioButton();
-            this.radioButtonMotionTypePointToPoint = new System.Windows.Forms.RadioButton();
+            this.radioButtonCoordinateTypeDescartes = new System.Windows.Forms.RadioButton();
+            this.groupBox6 = new System.Windows.Forms.GroupBox();
             this.radioButtonMotionTypeLinear = new System.Windows.Forms.RadioButton();
-            this.buttonArmMotionStart = new System.Windows.Forms.Button();
-            this.checkBoxArmSlowlyHoming = new System.Windows.Forms.CheckBox();
+            this.radioButtonMotionTypePointToPoint = new System.Windows.Forms.RadioButton();
+            this.groupBox7 = new System.Windows.Forms.GroupBox();
+            this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
             this.buttonArmHoming = new System.Windows.Forms.Button();
+            this.checkBoxArmSlowlyHoming = new System.Windows.Forms.CheckBox();
+            this.buttonArmMotionStart = new System.Windows.Forms.Button();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
             this.label9 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
             this.numericUpDownArmSpeed = new System.Windows.Forms.NumericUpDown();
             this.numericUpDownArmAcceleration = new System.Windows.Forms.NumericUpDown();
             this.buttonSetSpeedAndAcceleration = new System.Windows.Forms.Button();
-            this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.groupBox1.SuspendLayout();
-            this.groupBox2.SuspendLayout();
-            this.groupBox3.SuspendLayout();
-            this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownArmTargetPositionXJ1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownArmTargetPositionYJ2)).BeginInit();
@@ -90,15 +87,18 @@ namespace UI
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownArmTargetPositionBJ5)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownArmTargetPositionZJ6)).BeginInit();
             this.tableLayoutPanel3.SuspendLayout();
+            this.groupBox2.SuspendLayout();
             this.tableLayoutPanel4.SuspendLayout();
             this.groupBox4.SuspendLayout();
             this.groupBox5.SuspendLayout();
             this.groupBox6.SuspendLayout();
             this.groupBox7.SuspendLayout();
+            this.tableLayoutPanel6.SuspendLayout();
+            this.groupBox3.SuspendLayout();
             this.tableLayoutPanel5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownArmSpeed)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownArmAcceleration)).BeginInit();
-            this.tableLayoutPanel6.SuspendLayout();
+            this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -111,46 +111,6 @@ namespace UI
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "位置";
-            // 
-            // groupBox2
-            // 
-            this.groupBox2.Controls.Add(this.tableLayoutPanel4);
-            this.groupBox2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.groupBox2.Location = new System.Drawing.Point(3, 634);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(1936, 414);
-            this.groupBox2.TabIndex = 1;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "動作";
-            // 
-            // groupBox3
-            // 
-            this.groupBox3.Controls.Add(this.tableLayoutPanel5);
-            this.groupBox3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.groupBox3.Location = new System.Drawing.Point(3, 1054);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(1936, 346);
-            this.groupBox3.TabIndex = 2;
-            this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "速度與加速度";
-            // 
-            // tableLayoutPanel1
-            // 
-            this.tableLayoutPanel1.ColumnCount = 1;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.Controls.Add(this.groupBox1, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.groupBox3, 0, 2);
-            this.tableLayoutPanel1.Controls.Add(this.groupBox2, 0, 1);
-            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
-            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 3;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 45F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 30F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(1942, 1403);
-            this.tableLayoutPanel1.TabIndex = 3;
             // 
             // tableLayoutPanel2
             // 
@@ -341,16 +301,6 @@ namespace UI
             this.label8.Text = "目標：";
             this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // buttonArmCopyPositionFromNowToTarget
-            // 
-            this.buttonArmCopyPositionFromNowToTarget.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.buttonArmCopyPositionFromNowToTarget.Location = new System.Drawing.Point(3, 74);
-            this.buttonArmCopyPositionFromNowToTarget.Name = "buttonArmCopyPositionFromNowToTarget";
-            this.buttonArmCopyPositionFromNowToTarget.Size = new System.Drawing.Size(181, 65);
-            this.buttonArmCopyPositionFromNowToTarget.TabIndex = 4;
-            this.buttonArmCopyPositionFromNowToTarget.Text = "複製";
-            this.buttonArmCopyPositionFromNowToTarget.UseVisualStyleBackColor = true;
-            // 
             // numericUpDownArmTargetPositionXJ1
             // 
             this.numericUpDownArmTargetPositionXJ1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
@@ -511,6 +461,17 @@ namespace UI
             this.tableLayoutPanel3.Size = new System.Drawing.Size(187, 142);
             this.tableLayoutPanel3.TabIndex = 6;
             // 
+            // buttonArmCopyPositionFromNowToTarget
+            // 
+            this.buttonArmCopyPositionFromNowToTarget.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.buttonArmCopyPositionFromNowToTarget.Location = new System.Drawing.Point(3, 74);
+            this.buttonArmCopyPositionFromNowToTarget.Name = "buttonArmCopyPositionFromNowToTarget";
+            this.buttonArmCopyPositionFromNowToTarget.Size = new System.Drawing.Size(181, 65);
+            this.buttonArmCopyPositionFromNowToTarget.TabIndex = 4;
+            this.buttonArmCopyPositionFromNowToTarget.Text = "複製";
+            this.buttonArmCopyPositionFromNowToTarget.UseVisualStyleBackColor = true;
+            this.buttonArmCopyPositionFromNowToTarget.Click += new System.EventHandler(this.buttonArmCopyPositionFromNowToTarget_Click);
+            // 
             // buttonArmUpdateNowPosition
             // 
             this.buttonArmUpdateNowPosition.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -520,6 +481,18 @@ namespace UI
             this.buttonArmUpdateNowPosition.TabIndex = 5;
             this.buttonArmUpdateNowPosition.Text = "更新";
             this.buttonArmUpdateNowPosition.UseVisualStyleBackColor = true;
+            this.buttonArmUpdateNowPosition.Click += new System.EventHandler(this.buttonArmUpdateNowPosition_Click);
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.tableLayoutPanel4);
+            this.groupBox2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.groupBox2.Location = new System.Drawing.Point(3, 634);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(1936, 414);
+            this.groupBox2.TabIndex = 1;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "動作";
             // 
             // tableLayoutPanel4
             // 
@@ -554,6 +527,29 @@ namespace UI
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "位置類型";
             // 
+            // radioButtonPositionTypeRelative
+            // 
+            this.radioButtonPositionTypeRelative.AutoSize = true;
+            this.radioButtonPositionTypeRelative.Location = new System.Drawing.Point(16, 82);
+            this.radioButtonPositionTypeRelative.Name = "radioButtonPositionTypeRelative";
+            this.radioButtonPositionTypeRelative.Size = new System.Drawing.Size(127, 29);
+            this.radioButtonPositionTypeRelative.TabIndex = 1;
+            this.radioButtonPositionTypeRelative.Text = "相對位置";
+            this.radioButtonPositionTypeRelative.UseVisualStyleBackColor = true;
+            // 
+            // radioButtonPositionTypeAbsolute
+            // 
+            this.radioButtonPositionTypeAbsolute.AutoSize = true;
+            this.radioButtonPositionTypeAbsolute.Checked = true;
+            this.radioButtonPositionTypeAbsolute.Location = new System.Drawing.Point(16, 47);
+            this.radioButtonPositionTypeAbsolute.Name = "radioButtonPositionTypeAbsolute";
+            this.radioButtonPositionTypeAbsolute.Size = new System.Drawing.Size(122, 29);
+            this.radioButtonPositionTypeAbsolute.TabIndex = 0;
+            this.radioButtonPositionTypeAbsolute.TabStop = true;
+            this.radioButtonPositionTypeAbsolute.Text = "絕對位置";
+            this.radioButtonPositionTypeAbsolute.UseVisualStyleBackColor = true;
+            this.radioButtonPositionTypeAbsolute.CheckedChanged += new System.EventHandler(this.radioButtonPositionTypeAbsolute_CheckedChanged);
+            // 
             // groupBox5
             // 
             this.groupBox5.Controls.Add(this.radioButtonCoordinateTypeJoint);
@@ -565,6 +561,29 @@ namespace UI
             this.groupBox5.TabIndex = 1;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "座標類型";
+            // 
+            // radioButtonCoordinateTypeJoint
+            // 
+            this.radioButtonCoordinateTypeJoint.AutoSize = true;
+            this.radioButtonCoordinateTypeJoint.Location = new System.Drawing.Point(7, 83);
+            this.radioButtonCoordinateTypeJoint.Name = "radioButtonCoordinateTypeJoint";
+            this.radioButtonCoordinateTypeJoint.Size = new System.Drawing.Size(127, 29);
+            this.radioButtonCoordinateTypeJoint.TabIndex = 1;
+            this.radioButtonCoordinateTypeJoint.Text = "關節座標";
+            this.radioButtonCoordinateTypeJoint.UseVisualStyleBackColor = true;
+            // 
+            // radioButtonCoordinateTypeDescartes
+            // 
+            this.radioButtonCoordinateTypeDescartes.AutoSize = true;
+            this.radioButtonCoordinateTypeDescartes.Checked = true;
+            this.radioButtonCoordinateTypeDescartes.Location = new System.Drawing.Point(7, 47);
+            this.radioButtonCoordinateTypeDescartes.Name = "radioButtonCoordinateTypeDescartes";
+            this.radioButtonCoordinateTypeDescartes.Size = new System.Drawing.Size(148, 29);
+            this.radioButtonCoordinateTypeDescartes.TabIndex = 0;
+            this.radioButtonCoordinateTypeDescartes.TabStop = true;
+            this.radioButtonCoordinateTypeDescartes.Text = "笛卡爾座標";
+            this.radioButtonCoordinateTypeDescartes.UseVisualStyleBackColor = true;
+            this.radioButtonCoordinateTypeDescartes.CheckedChanged += new System.EventHandler(this.radioButtonCoordinateTypeDescartes_CheckedChanged);
             // 
             // groupBox6
             // 
@@ -578,60 +597,15 @@ namespace UI
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = "運動類型";
             // 
-            // groupBox7
+            // radioButtonMotionTypeLinear
             // 
-            this.groupBox7.Controls.Add(this.tableLayoutPanel6);
-            this.groupBox7.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.groupBox7.Location = new System.Drawing.Point(1547, 3);
-            this.groupBox7.Name = "groupBox7";
-            this.groupBox7.Size = new System.Drawing.Size(380, 378);
-            this.groupBox7.TabIndex = 3;
-            this.groupBox7.TabStop = false;
-            this.groupBox7.Text = "原點";
-            // 
-            // radioButtonPositionTypeAbsolute
-            // 
-            this.radioButtonPositionTypeAbsolute.AutoSize = true;
-            this.radioButtonPositionTypeAbsolute.Checked = true;
-            this.radioButtonPositionTypeAbsolute.Location = new System.Drawing.Point(16, 47);
-            this.radioButtonPositionTypeAbsolute.Name = "radioButtonPositionTypeAbsolute";
-            this.radioButtonPositionTypeAbsolute.Size = new System.Drawing.Size(122, 29);
-            this.radioButtonPositionTypeAbsolute.TabIndex = 0;
-            this.radioButtonPositionTypeAbsolute.TabStop = true;
-            this.radioButtonPositionTypeAbsolute.Text = "絕對位置";
-            this.radioButtonPositionTypeAbsolute.UseVisualStyleBackColor = true;
-            // 
-            // radioButtonPositionTypeRelative
-            // 
-            this.radioButtonPositionTypeRelative.AutoSize = true;
-            this.radioButtonPositionTypeRelative.Location = new System.Drawing.Point(16, 82);
-            this.radioButtonPositionTypeRelative.Name = "radioButtonPositionTypeRelative";
-            this.radioButtonPositionTypeRelative.Size = new System.Drawing.Size(127, 29);
-            this.radioButtonPositionTypeRelative.TabIndex = 1;
-            this.radioButtonPositionTypeRelative.Text = "相對位置";
-            this.radioButtonPositionTypeRelative.UseVisualStyleBackColor = true;
-            // 
-            // radioButtonCoordinateTypeDescartes
-            // 
-            this.radioButtonCoordinateTypeDescartes.AutoSize = true;
-            this.radioButtonCoordinateTypeDescartes.Checked = true;
-            this.radioButtonCoordinateTypeDescartes.Location = new System.Drawing.Point(7, 47);
-            this.radioButtonCoordinateTypeDescartes.Name = "radioButtonCoordinateTypeDescartes";
-            this.radioButtonCoordinateTypeDescartes.Size = new System.Drawing.Size(148, 29);
-            this.radioButtonCoordinateTypeDescartes.TabIndex = 0;
-            this.radioButtonCoordinateTypeDescartes.TabStop = true;
-            this.radioButtonCoordinateTypeDescartes.Text = "笛卡爾座標";
-            this.radioButtonCoordinateTypeDescartes.UseVisualStyleBackColor = true;
-            // 
-            // radioButtonCoordinateTypeJoint
-            // 
-            this.radioButtonCoordinateTypeJoint.AutoSize = true;
-            this.radioButtonCoordinateTypeJoint.Location = new System.Drawing.Point(7, 83);
-            this.radioButtonCoordinateTypeJoint.Name = "radioButtonCoordinateTypeJoint";
-            this.radioButtonCoordinateTypeJoint.Size = new System.Drawing.Size(127, 29);
-            this.radioButtonCoordinateTypeJoint.TabIndex = 1;
-            this.radioButtonCoordinateTypeJoint.Text = "關節座標";
-            this.radioButtonCoordinateTypeJoint.UseVisualStyleBackColor = true;
+            this.radioButtonMotionTypeLinear.AutoSize = true;
+            this.radioButtonMotionTypeLinear.Location = new System.Drawing.Point(7, 83);
+            this.radioButtonMotionTypeLinear.Name = "radioButtonMotionTypeLinear";
+            this.radioButtonMotionTypeLinear.Size = new System.Drawing.Size(127, 29);
+            this.radioButtonMotionTypeLinear.TabIndex = 1;
+            this.radioButtonMotionTypeLinear.Text = "線性運動";
+            this.radioButtonMotionTypeLinear.UseVisualStyleBackColor = true;
             // 
             // radioButtonMotionTypePointToPoint
             // 
@@ -645,25 +619,42 @@ namespace UI
             this.radioButtonMotionTypePointToPoint.Text = "點到點運動";
             this.radioButtonMotionTypePointToPoint.UseVisualStyleBackColor = true;
             // 
-            // radioButtonMotionTypeLinear
+            // groupBox7
             // 
-            this.radioButtonMotionTypeLinear.AutoSize = true;
-            this.radioButtonMotionTypeLinear.Location = new System.Drawing.Point(7, 83);
-            this.radioButtonMotionTypeLinear.Name = "radioButtonMotionTypeLinear";
-            this.radioButtonMotionTypeLinear.Size = new System.Drawing.Size(127, 29);
-            this.radioButtonMotionTypeLinear.TabIndex = 1;
-            this.radioButtonMotionTypeLinear.Text = "線性運動";
-            this.radioButtonMotionTypeLinear.UseVisualStyleBackColor = true;
+            this.groupBox7.Controls.Add(this.tableLayoutPanel6);
+            this.groupBox7.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.groupBox7.Location = new System.Drawing.Point(1547, 3);
+            this.groupBox7.Name = "groupBox7";
+            this.groupBox7.Size = new System.Drawing.Size(380, 378);
+            this.groupBox7.TabIndex = 3;
+            this.groupBox7.TabStop = false;
+            this.groupBox7.Text = "原點";
             // 
-            // buttonArmMotionStart
+            // tableLayoutPanel6
             // 
-            this.buttonArmMotionStart.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonArmMotionStart.Location = new System.Drawing.Point(1161, 148);
-            this.buttonArmMotionStart.Name = "buttonArmMotionStart";
-            this.buttonArmMotionStart.Size = new System.Drawing.Size(380, 88);
-            this.buttonArmMotionStart.TabIndex = 4;
-            this.buttonArmMotionStart.Text = "進行動作";
-            this.buttonArmMotionStart.UseVisualStyleBackColor = true;
+            this.tableLayoutPanel6.ColumnCount = 1;
+            this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel6.Controls.Add(this.buttonArmHoming, 0, 0);
+            this.tableLayoutPanel6.Controls.Add(this.checkBoxArmSlowlyHoming, 0, 1);
+            this.tableLayoutPanel6.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel6.Location = new System.Drawing.Point(3, 27);
+            this.tableLayoutPanel6.Name = "tableLayoutPanel6";
+            this.tableLayoutPanel6.RowCount = 2;
+            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel6.Size = new System.Drawing.Size(374, 348);
+            this.tableLayoutPanel6.TabIndex = 2;
+            // 
+            // buttonArmHoming
+            // 
+            this.buttonArmHoming.Location = new System.Drawing.Point(3, 3);
+            this.buttonArmHoming.Name = "buttonArmHoming";
+            this.buttonArmHoming.Size = new System.Drawing.Size(167, 69);
+            this.buttonArmHoming.TabIndex = 1;
+            this.buttonArmHoming.Text = "回到原點";
+            this.buttonArmHoming.UseVisualStyleBackColor = true;
+            this.buttonArmHoming.Click += new System.EventHandler(this.buttonArmHoming_Click);
             // 
             // checkBoxArmSlowlyHoming
             // 
@@ -677,14 +668,27 @@ namespace UI
             this.checkBoxArmSlowlyHoming.Text = "慢速";
             this.checkBoxArmSlowlyHoming.UseVisualStyleBackColor = true;
             // 
-            // buttonArmHoming
+            // buttonArmMotionStart
             // 
-            this.buttonArmHoming.Location = new System.Drawing.Point(3, 3);
-            this.buttonArmHoming.Name = "buttonArmHoming";
-            this.buttonArmHoming.Size = new System.Drawing.Size(167, 69);
-            this.buttonArmHoming.TabIndex = 1;
-            this.buttonArmHoming.Text = "回到原點";
-            this.buttonArmHoming.UseVisualStyleBackColor = true;
+            this.buttonArmMotionStart.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonArmMotionStart.Location = new System.Drawing.Point(1161, 148);
+            this.buttonArmMotionStart.Name = "buttonArmMotionStart";
+            this.buttonArmMotionStart.Size = new System.Drawing.Size(380, 88);
+            this.buttonArmMotionStart.TabIndex = 4;
+            this.buttonArmMotionStart.Text = "進行動作";
+            this.buttonArmMotionStart.UseVisualStyleBackColor = true;
+            this.buttonArmMotionStart.Click += new System.EventHandler(this.buttonArmMotionStart_Click);
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.tableLayoutPanel5);
+            this.groupBox3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.groupBox3.Location = new System.Drawing.Point(3, 1054);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(1936, 346);
+            this.groupBox3.TabIndex = 2;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "速度與加速度";
             // 
             // tableLayoutPanel5
             // 
@@ -705,7 +709,7 @@ namespace UI
             this.tableLayoutPanel5.Name = "tableLayoutPanel5";
             this.tableLayoutPanel5.RowCount = 1;
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 316F));
             this.tableLayoutPanel5.Size = new System.Drawing.Size(1930, 316);
             this.tableLayoutPanel5.TabIndex = 0;
             // 
@@ -776,22 +780,25 @@ namespace UI
             this.buttonSetSpeedAndAcceleration.TabIndex = 6;
             this.buttonSetSpeedAndAcceleration.Text = "設定";
             this.buttonSetSpeedAndAcceleration.UseVisualStyleBackColor = true;
+            this.buttonSetSpeedAndAcceleration.Click += new System.EventHandler(this.buttonSetSpeedAndAcceleration_Click);
             // 
-            // tableLayoutPanel6
+            // tableLayoutPanel1
             // 
-            this.tableLayoutPanel6.ColumnCount = 1;
-            this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel6.Controls.Add(this.buttonArmHoming, 0, 0);
-            this.tableLayoutPanel6.Controls.Add(this.checkBoxArmSlowlyHoming, 0, 1);
-            this.tableLayoutPanel6.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel6.Location = new System.Drawing.Point(3, 27);
-            this.tableLayoutPanel6.Name = "tableLayoutPanel6";
-            this.tableLayoutPanel6.RowCount = 2;
-            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel6.Size = new System.Drawing.Size(374, 348);
-            this.tableLayoutPanel6.TabIndex = 2;
+            this.tableLayoutPanel1.ColumnCount = 1;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel1.Controls.Add(this.groupBox1, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.groupBox3, 0, 2);
+            this.tableLayoutPanel1.Controls.Add(this.groupBox2, 0, 1);
+            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            this.tableLayoutPanel1.RowCount = 3;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 45F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 30F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(1942, 1403);
+            this.tableLayoutPanel1.TabIndex = 3;
             // 
             // BasicArmController
             // 
@@ -801,9 +808,6 @@ namespace UI
             this.Name = "BasicArmController";
             this.Size = new System.Drawing.Size(1942, 1403);
             this.groupBox1.ResumeLayout(false);
-            this.groupBox2.ResumeLayout(false);
-            this.groupBox3.ResumeLayout(false);
-            this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel2.ResumeLayout(false);
             this.tableLayoutPanel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownArmTargetPositionXJ1)).EndInit();
@@ -813,6 +817,7 @@ namespace UI
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownArmTargetPositionBJ5)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownArmTargetPositionZJ6)).EndInit();
             this.tableLayoutPanel3.ResumeLayout(false);
+            this.groupBox2.ResumeLayout(false);
             this.tableLayoutPanel4.ResumeLayout(false);
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
@@ -821,12 +826,14 @@ namespace UI
             this.groupBox6.ResumeLayout(false);
             this.groupBox6.PerformLayout();
             this.groupBox7.ResumeLayout(false);
+            this.tableLayoutPanel6.ResumeLayout(false);
+            this.tableLayoutPanel6.PerformLayout();
+            this.groupBox3.ResumeLayout(false);
             this.tableLayoutPanel5.ResumeLayout(false);
             this.tableLayoutPanel5.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownArmSpeed)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownArmAcceleration)).EndInit();
-            this.tableLayoutPanel6.ResumeLayout(false);
-            this.tableLayoutPanel6.PerformLayout();
+            this.tableLayoutPanel1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
