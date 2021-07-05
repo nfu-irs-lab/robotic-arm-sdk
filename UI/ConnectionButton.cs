@@ -14,15 +14,18 @@ namespace UI
 {
     public partial class ConnectionButton : UserControl
     {
-        public readonly List<IDevice> _devices;
-        public readonly IMessage _message;
+        private List<IDevice> _devices;
+        private IMessage _message;
 
         public ConnectionButton()
         {
             InitializeComponent();
+        }
 
-            //            _devices = devices;
-            //           _message = message;
+        public void DependencyInjection(List<IDevice> devices, IMessage message)
+        {
+            _message = message;
+            _devices = devices;
         }
 
         private void buttonConnect_Click(object sender, EventArgs e)
