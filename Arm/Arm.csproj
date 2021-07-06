@@ -54,6 +54,7 @@
     <Compile Include="Action\RelativeMotion.cs" />
     <Compile Include="HiwinArm.cs" />
     <Compile Include="HRobot.cs" />
+    <Compile Include="IArm.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Type\CoordinateType.cs" />
     <Compile Include="Type\MotionTypo.cs" />
