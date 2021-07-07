@@ -5,6 +5,7 @@ namespace Arm
     public abstract class ArmActionFactory
     {
         protected readonly IMessage _message;
+        public bool Connected { get; protected set; } = false;
 
         public ArmActionFactory(IMessage message)
         {

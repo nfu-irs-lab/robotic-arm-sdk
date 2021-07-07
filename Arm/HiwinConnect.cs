@@ -28,7 +28,11 @@ namespace Arm
 
         public int Id { get; }
 
-        public HiwinConnect(string ip, IMessage message, out int id, ref bool waiting)
+        public HiwinConnect(string ip,
+                            IMessage message,
+                            out int id,
+                            out bool connected,
+                            ref bool waiting)
         {
             _message = message;
             Id = HRobot.open_connection(ip, 1, _callBackFun);
@@ -37,10 +41,12 @@ namespace Arm
             if (Id >= 0 && Id <= 65535)
             {
                 ShowSuccessfulConnectMessage();
+                connected = true;
             }
             else
             {
                 ShowUnsuccessfulConnectMessage();
+                connected = false;
             }
 
             id = Id;

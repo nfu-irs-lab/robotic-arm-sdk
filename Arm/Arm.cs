@@ -16,7 +16,6 @@ namespace Arm
             _arm.GetConnect();
         }
 
-
         public void Disconnect()
         {
             _arm.GetDisconnect();
