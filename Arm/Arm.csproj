@@ -52,9 +52,11 @@
       <Compile Include="Action\IArmAction.cs"/>
       <Compile Include="Action\Jog.cs"/>
       <Compile Include="Action\RelativeMotion.cs"/>
+      <Compile Include="ArmActionFactory.cs"/>
       <Compile Include="Axis.cs"/>
       <Compile Include="Connect.cs"/>
       <Compile Include="HiwinArm.cs"/>
+      <Compile Include="HiwinArmActionFactory.cs"/>
       <Compile Include="HiwinArmAdapter.cs"/>
       <Compile Include="HiwinConnect.cs"/>
       <Compile Include="HiwinDisconnect.cs"/>
