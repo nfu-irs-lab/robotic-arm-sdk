@@ -1,4 +1,15 @@
-﻿using System;
+﻿//#define DISABLE_SHOW_MESSAGE
+
+// 選擇一種等待手臂動作完成的做法，都不選就是使用預設方法。
+#define USE_CALLBACK_MOTION_STATE_WAIT
+// #define USE_MOTION_STATE_WAIT
+
+#if (DISABLE_SHOW_MESSAGE)
+#warning Message is disabled.
+#endif
+
+
+using System;
 using System.Threading;
 using System.Windows.Forms;
 using SDKHrobot;
@@ -12,9 +23,12 @@ namespace Arm
         private static readonly HRobot.CallBackFun _callBackFun = EventFun;
 
         private readonly IMessage _message;
-        public int Id { get; private set; }
 
-        public HiwinConnect(string ip, IMessage message)
+        public static bool Waiting { get; private set; } = false;
+
+        public int Id { get; }
+
+        public HiwinConnect(string ip, IMessage message, ref bool waiting)
         {
             _message = message;
             Id = HRobot.open_connection(ip, 1, _callBackFun);
@@ -28,6 +42,8 @@ namespace Arm
             {
                 ShowUnsuccessfulConnectMessage();
             }
+
+            waiting = Waiting;
         }
 
         private void ShowSuccessfulConnectMessage()
