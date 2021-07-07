@@ -4,10 +4,22 @@ namespace Arm
 {
     public class Arm
     {
-        public Arm()
+        private readonly ArmActionFactory _arm;
+
+        public Arm(ArmActionFactory arm)
         {
-            ArmActionFactory armActionFactory = new HiwinArmActionFactory("127.0.0.1", new EmptyMessage());
-            armActionFactory.GetConnect();
+            _arm = arm;
+        }
+
+        public void Connect()
+        {
+            _arm.GetConnect();
+        }
+
+
+        public void Disconnect()
+        {
+            _arm.GetDisconnect();
         }
     }
 }

@@ -12,5 +12,7 @@ namespace Arm
         }
 
         public abstract Connect GetConnect();
+
+        public abstract Disconnect GetDisconnect();
     }
 }
