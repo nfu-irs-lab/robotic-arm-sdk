@@ -52,6 +52,7 @@
       <Compile Include="Action\IArmAction.cs"/>
       <Compile Include="Action\Jog.cs"/>
       <Compile Include="Action\RelativeMotion.cs"/>
+      <Compile Include="Arm.cs"/>
       <Compile Include="ArmActionFactory.cs"/>
       <Compile Include="Axis.cs"/>
       <Compile Include="Connect.cs"/>
