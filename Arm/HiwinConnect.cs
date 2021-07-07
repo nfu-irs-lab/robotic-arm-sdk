@@ -32,7 +32,6 @@ namespace Arm
 
         private void ShowSuccessfulConnectMessage()
         {
-
             int alarmState;
             int motorState;
             int connectionLevel;
@@ -61,8 +60,7 @@ namespace Arm
             _message.Show(text,
                           "連線",
                           MessageBoxButtons.OK,
-                          MessageBoxIcon.None,
-                          LoggingLevel.Info);
+                          MessageBoxIcon.None);
         }
 
         private void ShowUnsuccessfulConnectMessage()
