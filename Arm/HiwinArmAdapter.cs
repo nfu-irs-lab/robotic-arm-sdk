@@ -22,8 +22,9 @@ namespace Arm
 
         public double Speed { get; set; }
         public double Acceleration { get; set; }
-        public double[] DescartesHomePosition { get; }
-        public double[] JointHomePosition { get; }
+
+        public double[] DescartesHomePosition { get; } = { 0, 368, 294, 180, 0, 90 };
+        public double[] JointHomePosition { get; } = { 0, 0, 0, 0, 0, 0 };
 
         public bool Jog(Sign direction, Axis axis)
         {
