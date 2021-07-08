@@ -15,12 +15,12 @@ namespace Arm.Hiwin
 
         public int Id => _id;
 
-        public override Connect GetConnect()
+        public override IConnect GetConnect()
         {
             return new HiwinConnect(_ip, _message, out _id, out _connected, ref _waiting);
         }
 
-        public override Disconnect GetDisconnect()
+        public override IDisconnect GetDisconnect()
         {
             return new HiwinDisconnect(_id, _message, out _connected);
         }

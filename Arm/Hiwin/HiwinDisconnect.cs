@@ -5,7 +5,7 @@ using Basic.Message;
 
 namespace Arm.Hiwin
 {
-    public class HiwinDisconnect : Disconnect
+    public class HiwinDisconnect : IDisconnect
     {
         public HiwinDisconnect(int id, IMessage message, out bool connected)
         {

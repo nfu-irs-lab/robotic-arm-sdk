@@ -13,8 +13,8 @@ namespace Arm
             _message = message;
         }
 
-        public abstract Connect GetConnect();
+        public abstract IConnect GetConnect();
 
-        public abstract Disconnect GetDisconnect();
+        public abstract IDisconnect GetDisconnect();
     }
 }

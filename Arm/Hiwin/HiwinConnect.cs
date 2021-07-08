@@ -17,23 +17,21 @@ using Basic.Message;
 
 namespace Arm.Hiwin
 {
-    public class HiwinConnect : Connect
+    public class HiwinConnect : HiwinBasicAction, IConnect
     {
         private static readonly HRobot.CallBackFun _callBackFun = EventFun;
-
-        private readonly IMessage _message;
 
         public HiwinConnect(string ip,
                             IMessage message,
                             out int id,
                             out bool connected,
                             ref bool waiting)
+            : base(-5, message)
         {
-            _message = message;
-            Id = HRobot.open_connection(ip, 1, _callBackFun);
+            _id = HRobot.open_connection(ip, 1, _callBackFun);
 
             // Check connection.
-            if (Id >= 0 && Id <= 65535)
+            if (_id >= 0 && _id <= 65535)
             {
                 ShowSuccessfulConnectMessage();
                 connected = true;
@@ -44,13 +42,11 @@ namespace Arm.Hiwin
                 connected = false;
             }
 
-            id = Id;
+            id = _id;
             waiting = Waiting;
         }
 
         public static bool Waiting { get; private set; } = false;
-
-        public int Id { get; }
 
         private static void EventFun(UInt16 cmd, UInt16 rlt, ref UInt16 Msg, int len)
         {
@@ -117,23 +113,23 @@ namespace Arm.Hiwin
             int connectionLevel;
 
             // 將所有錯誤代碼清除。
-            alarmState = HRobot.clear_alarm(Id);
+            alarmState = HRobot.clear_alarm(_id);
 
             // 錯誤代碼300代表沒有警報，無法清除警報。
             alarmState = alarmState == 300 ? 0 : alarmState;
 
             // 設定控制器: 1為啟動,0為關閉。
-            HRobot.set_motor_state(Id, 1);
+            HRobot.set_motor_state(_id, 1);
             Thread.Sleep(500);
 
             // 取得控制器狀態。
-            motorState = HRobot.get_motor_state(Id);
+            motorState = HRobot.get_motor_state(_id);
 
             // 取得連線等級。
-            connectionLevel = HRobot.get_connection_level(Id);
+            connectionLevel = HRobot.get_connection_level(_id);
 
             var text = "連線成功!\r\n" +
-                       $"手臂ID: {Id}\r\n" +
+                       $"手臂ID: {_id}\r\n" +
                        $"連線等級: {(connectionLevel == 0 ? "觀測者" : "操作者")}\r\n" +
                        $"控制器狀態: {(motorState == 0 ? "關閉" : "開啟")}\r\n" +
                        $"錯誤代碼: {alarmState}";
@@ -146,7 +142,7 @@ namespace Arm.Hiwin
         private void ShowUnsuccessfulConnectMessage()
         {
             string errorMessage;
-            switch (Id)
+            switch (_id)
             {
                 case -1:
                     errorMessage = "-1：連線失敗。";
@@ -165,7 +161,7 @@ namespace Arm.Hiwin
                     break;
 
                 default:
-                    errorMessage = $"未知的錯誤代碼： {Id}";
+                    errorMessage = $"未知的錯誤代碼： {_id}";
                     break;
             }
             _message.Show($"無法連線!\r\n{errorMessage}", LoggingLevel.Error);
