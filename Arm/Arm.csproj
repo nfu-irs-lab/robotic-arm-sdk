@@ -54,6 +54,7 @@
       <Compile Include="Action\RelativeMotion.cs"/>
       <Compile Include="Arm.cs"/>
       <Compile Include="ArmActionFactory.cs"/>
+      <Compile Include="IArmDo.cs"/>
       <Compile Include="Axis.cs"/>
       <Compile Include="Connect.cs"/>
       <Compile Include="Disconnect.cs"/>

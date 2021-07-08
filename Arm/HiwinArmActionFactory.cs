@@ -13,6 +13,9 @@ namespace Arm
             _ip = ip;
         }
 
+        public override void Do(IArmDo armDo)
+        { }
+
         public override Connect GetConnect()
         {
             var hc = new HiwinConnect(_ip, _message, out _id, out var connected, ref _waiting);
