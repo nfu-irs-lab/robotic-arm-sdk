@@ -1,5 +1,5 @@
 ﻿namespace Arm
 {
-    public abstract class Disconnect : IArmDo
+    public abstract class Disconnect
     { }
 }

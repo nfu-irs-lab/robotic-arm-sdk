@@ -1,5 +1,5 @@
 ﻿namespace Arm
 {
-    public abstract class Connect : IArmDo
+    public abstract class Connect
     { }
 }

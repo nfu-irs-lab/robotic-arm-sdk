@@ -12,8 +12,6 @@ namespace Arm
             _message = message;
         }
 
-        public abstract void Do(IArmDo armDo);
-
         public abstract Connect GetConnect();
 
         public abstract Disconnect GetDisconnect();
