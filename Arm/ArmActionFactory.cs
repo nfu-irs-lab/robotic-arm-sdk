@@ -16,5 +16,23 @@ namespace Arm
         public abstract IConnect GetConnect();
 
         public abstract IDisconnect GetDisconnect();
+
+        public abstract IAbsoluteMotion AbsoluteMotion(double[] position);
+
+        public abstract IAbsoluteMotion AbsoluteMotion(double xJ1,
+                                                       double yJ2,
+                                                       double zJ3,
+                                                       double aJ4,
+                                                       double bJ5,
+                                                       double cJ6);
+
+        public abstract IRelativeMotion RelativeMotion(double[] position);
+
+        public abstract IRelativeMotion RelativeMotion(double xJ1,
+                                                       double yJ2,
+                                                       double zJ3,
+                                                       double aJ4,
+                                                       double bJ5,
+                                                       double cJ6);
     }
 }
