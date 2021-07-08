@@ -8,7 +8,6 @@
 #warning Message is disabled.
 #endif
 
-
 using System;
 using System.Threading;
 using System.Windows.Forms;
@@ -16,17 +15,13 @@ using SDKHrobot;
 using Basic;
 using Basic.Message;
 
-namespace Arm
+namespace Arm.Hiwin
 {
     public class HiwinConnect : Connect
     {
         private static readonly HRobot.CallBackFun _callBackFun = EventFun;
 
         private readonly IMessage _message;
-
-        public static bool Waiting { get; private set; } = false;
-
-        public int Id { get; }
 
         public HiwinConnect(string ip,
                             IMessage message,
@@ -51,6 +46,68 @@ namespace Arm
 
             id = Id;
             waiting = Waiting;
+        }
+
+        public static bool Waiting { get; private set; } = false;
+
+        public int Id { get; }
+
+        private static void EventFun(UInt16 cmd, UInt16 rlt, ref UInt16 Msg, int len)
+        {
+            // 該 Method 的內容請參考 HRSDK-SampleCode： 11.CallbackNotify。
+            // 此處不受 IMessage 影響。
+
+            // Get info.
+            String info = "";
+            unsafe
+            {
+                fixed (UInt16* p = &Msg)
+                {
+                    for (int i = 0; i < len; i++)
+                    {
+                        info += (char)p[i];
+                    }
+                }
+            }
+            var infos = info.Split(',');
+
+            // Show in Console.
+            Console.WriteLine($"Command:{cmd}, Result:{rlt}");
+            switch (cmd)
+            {
+                case 0 when rlt == 4702:
+                    Console.WriteLine($"HRSS Mode:{infos[0]}\r\n" +
+                                      $"Operation Mode:{infos[1]}\r\n" +
+                                      $"Override Ratio:{infos[2]}\r\n" +
+                                      $"Motor State:{infos[3]}\r\n" +
+                                      $"Exe File Name:{infos[4]}\r\n" +
+                                      $"Function Output:{infos[5]}\r\n" +
+                                      $"Alarm Count:{infos[6]}\r\n" +
+                                      $"Keep Alive:{infos[7]}\r\n" +
+                                      $"Motion Status:{infos[8]}\r\n" +
+                                      $"Payload:{infos[9]}\r\n" +
+                                      $"Speed:{infos[10]}\r\n" +
+                                      $"Position:{infos[11]}\r\n" +
+                                      $"Coor:{infos[14]},{infos[15]},{infos[16]},{infos[17]},{infos[18]},{infos[19]}\r\n" +
+                                      $"Joint:{infos[20]},{infos[21]},{infos[22]},{infos[23]},{infos[24]},{infos[25]}\r\n");
+
+#if (USE_CALLBACK_MOTION_STATE_WAIT)
+                    // Motion state=1: Idle.
+                    Waiting = infos[8] != "1";
+#endif
+                    break;
+
+                case 4011 when rlt != 0:
+#if (!DISABLE_SHOW_MESSAGE)
+                    MessageBox.Show("Update fail. " + rlt,
+                                    "HRSS update callback",
+                                    MessageBoxButtons.OK,
+                                    MessageBoxIcon.Warning,
+                                    MessageBoxDefaultButton.Button1,
+                                    MessageBoxOptions.DefaultDesktopOnly);
+#endif
+                    break;
+            }
         }
 
         private void ShowSuccessfulConnectMessage()
@@ -112,64 +169,6 @@ namespace Arm
                     break;
             }
             _message.Show($"無法連線!\r\n{errorMessage}", LoggingLevel.Error);
-        }
-
-        private static void EventFun(UInt16 cmd, UInt16 rlt, ref UInt16 Msg, int len)
-        {
-            // 該 Method 的內容請參考 HRSDK-SampleCode： 11.CallbackNotify。
-            // 此處不受 IMessage 影響。
-
-            // Get info.
-            String info = "";
-            unsafe
-            {
-                fixed (UInt16* p = &Msg)
-                {
-                    for (int i = 0; i < len; i++)
-                    {
-                        info += (char)p[i];
-                    }
-                }
-            }
-            var infos = info.Split(',');
-
-            // Show in Console.
-            Console.WriteLine($"Command:{cmd}, Result:{rlt}");
-            switch (cmd)
-            {
-                case 0 when rlt == 4702:
-                    Console.WriteLine($"HRSS Mode:{infos[0]}\r\n" +
-                                      $"Operation Mode:{infos[1]}\r\n" +
-                                      $"Override Ratio:{infos[2]}\r\n" +
-                                      $"Motor State:{infos[3]}\r\n" +
-                                      $"Exe File Name:{infos[4]}\r\n" +
-                                      $"Function Output:{infos[5]}\r\n" +
-                                      $"Alarm Count:{infos[6]}\r\n" +
-                                      $"Keep Alive:{infos[7]}\r\n" +
-                                      $"Motion Status:{infos[8]}\r\n" +
-                                      $"Payload:{infos[9]}\r\n" +
-                                      $"Speed:{infos[10]}\r\n" +
-                                      $"Position:{infos[11]}\r\n" +
-                                      $"Coor:{infos[14]},{infos[15]},{infos[16]},{infos[17]},{infos[18]},{infos[19]}\r\n" +
-                                      $"Joint:{infos[20]},{infos[21]},{infos[22]},{infos[23]},{infos[24]},{infos[25]}\r\n");
-
-#if (USE_CALLBACK_MOTION_STATE_WAIT)
-                    // Motion state=1: Idle.
-                    Waiting = infos[8] != "1";
-#endif
-                    break;
-
-                case 4011 when rlt != 0:
-#if (!DISABLE_SHOW_MESSAGE)
-                    MessageBox.Show("Update fail. " + rlt,
-                                    "HRSS update callback",
-                                    MessageBoxButtons.OK,
-                                    MessageBoxIcon.Warning,
-                                    MessageBoxDefaultButton.Button1,
-                                    MessageBoxOptions.DefaultDesktopOnly);
-#endif
-                    break;
-            }
         }
     }
 }

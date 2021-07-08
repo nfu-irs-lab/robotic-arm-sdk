@@ -3,7 +3,7 @@ using System.Threading;
 using System.Windows.Forms;
 using Basic.Message;
 
-namespace Arm
+namespace Arm.Hiwin
 {
     public class HiwinDisconnect : Disconnect
     {
