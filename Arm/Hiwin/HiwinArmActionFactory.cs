@@ -1,4 +1,5 @@
-﻿using Basic.Message;
+﻿using System;
+using Basic.Message;
 
 namespace Arm.Hiwin
 {
@@ -27,7 +28,22 @@ namespace Arm.Hiwin
 
         public override IAbsoluteMotion AbsoluteMotion(double[] position)
         {
-            return new HiwinAbsoluteMotion(position, _id, _message, out var code);
+            if (position.Length == 6)
+            {
+                return new HiwinAbsoluteMotion(position[(int)Axis.XJ1],
+                                               position[(int)Axis.YJ2],
+                                               position[(int)Axis.ZJ3],
+                                               position[(int)Axis.AJ4],
+                                               position[(int)Axis.BJ5],
+                                               position[(int)Axis.CJ6],
+                                               _id,
+                                               _message,
+                                               out var returnCode);
+            }
+            else
+            {
+                throw new ArgumentException("Length of position must be 6");
+            }
         }
 
         public override IAbsoluteMotion AbsoluteMotion(double xJ1,
@@ -37,12 +53,27 @@ namespace Arm.Hiwin
                                                        double bJ5,
                                                        double cJ6)
         {
-            return new HiwinAbsoluteMotion(new[] { xJ1, yJ2, zJ3, aJ4, bJ5, cJ6, }, _id, _message, out var code);
+            return new HiwinAbsoluteMotion(xJ1, yJ2, zJ3, aJ4, bJ5, cJ6, _id, _message, out var code);
         }
 
         public override IRelativeMotion RelativeMotion(double[] position)
         {
-            return new HiwinRelativeMotion(position, _id, _message, out var code);
+            if (position.Length == 6)
+            {
+                return new HiwinRelativeMotion(position[(int)Axis.XJ1],
+                                               position[(int)Axis.YJ2],
+                                               position[(int)Axis.ZJ3],
+                                               position[(int)Axis.AJ4],
+                                               position[(int)Axis.BJ5],
+                                               position[(int)Axis.CJ6],
+                                               _id,
+                                               _message,
+                                               out var returnCode);
+            }
+            else
+            {
+                throw new ArgumentException("Length of position must be 6");
+            }
         }
 
         public override IRelativeMotion RelativeMotion(double xJ1,
@@ -52,7 +83,7 @@ namespace Arm.Hiwin
                                                        double bJ5,
                                                        double cJ6)
         {
-            return new HiwinRelativeMotion(new[] { xJ1, yJ2, zJ3, aJ4, bJ5, cJ6, }, _id, _message, out var code);
+            return new HiwinRelativeMotion(xJ1, yJ2, zJ3, aJ4, bJ5, cJ6, _id, _message, out var code);
         }
     }
 }

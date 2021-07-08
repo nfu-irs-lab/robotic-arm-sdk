@@ -20,12 +20,6 @@ namespace Arm.Hiwin
             returnCode = Action();
         }
 
-        public HiwinAbsoluteMotion(double[] position, int id, IMessage message, out int returnCode)
-            : base(position, id, message)
-        {
-            returnCode = Action();
-        }
-
         private int Action()
         {
             int returnCode = 0;

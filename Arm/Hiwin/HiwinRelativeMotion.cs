@@ -14,12 +14,8 @@ namespace Arm.Hiwin
                                    double cJ6,
                                    int id,
                                    IMessage message,
-                                   out int returnCode) : base(xJ1, yJ2, zJ3, aJ4, bJ5, cJ6, id, message)
-        {
-            returnCode = Action();
-        }
-
-        public HiwinRelativeMotion(double[] position, int id, IMessage message, out int returnCode) : base(position, id, message)
+                                   out int returnCode)
+            : base(xJ1, yJ2, zJ3, aJ4, bJ5, cJ6, id, message)
         {
             returnCode = Action();
         }

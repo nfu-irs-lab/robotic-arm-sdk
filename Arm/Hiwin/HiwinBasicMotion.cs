@@ -65,16 +65,5 @@ namespace Arm.Hiwin
             _position = new[] { xJ1, yJ2, zJ3, aJ4, bJ5, cJ6 };
             SmoothType = SmoothType.TwoLinesSpeedSmooth;
         }
-
-        public HiwinBasicMotion(double[] position, int id, IMessage message)
-            : base(id, message)
-        {
-            if (position.Length == 6)
-                _position = position;
-            else
-                throw new ArgumentException();
-
-            SmoothType = SmoothType.TwoLinesSpeedSmooth;
-        }
     }
 }
