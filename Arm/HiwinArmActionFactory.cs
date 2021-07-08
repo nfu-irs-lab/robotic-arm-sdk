@@ -7,6 +7,7 @@ namespace Arm
         private readonly string _ip;
         private int _id;
         private bool _waiting = false;
+        public int Id => _id;
 
         public HiwinArmActionFactory(string ip, IMessage message) : base(message)
         {
