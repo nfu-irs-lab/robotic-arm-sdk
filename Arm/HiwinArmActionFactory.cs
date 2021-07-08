@@ -15,16 +15,12 @@ namespace Arm
 
         public override Connect GetConnect()
         {
-            var hc = new HiwinConnect(_ip, _message, out _id, out var connected, ref _waiting);
-            Connected = connected;
-            return hc;
+            return new HiwinConnect(_ip, _message, out _id, out _connected, ref _waiting);
         }
 
         public override Disconnect GetDisconnect()
         {
-            var hd = new HiwinDisconnect(_id, _message, out var connected);
-            Connected = connected;
-            return hd;
+            return new HiwinDisconnect(_id, _message, out _connected);
         }
     }
 }
