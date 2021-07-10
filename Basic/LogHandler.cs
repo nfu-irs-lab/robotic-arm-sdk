@@ -48,6 +48,17 @@ namespace Basic
         void Write(Exception ex, LoggingLevel loggingLevel);
     }
 
+    public class EmptyLog : ILogHandler
+    {
+        public string Path { get; }
+
+        public void Write(string message, LoggingLevel loggingLevel)
+        { }
+
+        public void Write(Exception ex, LoggingLevel loggingLevel)
+        { }
+    }
+
     public class LogHandler : ILogHandler
     {
         private readonly LoggingLevel LoggingLevel;
