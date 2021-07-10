@@ -14,8 +14,9 @@ namespace Arm.Hiwin
                                    double cJ6,
                                    int id,
                                    IMessage message,
-                                   out int returnCode)
-            : base(xJ1, yJ2, zJ3, aJ4, bJ5, cJ6, id, message)
+                                   out int returnCode,
+                                   ref bool waitingState)
+            : base(xJ1, yJ2, zJ3, aJ4, bJ5, cJ6, id, message, ref waitingState)
         {
             returnCode = Action();
         }
@@ -51,6 +52,8 @@ namespace Arm.Hiwin
                                                  _position);
                     break;
             }
+
+            WaitForMotionComplete(returnCode);
             return returnCode;
         }
     }

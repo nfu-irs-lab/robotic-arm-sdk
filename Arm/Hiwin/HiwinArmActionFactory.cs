@@ -38,7 +38,8 @@ namespace Arm.Hiwin
                                                position[(int)Axis.CJ6],
                                                _id,
                                                _message,
-                                               out var returnCode);
+                                               out var returnCode,
+                                               ref _waiting);
             }
             else
             {
@@ -53,7 +54,16 @@ namespace Arm.Hiwin
                                                        double bJ5,
                                                        double cJ6)
         {
-            return new HiwinAbsoluteMotion(xJ1, yJ2, zJ3, aJ4, bJ5, cJ6, _id, _message, out var code);
+            return new HiwinAbsoluteMotion(xJ1,
+                                           yJ2,
+                                           zJ3,
+                                           aJ4,
+                                           bJ5,
+                                           cJ6,
+                                           _id,
+                                           _message,
+                                           out var code,
+                                           ref _waiting);
         }
 
         public override IRelativeMotion RelativeMotion(double[] position)
@@ -68,7 +78,8 @@ namespace Arm.Hiwin
                                                position[(int)Axis.CJ6],
                                                _id,
                                                _message,
-                                               out var returnCode);
+                                               out var returnCode,
+                                               ref _waiting);
             }
             else
             {
@@ -83,7 +94,16 @@ namespace Arm.Hiwin
                                                        double bJ5,
                                                        double cJ6)
         {
-            return new HiwinRelativeMotion(xJ1, yJ2, zJ3, aJ4, bJ5, cJ6, _id, _message, out var code);
+            return new HiwinRelativeMotion(xJ1,
+                                           yJ2,
+                                           zJ3,
+                                           aJ4,
+                                           bJ5,
+                                           cJ6,
+                                           _id,
+                                           _message,
+                                           out var code,
+                                           ref _waiting);
         }
     }
 }

@@ -11,6 +11,8 @@ namespace Arm.Hiwin
         public CoordinateType CoordinateType = CoordinateType.Descartes;
         protected int _smoothTypeCode;
         public int SmoothValue = 50;
+        public bool NeedWait = true;
+        protected bool _waitingState;
 
         public SmoothType SmoothType
         {
@@ -59,11 +61,25 @@ namespace Arm.Hiwin
                                 double bJ5,
                                 double cJ6,
                                 int id,
-                                IMessage message)
+                                IMessage message,
+                                ref bool waitingState)
             : base(id, message)
         {
             _position = new[] { xJ1, yJ2, zJ3, aJ4, bJ5, cJ6 };
             SmoothType = SmoothType.TwoLinesSpeedSmooth;
+            _waitingState = waitingState;
+        }
+
+        protected void WaitForMotionComplete(int returnCode)
+        {
+            if (NeedWait && ReturnCodeCheck.IsSuccessful(returnCode))
+            {
+                _waitingState = true;
+                while (_waitingState)
+                {
+                    /* Null. */
+                }
+            }
         }
     }
 }

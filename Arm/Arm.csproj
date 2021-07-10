@@ -46,6 +46,7 @@
   <ItemGroup>
       <Compile Include="Hiwin\HiwinBasicMotion.cs"/>
       <Compile Include="Hiwin\HiwinRelativeMotion.cs"/>
+      <Compile Include="Hiwin\ReturnCodeCheck.cs"/>
       <Compile Include="IAbsoluteMotion.cs"/>
       <Compile Include="Action\AbortMotion.cs"/>
       <Compile Include="Action\AbsoluteMotion.cs"/>
