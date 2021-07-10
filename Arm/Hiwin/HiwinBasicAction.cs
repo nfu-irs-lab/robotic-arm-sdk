@@ -6,7 +6,9 @@ namespace Arm.Hiwin
     {
         protected int _id;
         protected readonly IMessage _message;
-
+        
+        public abstract int Do();
+        
         public HiwinBasicAction(int id, IMessage message)
         {
             _id = id;

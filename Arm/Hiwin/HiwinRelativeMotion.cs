@@ -14,14 +14,13 @@ namespace Arm.Hiwin
                                    double cJ6,
                                    int id,
                                    IMessage message,
-                                   out int returnCode,
                                    ref bool waitingState)
             : base(xJ1, yJ2, zJ3, aJ4, bJ5, cJ6, id, message, ref waitingState)
         {
-            returnCode = Action();
+            
         }
-
-        private int Action()
+        
+        public override int Do()
         {
             int returnCode = 0;
             switch (CoordinateType)

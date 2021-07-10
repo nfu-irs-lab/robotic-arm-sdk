@@ -38,7 +38,6 @@ namespace Arm.Hiwin
                                                position[(int)Axis.CJ6],
                                                _id,
                                                _message,
-                                               out var returnCode,
                                                ref _waiting);
             }
             else
@@ -62,7 +61,6 @@ namespace Arm.Hiwin
                                            cJ6,
                                            _id,
                                            _message,
-                                           out var code,
                                            ref _waiting);
         }
 
@@ -78,7 +76,6 @@ namespace Arm.Hiwin
                                                position[(int)Axis.CJ6],
                                                _id,
                                                _message,
-                                               out var returnCode,
                                                ref _waiting);
             }
             else
@@ -102,7 +99,6 @@ namespace Arm.Hiwin
                                            cJ6,
                                            _id,
                                            _message,
-                                           out var code,
                                            ref _waiting);
         }
     }
