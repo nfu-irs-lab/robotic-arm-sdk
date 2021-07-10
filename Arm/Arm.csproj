@@ -22,6 +22,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DocumentationFile>bin\Debug\Arm.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -43,21 +44,39 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Action\AbortMotion.cs" />
-    <Compile Include="Action\AbsoluteMotion.cs" />
-    <Compile Include="Action\ArmMotion.cs" />
-    <Compile Include="Action\EmptyArmAction.cs" />
-    <Compile Include="Action\Homing.cs" />
-    <Compile Include="Action\IArmAction.cs" />
-    <Compile Include="Action\Jog.cs" />
-    <Compile Include="Action\RelativeMotion.cs" />
-    <Compile Include="ArmController.cs" />
-    <Compile Include="HRobot.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Type\CoordinateType.cs" />
-    <Compile Include="Type\MotionTypo.cs" />
-    <Compile Include="Type\PositionType.cs" />
-    <Compile Include="Type\SmoothType.cs" />
+      <Compile Include="Hiwin\HiwinBasicMotion.cs"/>
+      <Compile Include="Hiwin\HiwinRelativeMotion.cs"/>
+      <Compile Include="Hiwin\ReturnCodeCheck.cs"/>
+      <Compile Include="IAbsoluteMotion.cs"/>
+      <Compile Include="Action\AbortMotion.cs"/>
+      <Compile Include="Action\AbsoluteMotion.cs"/>
+      <Compile Include="Action\ArmMotion.cs"/>
+      <Compile Include="Action\EmptyArmAction.cs"/>
+      <Compile Include="Action\Homing.cs"/>
+      <Compile Include="Action\IArmAction.cs"/>
+      <Compile Include="Action\Jog.cs"/>
+      <Compile Include="Action\RelativeMotion.cs"/>
+      <Compile Include="Arm.cs"/>
+      <Compile Include="ArmActionFactory.cs"/>
+      <Compile Include="Axis.cs"/>
+      <Compile Include="IConnect.cs"/>
+      <Compile Include="IDisconnect.cs"/>
+      <Compile Include="HiwinArm.cs"/>
+      <Compile Include="Hiwin\HiwinAbsoluteMotion.cs"/>
+      <Compile Include="Hiwin\HiwinArmActionFactory.cs"/>
+      <Compile Include="HiwinArmAdapter.cs"/>
+      <Compile Include="Hiwin\HiwinBasicAction.cs"/>
+      <Compile Include="Hiwin\HiwinConnect.cs"/>
+      <Compile Include="Hiwin\HiwinDisconnect.cs"/>
+      <Compile Include="HRobot.cs"/>
+      <Compile Include="IArm.cs"/>
+      <Compile Include="IArmAdapter.cs"/>
+      <Compile Include="IRelativeMotion.cs"/>
+      <Compile Include="Properties\AssemblyInfo.cs"/>
+      <Compile Include="Type\CoordinateType.cs"/>
+      <Compile Include="Type\MotionTypo.cs"/>
+      <Compile Include="Type\PositionType.cs"/>
+      <Compile Include="Type\SmoothType.cs"/>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Basic\Basic.csproj">

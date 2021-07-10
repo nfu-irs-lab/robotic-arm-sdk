@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\Basic.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -42,14 +43,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="File\CsvHandler.cs" />
+    <Compile Include="CsvHandler.cs" />
     <Compile Include="IDevice.cs" />
     <Compile Include="Message\EmptyMessage.cs" />
     <Compile Include="Message\GeneralMessage.cs" />
     <Compile Include="Message\IMessage.cs" />
-    <Compile Include="File\LogHandler.cs" />
+    <Compile Include="LogHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SerialPortDevice.cs" />
+    <Compile Include="Sign.cs"/>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
