@@ -8,8 +8,8 @@
 
 # 各 Project 功能
 
-- NFUIRSL.HRTK：主要函式庫。
-- NFUIRSL.HRTK.Vision：視覺系統函式庫。
-- NFUIRSL.HRTK.UnitTests：「NFUIRSL.HRTK」的單元測試。不會封裝發行。
-- NFUIRSL.HRTK.Vision.UnitTests：「NFUIRSL.HRTK.Vision」的單元測試。不會封裝發行。
-- NFUIRSL.HRTK.Vision.TestForm：「NFUIRSL.HRTK.Vision」的測試用視窗程式。不會封裝發行。
+- Arm：機械手臂函式庫。
+- Basic：基本功能函式庫。
+- Gripper：夾爪函式庫。
+- UI：使用者介面函式庫。
+- Vision：影像及視覺相關函式庫。
