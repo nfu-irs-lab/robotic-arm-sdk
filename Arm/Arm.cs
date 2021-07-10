@@ -13,12 +13,12 @@ namespace Arm
 
         public void Connect()
         {
-            _arm.GetConnect();
+            _arm.Connect();
         }
 
         public void Disconnect()
         {
-            _arm.GetDisconnect();
+            _arm.Disconnect();
         }
     }
 }

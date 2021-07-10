@@ -19,6 +19,7 @@ namespace Arm.Hiwin
 {
     public class HiwinConnect : HiwinBasicAction, IConnect
     {
+        private static bool _waiting;
         private static readonly HRobot.CallBackFun _callBackFun = EventFun;
 
         public HiwinConnect(string ip,
@@ -26,7 +27,7 @@ namespace Arm.Hiwin
                             out int id,
                             out bool connected,
                             ref bool waiting)
-            : base(-5, message)
+            : base(-99, message)
         {
             _id = HRobot.open_connection(ip, 1, _callBackFun);
 
@@ -43,10 +44,14 @@ namespace Arm.Hiwin
             }
 
             id = _id;
-            waiting = Waiting;
+            unsafe
+            {
+                fixed (bool* w = &waiting)
+                {
+                    *w = _waiting;
+                }
+            }
         }
-
-        public static bool Waiting { get; private set; } = false;
 
         private static void EventFun(UInt16 cmd, UInt16 rlt, ref UInt16 Msg, int len)
         {
@@ -88,8 +93,11 @@ namespace Arm.Hiwin
                                       $"Joint:{infos[20]},{infos[21]},{infos[22]},{infos[23]},{infos[24]},{infos[25]}\r\n");
 
 #if (USE_CALLBACK_MOTION_STATE_WAIT)
-                    // Motion state=1: Idle.
-                    Waiting = infos[8] != "1";
+                    unsafe
+                    {
+                        // Motion state=1: Idle.
+                        _waiting = (infos[8] != "1");
+                    }
 #endif
                     break;
 
@@ -158,6 +166,10 @@ namespace Arm.Hiwin
 
                 case -4:
                     errorMessage = "-4：版本不相符。";
+                    break;
+
+                case -99:
+                    errorMessage = "-99：建構子預設 ID，從未進行連線。";
                     break;
 
                 default:

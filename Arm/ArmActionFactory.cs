@@ -13,9 +13,9 @@ namespace Arm
             _message = message;
         }
 
-        public abstract IConnect GetConnect();
+        public abstract IConnect Connect();
 
-        public abstract IDisconnect GetDisconnect();
+        public abstract IDisconnect Disconnect();
 
         public abstract IAbsoluteMotion AbsoluteMotion(double[] position);
 

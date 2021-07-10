@@ -67,14 +67,20 @@ namespace Arm.Hiwin
         {
             _position = new[] { xJ1, yJ2, zJ3, aJ4, bJ5, cJ6 };
             SmoothType = SmoothType.TwoLinesSpeedSmooth;
-            _waitingState = waitingState;
+
+            unsafe
+            {
+                fixed (bool* w = &waitingState)
+                {
+                    *w = _waitingState;
+                }
+            }
         }
 
         protected void WaitForMotionComplete(int returnCode)
         {
             if (NeedWait && ReturnCodeCheck.IsSuccessful(returnCode))
             {
-                _waitingState = true;
                 while (_waitingState)
                 {
                     /* Null. */

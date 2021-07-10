@@ -7,7 +7,7 @@ namespace Arm.Hiwin
     {
         private readonly string _ip;
         private int _id;
-        private bool _waiting = false;
+        private static bool _waiting = false;
 
         public HiwinArmActionFactory(string ip, IMessage message) : base(message)
         {
@@ -16,12 +16,12 @@ namespace Arm.Hiwin
 
         public int Id => _id;
 
-        public override IConnect GetConnect()
+        public override IConnect Connect()
         {
             return new HiwinConnect(_ip, _message, out _id, out _connected, ref _waiting);
         }
 
-        public override IDisconnect GetDisconnect()
+        public override IDisconnect Disconnect()
         {
             return new HiwinDisconnect(_id, _message, out _connected);
         }
