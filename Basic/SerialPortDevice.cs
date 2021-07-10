@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading;
 using System.IO.Ports;
 using Basic.Message;
-using Basic.File;
 
 namespace Basic
 {
