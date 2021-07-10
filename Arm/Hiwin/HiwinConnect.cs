@@ -169,7 +169,7 @@ namespace Arm.Hiwin
                     break;
 
                 case -99:
-                    errorMessage = "-99：建構子預設 ID，從未進行連線。";
+                    errorMessage = "-99：自定義錯誤碼。建構子預設 ID，從未進行連線，請檢測程式。";
                     break;
 
                 default:
