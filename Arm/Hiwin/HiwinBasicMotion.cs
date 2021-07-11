@@ -12,7 +12,7 @@ namespace Arm.Hiwin
         public int SmoothValue = 50;
         protected double[] _position;
         protected int _smoothTypeCode;
-        protected bool _waitingState;
+        protected unsafe bool* _waitingState;
 
         public HiwinBasicMotion(double xJ1,
                                 double yJ2,
@@ -42,7 +42,7 @@ namespace Arm.Hiwin
             {
                 fixed (bool* w = &waitingState)
                 {
-                    *w = _waitingState;
+                    _waitingState = w;
                 }
             }
         }
@@ -90,10 +90,13 @@ namespace Arm.Hiwin
         {
             if (NeedWait && ReturnCodeCheck.IsSuccessful(returnCode))
             {
-                _waitingState = true;
-                while (_waitingState)
+                unsafe
                 {
-                    /* Null. */
+                    *_waitingState = true;
+                    while (*_waitingState)
+                    {
+                        /* Null. */
+                    }
                 }
             }
         }

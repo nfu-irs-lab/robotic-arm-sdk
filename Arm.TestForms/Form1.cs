@@ -49,7 +49,7 @@ namespace Arm.TestForms
 
         private void buttonMove1_Click(object sender, EventArgs e)
         {
-            _arm.RelativeMotion(100, 0, 0, 0, 0, 0, new AdditionalMotionParameters() { NeedWait = true });
+            _arm.RelativeMotion(100, 0, 0, 0, 0, 0, new AdditionalMotionParameters() { NeedWait = false });
             MessageBox.Show("1");
             _arm.RelativeMotion(-100, 0, 0, 0, 0, 0, new AdditionalMotionParameters() { NeedWait = true });
             MessageBox.Show("2");
