@@ -115,7 +115,7 @@ namespace Arm.Hiwin
                                            additionalMotionParameters);
         }
 
-        public override IHoming Homing(CoordinateType coordinateType, bool needWait = true)
+        public override IHoming Homing(CoordinateType coordinateType = CoordinateType.Descartes, bool needWait = true)
         {
             return new HiwinHoming(coordinateType, _id, _message, ref _waiting, needWait);
         }

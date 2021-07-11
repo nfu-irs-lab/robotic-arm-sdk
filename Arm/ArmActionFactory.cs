@@ -41,6 +41,6 @@ namespace Arm
                                                        double cJ6,
                                                        AdditionalMotionParameters additionalMotionParameters = null);
 
-        public abstract IHoming Homing(CoordinateType coordinateType, bool needWait = true);
+        public abstract IHoming Homing(CoordinateType coordinateType = CoordinateType.Descartes, bool needWait = true);
     }
 }

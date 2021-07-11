@@ -6,53 +6,13 @@ namespace Arm.Hiwin
 {
     public abstract class HiwinBasicMotion : HiwinBasicAction
     {
-        protected double[] _position;
-        public MotionType MotionType = MotionType.PointToPoint;
         public CoordinateType CoordinateType = CoordinateType.Descartes;
-        protected int _smoothTypeCode;
-        public int SmoothValue = 50;
+        public MotionType MotionType = MotionType.PointToPoint;
         public bool NeedWait = true;
+        public int SmoothValue = 50;
+        protected double[] _position;
+        protected int _smoothTypeCode;
         protected bool _waitingState;
-
-        public SmoothType SmoothType
-        {
-            get
-            {
-                SmoothType type = SmoothType.Disable;
-                switch (MotionType)
-                {
-                    case MotionType.Circle:
-                    case MotionType.PointToPoint:
-                        type = (_smoothTypeCode == 1) ? SmoothType.TwoLinesSpeedSmooth : SmoothType.Disable;
-                        break;
-
-                    case MotionType.Linear:
-                        type = SmoothType;
-                        break;
-                }
-                return type;
-
-            }
-
-            set
-            {
-                switch (MotionType)
-                {
-                    case MotionType.Circle:
-                    case MotionType.PointToPoint:
-                        _smoothTypeCode = (value == SmoothType.TwoLinesSpeedSmooth) ? 1 : 0;
-                        break;
-
-                    case MotionType.Linear:
-                        _smoothTypeCode = (int)value;
-                        break;
-
-                    default:
-                        _smoothTypeCode = 0;
-                        break;
-                }
-            }
-        }
 
         public HiwinBasicMotion(double xJ1,
                                 double yJ2,
@@ -87,10 +47,50 @@ namespace Arm.Hiwin
             }
         }
 
+        public SmoothType SmoothType
+        {
+            get
+            {
+                SmoothType type = SmoothType.Disable;
+                switch (MotionType)
+                {
+                    case MotionType.Circle:
+                    case MotionType.PointToPoint:
+                        type = (_smoothTypeCode == 1) ? SmoothType.TwoLinesSpeedSmooth : SmoothType.Disable;
+                        break;
+
+                    case MotionType.Linear:
+                        type = SmoothType;
+                        break;
+                }
+                return type;
+            }
+
+            set
+            {
+                switch (MotionType)
+                {
+                    case MotionType.Circle:
+                    case MotionType.PointToPoint:
+                        _smoothTypeCode = (value == SmoothType.TwoLinesSpeedSmooth) ? 1 : 0;
+                        break;
+
+                    case MotionType.Linear:
+                        _smoothTypeCode = (int)value;
+                        break;
+
+                    default:
+                        _smoothTypeCode = 0;
+                        break;
+                }
+            }
+        }
+
         protected void WaitForMotionComplete(int returnCode)
         {
             if (NeedWait && ReturnCodeCheck.IsSuccessful(returnCode))
             {
+                _waitingState = true;
                 while (_waitingState)
                 {
                     /* Null. */
