@@ -15,8 +15,9 @@ namespace Arm.Hiwin
                                    int id,
                                    IMessage message,
                                    out int returnCode,
-                                   ref bool waitingState)
-            : base(xJ1, yJ2, zJ3, aJ4, bJ5, cJ6, id, message, ref waitingState)
+                                   ref bool waitingState,
+                                   AdditionalMotionParameters additionalPara = null)
+            : base(xJ1, yJ2, zJ3, aJ4, bJ5, cJ6, id, message, ref waitingState, additionalPara)
         {
             returnCode = Action();
         }
