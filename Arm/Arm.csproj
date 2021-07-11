@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+      <Compile Include="Hiwin\AdditionalMotionParameters.cs"/>
       <Compile Include="Hiwin\HiwinBasicMotion.cs"/>
       <Compile Include="Hiwin\HiwinRelativeMotion.cs"/>
       <Compile Include="Hiwin\ReturnCodeCheck.cs"/>

@@ -1,4 +1,5 @@
-﻿using Basic.Message;
+﻿using Arm.Hiwin;
+using Basic.Message;
 
 namespace Arm
 {
@@ -17,22 +18,26 @@ namespace Arm
 
         public abstract IDisconnect Disconnect();
 
-        public abstract IAbsoluteMotion AbsoluteMotion(double[] position);
+        public abstract IAbsoluteMotion AbsoluteMotion(double[] position,
+                                                       AdditionalMotionParameters additionalMotionParameters = null);
 
         public abstract IAbsoluteMotion AbsoluteMotion(double xJ1,
                                                        double yJ2,
                                                        double zJ3,
                                                        double aJ4,
                                                        double bJ5,
-                                                       double cJ6);
+                                                       double cJ6,
+                                                       AdditionalMotionParameters additionalMotionParameters = null);
 
-        public abstract IRelativeMotion RelativeMotion(double[] position);
+        public abstract IRelativeMotion RelativeMotion(double[] position,
+                                                       AdditionalMotionParameters additionalMotionParameters = null);
 
         public abstract IRelativeMotion RelativeMotion(double xJ1,
                                                        double yJ2,
                                                        double zJ3,
                                                        double aJ4,
                                                        double bJ5,
-                                                       double cJ6);
+                                                       double cJ6,
+                                                       AdditionalMotionParameters additionalMotionParameters = null);
     }
 }
