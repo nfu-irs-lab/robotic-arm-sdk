@@ -19,8 +19,8 @@ namespace Arm.Hiwin
 {
     public class HiwinConnect : HiwinBasicAction, IConnect
     {
-        private static bool _waiting;
         private static readonly HRobot.CallBackFun _callBackFun = EventFun;
+        private static unsafe bool* _waiting;
 
         public HiwinConnect(string ip,
                             IMessage message,
@@ -29,7 +29,16 @@ namespace Arm.Hiwin
                             ref bool waiting)
             : base(-99, message)
         {
+            unsafe
+            {
+                fixed (bool* w = &waiting)
+                {
+                    _waiting = w;
+                }
+            }
+
             _id = HRobot.open_connection(ip, 1, _callBackFun);
+            id = _id;
 
             // Check connection.
             if (_id >= 0 && _id <= 65535)
@@ -41,15 +50,6 @@ namespace Arm.Hiwin
             {
                 ShowUnsuccessfulConnectMessage();
                 connected = false;
-            }
-
-            id = _id;
-            unsafe
-            {
-                fixed (bool* w = &waiting)
-                {
-                    *w = _waiting;
-                }
             }
         }
 
@@ -96,7 +96,7 @@ namespace Arm.Hiwin
                     unsafe
                     {
                         // Motion state=1: Idle.
-                        _waiting = (infos[8] != "1");
+                        *_waiting = (infos[8] != "1");
                     }
 #endif
                     break;
@@ -169,7 +169,7 @@ namespace Arm.Hiwin
                     break;
 
                 case -99:
-                    errorMessage = "-99：建構子預設 ID，從未進行連線。";
+                    errorMessage = "-99：自定義錯誤碼。建構子預設 ID，從未進行連線，請檢測程式。";
                     break;
 
                 default:

@@ -1,4 +1,5 @@
 ﻿using System;
+using Arm.Type;
 using Basic.Message;
 
 namespace Arm.Hiwin
@@ -26,7 +27,8 @@ namespace Arm.Hiwin
             return new HiwinDisconnect(_id, _message, out _connected);
         }
 
-        public override IAbsoluteMotion AbsoluteMotion(double[] position)
+        public override IAbsoluteMotion AbsoluteMotion(double[] position,
+                                                       AdditionalMotionParameters additionalMotionParameters = null)
         {
             if (position.Length == 6)
             {
@@ -39,7 +41,8 @@ namespace Arm.Hiwin
                                                _id,
                                                _message,
                                                out var returnCode,
-                                               ref _waiting);
+                                               ref _waiting,
+                                               additionalMotionParameters);
             }
             else
             {
@@ -52,7 +55,8 @@ namespace Arm.Hiwin
                                                        double zJ3,
                                                        double aJ4,
                                                        double bJ5,
-                                                       double cJ6)
+                                                       double cJ6,
+                                                       AdditionalMotionParameters additionalMotionParameters = null)
         {
             return new HiwinAbsoluteMotion(xJ1,
                                            yJ2,
@@ -62,11 +66,13 @@ namespace Arm.Hiwin
                                            cJ6,
                                            _id,
                                            _message,
-                                           out var code,
-                                           ref _waiting);
+                                           out var returnCode,
+                                           ref _waiting,
+                                           additionalMotionParameters);
         }
 
-        public override IRelativeMotion RelativeMotion(double[] position)
+        public override IRelativeMotion RelativeMotion(double[] position,
+                                                       AdditionalMotionParameters additionalMotionParameters = null)
         {
             if (position.Length == 6)
             {
@@ -79,7 +85,8 @@ namespace Arm.Hiwin
                                                _id,
                                                _message,
                                                out var returnCode,
-                                               ref _waiting);
+                                               ref _waiting,
+                                               additionalMotionParameters);
             }
             else
             {
@@ -92,7 +99,8 @@ namespace Arm.Hiwin
                                                        double zJ3,
                                                        double aJ4,
                                                        double bJ5,
-                                                       double cJ6)
+                                                       double cJ6,
+                                                       AdditionalMotionParameters additionalMotionParameters = null)
         {
             return new HiwinRelativeMotion(xJ1,
                                            yJ2,
@@ -102,8 +110,14 @@ namespace Arm.Hiwin
                                            cJ6,
                                            _id,
                                            _message,
-                                           out var code,
-                                           ref _waiting);
+                                           out var returnCode,
+                                           ref _waiting,
+                                           additionalMotionParameters);
+        }
+
+        public override IHoming Homing(CoordinateType coordinateType = CoordinateType.Descartes, bool needWait = true)
+        {
+            return new HiwinHoming(coordinateType, _id, _message, ref _waiting, needWait);
         }
     }
 }

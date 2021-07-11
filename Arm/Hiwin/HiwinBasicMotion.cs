@@ -6,13 +6,46 @@ namespace Arm.Hiwin
 {
     public abstract class HiwinBasicMotion : HiwinBasicAction
     {
-        protected readonly double[] _position;
-        public MotionType MotionType = MotionType.PointToPoint;
         public CoordinateType CoordinateType = CoordinateType.Descartes;
-        protected int _smoothTypeCode;
-        public int SmoothValue = 50;
+        public MotionType MotionType = MotionType.PointToPoint;
         public bool NeedWait = true;
-        protected bool _waitingState;
+        public int SmoothValue = 50;
+        protected double[] _position;
+        protected int _smoothTypeCode;
+        protected unsafe bool* _waitingState;
+
+        public HiwinBasicMotion(double xJ1,
+                                double yJ2,
+                                double zJ3,
+                                double aJ4,
+                                double bJ5,
+                                double cJ6,
+                                int id,
+                                IMessage message,
+                                ref bool waitingState,
+                                AdditionalMotionParameters additionalPara = null)
+            : base(id, message)
+        {
+            if (additionalPara != null)
+            {
+                MotionType = additionalPara.MotionType;
+                CoordinateType = additionalPara.CoordinateType;
+                SmoothType = additionalPara.SmoothType;
+                SmoothValue = additionalPara.SmoothValue;
+                NeedWait = additionalPara.NeedWait;
+            }
+
+            _position = new[] { xJ1, yJ2, zJ3, aJ4, bJ5, cJ6 };
+            SmoothType = SmoothType.TwoLinesSpeedSmooth;
+
+            unsafe
+            {
+                fixed (bool* w = &waitingState)
+                {
+                    _waitingState = w;
+                }
+            }
+        }
 
         public SmoothType SmoothType
         {
@@ -31,7 +64,6 @@ namespace Arm.Hiwin
                         break;
                 }
                 return type;
-
             }
 
             set
@@ -54,36 +86,17 @@ namespace Arm.Hiwin
             }
         }
 
-        public HiwinBasicMotion(double xJ1,
-                                double yJ2,
-                                double zJ3,
-                                double aJ4,
-                                double bJ5,
-                                double cJ6,
-                                int id,
-                                IMessage message,
-                                ref bool waitingState)
-            : base(id, message)
-        {
-            _position = new[] { xJ1, yJ2, zJ3, aJ4, bJ5, cJ6 };
-            SmoothType = SmoothType.TwoLinesSpeedSmooth;
-
-            unsafe
-            {
-                fixed (bool* w = &waitingState)
-                {
-                    *w = _waitingState;
-                }
-            }
-        }
-
         protected void WaitForMotionComplete(int returnCode)
         {
             if (NeedWait && ReturnCodeCheck.IsSuccessful(returnCode))
             {
-                while (_waitingState)
+                unsafe
                 {
-                    /* Null. */
+                    *_waitingState = true;
+                    while (*_waitingState)
+                    {
+                        /* Null. */
+                    }
                 }
             }
         }
