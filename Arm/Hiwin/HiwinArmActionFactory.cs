@@ -1,4 +1,5 @@
 ﻿using System;
+using Arm.Type;
 using Basic.Message;
 
 namespace Arm.Hiwin
@@ -112,6 +113,11 @@ namespace Arm.Hiwin
                                            out var returnCode,
                                            ref _waiting,
                                            additionalMotionParameters);
+        }
+
+        public override IHoming Homing(CoordinateType coordinateType, bool needWait = true)
+        {
+            return new HiwinHoming(coordinateType, _id, _message, ref _waiting, needWait);
         }
     }
 }

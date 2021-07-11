@@ -6,7 +6,7 @@ namespace Arm.Hiwin
 {
     public abstract class HiwinBasicMotion : HiwinBasicAction
     {
-        protected readonly double[] _position;
+        protected double[] _position;
         public MotionType MotionType = MotionType.PointToPoint;
         public CoordinateType CoordinateType = CoordinateType.Descartes;
         protected int _smoothTypeCode;

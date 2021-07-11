@@ -1,4 +1,5 @@
 ﻿using Arm.Hiwin;
+using Arm.Type;
 using Basic.Message;
 
 namespace Arm
@@ -39,5 +40,7 @@ namespace Arm
                                                        double bJ5,
                                                        double cJ6,
                                                        AdditionalMotionParameters additionalMotionParameters = null);
+
+        public abstract IHoming Homing(CoordinateType coordinateType, bool needWait = true);
     }
 }
