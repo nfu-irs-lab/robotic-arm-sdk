@@ -48,5 +48,10 @@ namespace Arm
         {
             throw new NotImplementedException();
         }
+
+        public virtual IAbortMotion AbortMotion()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

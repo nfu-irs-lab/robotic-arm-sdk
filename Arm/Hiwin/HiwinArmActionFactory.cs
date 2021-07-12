@@ -124,5 +124,10 @@ namespace Arm.Hiwin
         {
             return new HiwinJog(axis, _id, _message, ref _waiting, needWait);
         }
+
+        public override IAbortMotion AbortMotion()
+        {
+            return new HiwinAbortMotion(_id, _message);
+        }
     }
 }

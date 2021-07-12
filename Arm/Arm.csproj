@@ -66,11 +66,13 @@
     <ItemGroup>
         <Compile Include="Hiwin\AdditionalMotionParameters.cs"/>
         <Compile Include="Hiwin\Default.cs"/>
+        <Compile Include="Hiwin\HiwinAbortMotion.cs"/>
         <Compile Include="Hiwin\HiwinBasicMotion.cs"/>
         <Compile Include="Hiwin\HiwinHoming.cs"/>
         <Compile Include="Hiwin\HiwinJog.cs"/>
         <Compile Include="Hiwin\HiwinRelativeMotion.cs"/>
         <Compile Include="Hiwin\ReturnCodeCheck.cs"/>
+        <Compile Include="IAbortMotion.cs"/>
         <Compile Include="IAbsoluteMotion.cs"/>
         <Compile Include="Action\AbortMotion.cs"/>
         <Compile Include="Action\AbsoluteMotion.cs"/>

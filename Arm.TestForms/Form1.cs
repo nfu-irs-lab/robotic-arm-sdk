@@ -47,6 +47,12 @@ namespace Arm.TestForms
             _arm.Homing();
         }
 
+        private void buttonJogYP_MouseDown(object sender, MouseEventArgs e)
+        { }
+
+        private void buttonJogYP_MouseUp(object sender, MouseEventArgs e)
+        { }
+
         private void buttonMove1_Click(object sender, EventArgs e)
         {
             _arm.RelativeMotion(100, 0, 0, 0, 0, 0, new AdditionalMotionParameters() { NeedWait = false });
