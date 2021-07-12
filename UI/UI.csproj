@@ -59,8 +59,8 @@
         <Reference Include="System.Drawing"/>
         <Reference Include="System.Net.Http"/>
         <Reference Include="System.Windows.Forms"/>
-    <Reference Include="System.Xml" />
-  </ItemGroup>
+        <Reference Include="System.Xml"/>
+    </ItemGroup>
   <ItemGroup>
     <Compile Include="BasicArmController.cs">
       <SubType>UserControl</SubType>
@@ -86,10 +86,10 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Arm\Arm.csproj">
-      <Project>{b3e315f9-6979-4acd-a1a5-2fa0bbecfeab}</Project>
-      <Name>Arm</Name>
-    </ProjectReference>
+      <ProjectReference Include="..\RASDK.Arm\RASDK.Arm.csproj">
+          <Project>{b3e315f9-6979-4acd-a1a5-2fa0bbecfeab}</Project>
+          <Name>RASDK.Arm</Name>
+      </ProjectReference>
     <ProjectReference Include="..\Basic\Basic.csproj">
       <Project>{cd68c0c8-e211-4ecc-93ec-ece9054777a3}</Project>
       <Name>Basic</Name>

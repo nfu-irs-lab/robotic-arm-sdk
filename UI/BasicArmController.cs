@@ -10,9 +10,9 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Basic;
 using Basic.Message;
-using Arm;
-using Arm.Action;
-using Arm.Type;
+using RASDK.Arm;
+using RASDK.Arm.Action;
+using RASDK.Arm.Type;
 
 namespace UI
 {
@@ -25,19 +25,25 @@ namespace UI
         {
             InitializeComponent();
 
-            _armNowPositionControllers = new List<TextBox> { textBoxArmNowPositionXJ1,
-                                                  textBoxArmNowPositionYJ2,
-                                                  textBoxArmNowPositionZJ3,
-                                                  textBoxArmNowPositionAJ4,
-                                                  textBoxArmNowPositionBJ5,
-                                                  textBoxArmNowPositionCJ6 };
+            _armNowPositionControllers = new List<TextBox>
+            {
+                textBoxArmNowPositionXJ1,
+                textBoxArmNowPositionYJ2,
+                textBoxArmNowPositionZJ3,
+                textBoxArmNowPositionAJ4,
+                textBoxArmNowPositionBJ5,
+                textBoxArmNowPositionCJ6
+            };
 
-            _armTargetPositionControllers = new List<NumericUpDown> { numericUpDownArmTargetPositionXJ1,
-                                                           numericUpDownArmTargetPositionYJ2,
-                                                           numericUpDownArmTargetPositionZJ3,
-                                                           numericUpDownArmTargetPositionAJ4,
-                                                           numericUpDownArmTargetPositionBJ5,
-                                                           numericUpDownArmTargetPositionZJ6 };
+            _armTargetPositionControllers = new List<NumericUpDown>
+            {
+                numericUpDownArmTargetPositionXJ1,
+                numericUpDownArmTargetPositionYJ2,
+                numericUpDownArmTargetPositionZJ3,
+                numericUpDownArmTargetPositionAJ4,
+                numericUpDownArmTargetPositionBJ5,
+                numericUpDownArmTargetPositionZJ6
+            };
         }
 
         public void DependencyInjection(IArm armController, IMessage message)
@@ -64,6 +70,7 @@ namespace UI
                 else
                     return CoordinateType.Unknown;
             }
+
             set
             {
                 switch (value)
@@ -90,6 +97,7 @@ namespace UI
                 else
                     return MotionType.Unknown;
             }
+
             set
             {
                 switch (value)
@@ -116,6 +124,7 @@ namespace UI
                 else
                     return PositionType.Unknown;
             }
+
             set
             {
                 switch (value)
@@ -157,6 +166,7 @@ namespace UI
                 }
                 return pos;
             }
+
             set
             {
                 if (value.Length == 6 || value.Length == 3)
@@ -188,6 +198,7 @@ namespace UI
                 }
                 return pos;
             }
+
             set
             {
                 if (value.Length == 6 || value.Length == 3)
@@ -206,10 +217,8 @@ namespace UI
 
         private int _nowAcceleration
         {
-            get
-            {
-                return Convert.ToInt32(numericUpDownArmAcceleration);
-            }
+            get { return Convert.ToInt32(numericUpDownArmAcceleration); }
+
             set
             {
                 //_message.Log($"Set arm acceleration:{value}.", LoggingLevel.Info);
@@ -220,10 +229,8 @@ namespace UI
 
         private int _nowSpeed
         {
-            get
-            {
-                return Convert.ToInt32(numericUpDownArmSpeed);
-            }
+            get { return Convert.ToInt32(numericUpDownArmSpeed); }
+
             set
             {
                 //_message.Log($"Set arm speed:{value}.", LoggingLevel.Info);
@@ -311,11 +318,9 @@ namespace UI
         private void radioButtonCoordinateTypeDescartes_CheckedChanged(object sender, EventArgs e)
         {
             if (radioButtonCoordinateTypeJoint.Checked)
-            {
-            }
+            { }
             else
-            {
-            }
+            { }
         }
 
         private void radioButtonPositionTypeAbsolute_CheckedChanged(object sender, EventArgs e)
@@ -325,8 +330,7 @@ namespace UI
                 _targetPosition = new double[] { 0, 0, 0, 0, 0, 0 };
             }
             else
-            {
-            }
+            { }
         }
 
         #endregion Event

@@ -217,7 +217,7 @@ namespace Arm.TestForms
             this.Controls.Add(this.buttonDisconnect);
             this.Controls.Add(this.buttonConnect);
             this.Name = "Form1";
-            this.Text = "Arm Test";
+            this.Text = "RASDK.Arm Test";
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownJogXY)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownJogZ)).EndInit();
             this.ResumeLayout(false);

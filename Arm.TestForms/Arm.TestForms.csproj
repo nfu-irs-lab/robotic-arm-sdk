@@ -100,9 +100,9 @@
         <None Include="App.config"/>
     </ItemGroup>
     <ItemGroup>
-        <ProjectReference Include="..\Arm\Arm.csproj">
+        <ProjectReference Include="..\RASDK.Arm\RASDK.Arm.csproj">
             <Project>{b3e315f9-6979-4acd-a1a5-2fa0bbecfeab}</Project>
-            <Name>Arm</Name>
+            <Name>RASDK.Arm</Name>
         </ProjectReference>
         <ProjectReference Include="..\Basic\Basic.csproj">
             <Project>{cd68c0c8-e211-4ecc-93ec-ece9054777a3}</Project>
