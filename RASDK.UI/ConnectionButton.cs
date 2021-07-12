@@ -10,7 +10,7 @@ using System.Windows.Forms;
 using RASDK.Basic;
 using RASDK.Basic.Message;
 
-namespace UI
+namespace RASDK.UI
 {
     public partial class ConnectionButton : UserControl
     {

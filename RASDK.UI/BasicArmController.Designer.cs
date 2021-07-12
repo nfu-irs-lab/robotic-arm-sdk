@@ -1,5 +1,5 @@
 ﻿
-namespace UI
+namespace RASDK.UI
 {
     partial class BasicArmController
     {

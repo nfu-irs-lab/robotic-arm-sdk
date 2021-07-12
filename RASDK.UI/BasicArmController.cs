@@ -14,7 +14,7 @@ using RASDK.Arm;
 using RASDK.Arm.Action;
 using RASDK.Arm.Type;
 
-namespace UI
+namespace RASDK.UI
 {
     public partial class BasicArmController : UserControl
     {
