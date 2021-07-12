@@ -8,13 +8,13 @@ namespace RASDK.Arm
     public abstract class ArmActionFactory
     {
         protected readonly IMessage _message;
-        protected bool _connected = false;
-        public bool Connected => _connected;
 
         public ArmActionFactory(IMessage message)
         {
             _message = message;
         }
+
+        public abstract IGetConnectionState GetConnectionState(out bool connected);
 
         public abstract IConnect Connect();
 

@@ -1,8 +1,9 @@
-﻿using RASDK.Basic.Message;
+﻿using RASDK.Basic;
+using RASDK.Basic.Message;
 
 namespace RASDK.Arm
 {
-    public class Arm
+    public class Arm : IDevice
     {
         private readonly ArmActionFactory _arm;
 
@@ -11,14 +12,25 @@ namespace RASDK.Arm
             _arm = arm;
         }
 
-        public void Connect()
+        public bool Connected
         {
-            _arm.Connect();
+            get
+            {
+                _arm.GetConnectionState(out var connected);
+                return connected;
+            }
         }
 
-        public void Disconnect()
+        bool IDevice.Disconnect()
         {
             _arm.Disconnect();
+            return !Connected;
+        }
+
+        bool IDevice.Connect()
+        {
+            _arm.Connect();
+            return Connected;
         }
     }
 }

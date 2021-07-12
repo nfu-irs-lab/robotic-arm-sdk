@@ -25,7 +25,6 @@ namespace RASDK.Arm.Hiwin
         public HiwinConnect(string ip,
                             IMessage message,
                             out int id,
-                            out bool connected,
                             ref bool waiting)
             : base(-99, message)
         {
@@ -44,12 +43,10 @@ namespace RASDK.Arm.Hiwin
             if (_id >= 0 && _id <= 65535)
             {
                 ShowSuccessfulConnectMessage();
-                connected = true;
             }
             else
             {
                 ShowUnsuccessfulConnectMessage();
-                connected = false;
             }
         }
 

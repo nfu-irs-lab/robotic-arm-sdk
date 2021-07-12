@@ -17,14 +17,19 @@ namespace RASDK.Arm.Hiwin
 
         public int Id => _id;
 
+        public override IGetConnectionState GetConnectionState(out bool connected)
+        {
+            return new HiwinGetConnectionState(_id, _message, out connected);
+        }
+
         public override IConnect Connect()
         {
-            return new HiwinConnect(_ip, _message, out _id, out _connected, ref _waiting);
+            return new HiwinConnect(_ip, _message, out _id, ref _waiting);
         }
 
         public override IDisconnect Disconnect()
         {
-            return new HiwinDisconnect(_id, _message, out _connected);
+            return new HiwinDisconnect(_id, _message);
         }
 
         public override IAbsoluteMotion AbsoluteMotion(double[] position,

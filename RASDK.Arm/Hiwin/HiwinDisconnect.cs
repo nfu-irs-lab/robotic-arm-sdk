@@ -7,7 +7,7 @@ namespace RASDK.Arm.Hiwin
 {
     public class HiwinDisconnect : IDisconnect
     {
-        public HiwinDisconnect(int id, IMessage message, out bool connected)
+        public HiwinDisconnect(int id, IMessage message)
         {
             int alarmState;
             int motorState;
@@ -32,8 +32,6 @@ namespace RASDK.Arm.Hiwin
                        $"控制器狀態: {(motorState == 0 ? "關閉" : "開啟")}\r\n" +
                        $"錯誤代碼: {alarmState}";
             message.Show(text, "斷線", MessageBoxButtons.OK, MessageBoxIcon.None);
-
-            connected = false;
         }
     }
 }

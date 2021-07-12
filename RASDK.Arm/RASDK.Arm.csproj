@@ -68,6 +68,7 @@
         <Compile Include="Hiwin\Default.cs"/>
         <Compile Include="Hiwin\HiwinAbortMotion.cs"/>
         <Compile Include="Hiwin\HiwinBasicMotion.cs"/>
+        <Compile Include="Hiwin\HiwinGetConnectionState.cs"/>
         <Compile Include="Hiwin\HiwinHoming.cs"/>
         <Compile Include="Hiwin\HiwinJog.cs"/>
         <Compile Include="Hiwin\HiwinRelativeMotion.cs"/>
@@ -97,6 +98,7 @@
         <Compile Include="HRobot.cs"/>
         <Compile Include="IArm.cs"/>
         <Compile Include="IArmAdapter.cs"/>
+        <Compile Include="IGetConnectionState.cs"/>
         <Compile Include="IHoming.cs"/>
         <Compile Include="IRelativeMotion.cs"/>
         <Compile Include="IJog.cs"/>
