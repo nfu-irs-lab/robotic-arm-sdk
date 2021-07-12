@@ -1,4 +1,5 @@
-﻿using Arm.Hiwin;
+﻿using System;
+using Arm.Hiwin;
 using Arm.Type;
 using Basic.Message;
 
@@ -42,5 +43,15 @@ namespace Arm
                                                        AdditionalMotionParameters additionalMotionParameters = null);
 
         public abstract IHoming Homing(CoordinateType coordinateType = CoordinateType.Descartes, bool needWait = true);
+
+        public virtual IJog Jog(string axis, bool needWait = true)
+        {
+            throw new NotImplementedException();
+        }
+
+        public virtual IAbortMotion AbortMotion()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

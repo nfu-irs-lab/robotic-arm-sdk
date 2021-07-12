@@ -57,5 +57,68 @@ namespace Arm.TestForms
 
         private void buttonMove2_Click(object sender, EventArgs e)
         { }
+
+        #region Jog
+
+        private void JogStart(int indexOfAxis, double value)
+        {
+            var dir = value >= 0 ? '+' : '-';
+            _arm.Jog($"{dir}{indexOfAxis}");
+        }
+
+        private void JogStop()
+        {
+            _arm.AbortMotion();
+        }
+
+        #region X
+
+        private void buttonJogXM_MouseDown(object sender, MouseEventArgs e)
+            => JogStart(0, (double)-numericUpDownJogXY.Value);
+
+        private void buttonJogXM_MouseUp(object sender, MouseEventArgs e)
+            => JogStop();
+
+        private void buttonJogXP_MouseDown(object sender, MouseEventArgs e)
+            => JogStart(0, (double)numericUpDownJogXY.Value);
+
+        private void buttonJogXP_MouseUp(object sender, MouseEventArgs e)
+            => JogStop();
+
+        #endregion X
+
+        #region Y
+
+        private void buttonJogYM_MouseDown(object sender, MouseEventArgs e)
+            => JogStart(1, (double)-numericUpDownJogXY.Value);
+
+        private void buttonJogYM_MouseUp(object sender, MouseEventArgs e)
+            => JogStop();
+
+        private void buttonJogYP_MouseDown(object sender, MouseEventArgs e)
+            => JogStart(1, (double)numericUpDownJogXY.Value);
+
+        private void buttonJogYP_MouseUp(object sender, MouseEventArgs e)
+            => JogStop();
+
+        #endregion Y
+
+        #region Z
+
+        private void buttonJogZM_MouseDown(object sender, MouseEventArgs e)
+            => JogStart(2, (double)-numericUpDownJogZ.Value);
+
+        private void buttonJogZM_MouseUp(object sender, MouseEventArgs e)
+            => JogStop();
+
+        private void buttonJogZP_MouseDown(object sender, MouseEventArgs e)
+            => JogStart(2, (double)numericUpDownJogZ.Value);
+
+        private void buttonJogZP_MouseUp(object sender, MouseEventArgs e)
+            => JogStop();
+
+        #endregion Z
+
+        #endregion Jog
     }
 }
