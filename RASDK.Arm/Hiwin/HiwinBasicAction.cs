@@ -1,4 +1,4 @@
-﻿using Basic.Message;
+﻿using RASDK.Basic.Message;
 
 namespace RASDK.Arm.Hiwin
 {

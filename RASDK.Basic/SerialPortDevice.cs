@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.IO.Ports;
-using Basic.Message;
+using RASDK.Basic.Message;
 
-namespace Basic
+namespace RASDK.Basic
 {
     /// <summary>
     /// 基本 Serial Port 裝置介面。

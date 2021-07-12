@@ -104,9 +104,9 @@
             <Project>{b3e315f9-6979-4acd-a1a5-2fa0bbecfeab}</Project>
             <Name>RASDK.Arm</Name>
         </ProjectReference>
-        <ProjectReference Include="..\Basic\Basic.csproj">
+        <ProjectReference Include="..\RASDK.Basic\RASDK.Basic.csproj">
             <Project>{cd68c0c8-e211-4ecc-93ec-ece9054777a3}</Project>
-            <Name>Basic</Name>
+            <Name>RASDK.Basic</Name>
         </ProjectReference>
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>

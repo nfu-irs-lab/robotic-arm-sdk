@@ -5,8 +5,8 @@ using System.IO.Ports;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Basic;
-using Basic.Message;
+using RASDK.Basic;
+using RASDK.Basic.Message;
 
 namespace Gripper
 {
@@ -25,14 +25,13 @@ namespace Gripper
 
         public GripperController(string comPort, IMessage message)
         {
-            SerialPortDevice = new SerialPortDevice(
-                new SerialPort()
-                {
-                    PortName = comPort,
-                    BaudRate = 115200,
-                    DataBits = 8
-                },
-                message);
+            SerialPortDevice = new SerialPortDevice(new SerialPort()
+                                                    {
+                                                        PortName = comPort,
+                                                        BaudRate = 115200,
+                                                        DataBits = 8
+                                                    },
+                                                    message);
 
             Message = message;
         }

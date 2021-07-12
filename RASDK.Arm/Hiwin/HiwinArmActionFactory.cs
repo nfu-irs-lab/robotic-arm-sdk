@@ -1,5 +1,5 @@
 ﻿using System;
-using Basic.Message;
+using RASDK.Basic.Message;
 using RASDK.Arm.Type;
 
 namespace RASDK.Arm.Hiwin

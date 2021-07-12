@@ -7,8 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Basic;
-using Basic.Message;
+using RASDK.Basic;
+using RASDK.Basic.Message;
 
 namespace UI
 {

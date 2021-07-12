@@ -60,17 +60,17 @@
         <Reference Include="System.Data"/>
         <Reference Include="System.Net.Http"/>
         <Reference Include="System.Xml"/>
-  </ItemGroup>
+    </ItemGroup>
   <ItemGroup>
     <Compile Include="GripperController.cs" />
     <Compile Include="IGripperController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Basic\Basic.csproj">
-      <Project>{cd68c0c8-e211-4ecc-93ec-ece9054777a3}</Project>
-      <Name>Basic</Name>
-    </ProjectReference>
+      <ProjectReference Include="..\RASDK.Basic\RASDK.Basic.csproj">
+          <Project>{cd68c0c8-e211-4ecc-93ec-ece9054777a3}</Project>
+          <Name>RASDK.Basic</Name>
+      </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

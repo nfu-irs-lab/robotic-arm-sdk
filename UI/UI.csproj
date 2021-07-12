@@ -90,10 +90,10 @@
           <Project>{b3e315f9-6979-4acd-a1a5-2fa0bbecfeab}</Project>
           <Name>RASDK.Arm</Name>
       </ProjectReference>
-    <ProjectReference Include="..\Basic\Basic.csproj">
-      <Project>{cd68c0c8-e211-4ecc-93ec-ece9054777a3}</Project>
-      <Name>Basic</Name>
-    </ProjectReference>
+      <ProjectReference Include="..\RASDK.Basic\RASDK.Basic.csproj">
+          <Project>{cd68c0c8-e211-4ecc-93ec-ece9054777a3}</Project>
+          <Name>RASDK.Basic</Name>
+      </ProjectReference>
     <ProjectReference Include="..\Gripper\Gripper.csproj">
       <Project>{7b304b62-73e6-4c9a-ab7a-e118c6905b4e}</Project>
       <Name>Gripper</Name>

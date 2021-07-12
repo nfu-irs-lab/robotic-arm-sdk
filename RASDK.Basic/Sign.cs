@@ -1,4 +1,4 @@
-﻿namespace Basic
+﻿namespace RASDK.Basic
 {
     public enum Sign
     {

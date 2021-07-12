@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31205.134
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Basic", "Basic\Basic.csproj", "{CD68C0C8-E211-4ECC-93EC-ECE9054777A3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RASDK.Basic", "RASDK.Basic\RASDK.Basic.csproj", "{CD68C0C8-E211-4ECC-93EC-ECE9054777A3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gripper", "Gripper\Gripper.csproj", "{7B304B62-73E6-4C9A-AB7A-E118C6905B4E}"
 EndProject

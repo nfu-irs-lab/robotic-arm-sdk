@@ -12,8 +12,8 @@ using System;
 using System.Threading;
 using System.Windows.Forms;
 using SDKHrobot;
-using Basic;
-using Basic.Message;
+using RASDK.Basic;
+using RASDK.Basic.Message;
 
 namespace RASDK.Arm.Hiwin
 {

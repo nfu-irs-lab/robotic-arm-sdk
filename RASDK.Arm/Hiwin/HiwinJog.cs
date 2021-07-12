@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Text.RegularExpressions;
-using Basic.Message;
+using RASDK.Basic.Message;
 using SDKHrobot;
 
 namespace RASDK.Arm.Hiwin

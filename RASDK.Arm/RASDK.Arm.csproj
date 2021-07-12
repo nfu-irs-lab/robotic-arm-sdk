@@ -107,10 +107,10 @@
         <Compile Include="Type\SmoothType.cs"/>
     </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Basic\Basic.csproj">
-      <Project>{cd68c0c8-e211-4ecc-93ec-ece9054777a3}</Project>
-      <Name>Basic</Name>
-    </ProjectReference>
+      <ProjectReference Include="..\RASDK.Basic\RASDK.Basic.csproj">
+          <Project>{cd68c0c8-e211-4ecc-93ec-ece9054777a3}</Project>
+          <Name>RASDK.Basic</Name>
+      </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

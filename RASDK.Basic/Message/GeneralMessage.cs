@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Basic.Message
+namespace RASDK.Basic.Message
 {
     /// <summary>
     /// 顯示訊息及記錄 Log 檔案的訊息處理實作。

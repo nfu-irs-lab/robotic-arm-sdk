@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Basic.Message
+namespace RASDK.Basic.Message
 {
     /// <summary>
     /// 不執行任何動作的訊息處理實作。
