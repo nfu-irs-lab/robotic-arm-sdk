@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace Vision.IDS
+namespace RASDK.Vision.IDS
 {
     public partial class CameraControl : IControl
     {
@@ -221,8 +221,8 @@ namespace Vision.IDS
                 Double dValue = range.Minimum + trackBarExposure.Value * range.Increment;
 
                 // update numeric
-                numericUpDownExposure.Value = Convert.ToDecimal(dValue > range.Maximum ?
-                    Convert.ToDecimal(range.Maximum) : Convert.ToDecimal(dValue));
+                numericUpDownExposure.Value =
+                    Convert.ToDecimal(dValue > range.Maximum ? Convert.ToDecimal(range.Maximum) : Convert.ToDecimal(dValue));
 
                 // set exposure
                 statusRet = m_Camera.Timing.Exposure.Set(dValue);
@@ -308,7 +308,9 @@ namespace Vision.IDS
 
             Double dValue;
             statusRet = m_Camera.Timing.Exposure.Get(out dValue);
-            numericUpDownExposure.Value = Convert.ToDecimal(dValue) > numericUpDownExposure.Maximum ? numericUpDownExposure.Maximum : Convert.ToDecimal(dValue);
+            numericUpDownExposure.Value = Convert.ToDecimal(dValue) > numericUpDownExposure.Maximum
+                ? numericUpDownExposure.Maximum
+                : Convert.ToDecimal(dValue);
 
             Int32 s32Value = Convert.ToInt32((dValue - range.Minimum) / range.Increment + 0.0005);
             trackBarExposure.Value = s32Value > trackBarExposure.Maximum ? trackBarExposure.Maximum : s32Value;

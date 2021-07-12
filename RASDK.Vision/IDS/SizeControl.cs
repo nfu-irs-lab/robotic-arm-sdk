@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace Vision.IDS
+namespace RASDK.Vision.IDS
 {
     public partial class SizeControl : IControl
     {
@@ -26,8 +26,7 @@ namespace Vision.IDS
         }
 
         public override void OnControlFocusLost()
-        {
-        }
+        { }
 
         private void checkBoxFormatMirrorLeftRight_CheckedChanged(object sender, EventArgs e)
         {

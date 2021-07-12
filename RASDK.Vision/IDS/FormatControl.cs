@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace Vision.IDS
+namespace RASDK.Vision.IDS
 {
     public partial class FormatControl : IControl
     {
@@ -31,8 +31,7 @@ namespace Vision.IDS
         }
 
         public override void OnControlFocusLost()
-        {
-        }
+        { }
 
         private void InitPixelformat()
         {
@@ -68,38 +67,62 @@ namespace Vision.IDS
             }
             else if (sensorInfo.SensorColorMode == uEye.Defines.SensorColorMode.Bayer)
             {
-                radioButtonGray8Normal.Enabled = isColorModeSupported(uEye.Defines.ColorMode.Mono8, uEye.Defines.ColorConvertMode.Software3X3);
-                radioButtonGray8High.Enabled = isColorModeSupported(uEye.Defines.ColorMode.Mono8, uEye.Defines.ColorConvertMode.Software5X5);
-                radioButtonGray8Hardware.Enabled = isColorModeSupported(uEye.Defines.ColorMode.Mono8, uEye.Defines.ColorConvertMode.Hardware3X3);
+                radioButtonGray8Normal.Enabled =
+                    isColorModeSupported(uEye.Defines.ColorMode.Mono8, uEye.Defines.ColorConvertMode.Software3X3);
+                radioButtonGray8High.Enabled =
+                    isColorModeSupported(uEye.Defines.ColorMode.Mono8, uEye.Defines.ColorConvertMode.Software5X5);
+                radioButtonGray8Hardware.Enabled =
+                    isColorModeSupported(uEye.Defines.ColorMode.Mono8, uEye.Defines.ColorConvertMode.Hardware3X3);
 
-                radioButtonGray12Normal.Enabled = isColorModeSupported(uEye.Defines.ColorMode.Mono12, uEye.Defines.ColorConvertMode.Software3X3);
-                radioButtonGray12High.Enabled = isColorModeSupported(uEye.Defines.ColorMode.Mono12, uEye.Defines.ColorConvertMode.Software5X5);
-                radioButtonGray12Hardware.Enabled = isColorModeSupported(uEye.Defines.ColorMode.Mono12, uEye.Defines.ColorConvertMode.Hardware3X3);
+                radioButtonGray12Normal.Enabled =
+                    isColorModeSupported(uEye.Defines.ColorMode.Mono12, uEye.Defines.ColorConvertMode.Software3X3);
+                radioButtonGray12High.Enabled =
+                    isColorModeSupported(uEye.Defines.ColorMode.Mono12, uEye.Defines.ColorConvertMode.Software5X5);
+                radioButtonGray12Hardware.Enabled =
+                    isColorModeSupported(uEye.Defines.ColorMode.Mono12, uEye.Defines.ColorConvertMode.Hardware3X3);
 
-                radioButtonGray16Normal.Enabled = isColorModeSupported(uEye.Defines.ColorMode.Mono16, uEye.Defines.ColorConvertMode.Software3X3);
-                radioButtonGray16High.Enabled = isColorModeSupported(uEye.Defines.ColorMode.Mono16, uEye.Defines.ColorConvertMode.Software5X5);
-                radioButtonGray16Hardware.Enabled = isColorModeSupported(uEye.Defines.ColorMode.Mono16, uEye.Defines.ColorConvertMode.Hardware3X3);
+                radioButtonGray16Normal.Enabled =
+                    isColorModeSupported(uEye.Defines.ColorMode.Mono16, uEye.Defines.ColorConvertMode.Software3X3);
+                radioButtonGray16High.Enabled =
+                    isColorModeSupported(uEye.Defines.ColorMode.Mono16, uEye.Defines.ColorConvertMode.Software5X5);
+                radioButtonGray16Hardware.Enabled =
+                    isColorModeSupported(uEye.Defines.ColorMode.Mono16, uEye.Defines.ColorConvertMode.Hardware3X3);
             }
 
-            radioButtonRaw8Normal.Enabled = isColorModeSupported(uEye.Defines.ColorMode.SensorRaw8, uEye.Defines.ColorConvertMode.Software3X3);
-            radioButtonRaw8High.Enabled = isColorModeSupported(uEye.Defines.ColorMode.SensorRaw8, uEye.Defines.ColorConvertMode.Software5X5);
-            radioButtonGray8Hardware.Enabled = isColorModeSupported(uEye.Defines.ColorMode.SensorRaw8, uEye.Defines.ColorConvertMode.Hardware3X3);
+            radioButtonRaw8Normal.Enabled =
+                isColorModeSupported(uEye.Defines.ColorMode.SensorRaw8, uEye.Defines.ColorConvertMode.Software3X3);
+            radioButtonRaw8High.Enabled =
+                isColorModeSupported(uEye.Defines.ColorMode.SensorRaw8, uEye.Defines.ColorConvertMode.Software5X5);
+            radioButtonGray8Hardware.Enabled =
+                isColorModeSupported(uEye.Defines.ColorMode.SensorRaw8, uEye.Defines.ColorConvertMode.Hardware3X3);
 
-            radioButtonRaw12Normal.Enabled = isColorModeSupported(uEye.Defines.ColorMode.SensorRaw12, uEye.Defines.ColorConvertMode.Software3X3);
-            radioButtonRaw12High.Enabled = isColorModeSupported(uEye.Defines.ColorMode.SensorRaw12, uEye.Defines.ColorConvertMode.Software5X5);
-            radioButtonRaw12Hardware.Enabled = isColorModeSupported(uEye.Defines.ColorMode.SensorRaw12, uEye.Defines.ColorConvertMode.Hardware3X3);
+            radioButtonRaw12Normal.Enabled =
+                isColorModeSupported(uEye.Defines.ColorMode.SensorRaw12, uEye.Defines.ColorConvertMode.Software3X3);
+            radioButtonRaw12High.Enabled =
+                isColorModeSupported(uEye.Defines.ColorMode.SensorRaw12, uEye.Defines.ColorConvertMode.Software5X5);
+            radioButtonRaw12Hardware.Enabled =
+                isColorModeSupported(uEye.Defines.ColorMode.SensorRaw12, uEye.Defines.ColorConvertMode.Hardware3X3);
 
-            radioButtonRaw16Normal.Enabled = isColorModeSupported(uEye.Defines.ColorMode.SensorRaw16, uEye.Defines.ColorConvertMode.Software3X3);
-            radioButtonRaw16High.Enabled = isColorModeSupported(uEye.Defines.ColorMode.SensorRaw16, uEye.Defines.ColorConvertMode.Software5X5);
-            radioButtonRaw16Hardware.Enabled = isColorModeSupported(uEye.Defines.ColorMode.SensorRaw16, uEye.Defines.ColorConvertMode.Hardware3X3);
+            radioButtonRaw16Normal.Enabled =
+                isColorModeSupported(uEye.Defines.ColorMode.SensorRaw16, uEye.Defines.ColorConvertMode.Software3X3);
+            radioButtonRaw16High.Enabled =
+                isColorModeSupported(uEye.Defines.ColorMode.SensorRaw16, uEye.Defines.ColorConvertMode.Software5X5);
+            radioButtonRaw16Hardware.Enabled =
+                isColorModeSupported(uEye.Defines.ColorMode.SensorRaw16, uEye.Defines.ColorConvertMode.Hardware3X3);
 
-            radioButtonRGB24Normal.Enabled = isColorModeSupported(uEye.Defines.ColorMode.RGB8Packed, uEye.Defines.ColorConvertMode.Software3X3);
-            radioButtonRGB24High.Enabled = isColorModeSupported(uEye.Defines.ColorMode.RGB8Packed, uEye.Defines.ColorConvertMode.Software5X5);
-            radioButtonRGB24Hardware.Enabled = isColorModeSupported(uEye.Defines.ColorMode.RGB8Packed, uEye.Defines.ColorConvertMode.Hardware3X3);
+            radioButtonRGB24Normal.Enabled =
+                isColorModeSupported(uEye.Defines.ColorMode.RGB8Packed, uEye.Defines.ColorConvertMode.Software3X3);
+            radioButtonRGB24High.Enabled =
+                isColorModeSupported(uEye.Defines.ColorMode.RGB8Packed, uEye.Defines.ColorConvertMode.Software5X5);
+            radioButtonRGB24Hardware.Enabled =
+                isColorModeSupported(uEye.Defines.ColorMode.RGB8Packed, uEye.Defines.ColorConvertMode.Hardware3X3);
 
-            radioButtonRGB32Normal.Enabled = isColorModeSupported(uEye.Defines.ColorMode.RGBA8Packed, uEye.Defines.ColorConvertMode.Software3X3);
-            radioButtonRGB32High.Enabled = isColorModeSupported(uEye.Defines.ColorMode.RGBA8Packed, uEye.Defines.ColorConvertMode.Software5X5);
-            radioButtonRGB32Hardware.Enabled = isColorModeSupported(uEye.Defines.ColorMode.RGBA8Packed, uEye.Defines.ColorConvertMode.Hardware3X3);
+            radioButtonRGB32Normal.Enabled =
+                isColorModeSupported(uEye.Defines.ColorMode.RGBA8Packed, uEye.Defines.ColorConvertMode.Software3X3);
+            radioButtonRGB32High.Enabled =
+                isColorModeSupported(uEye.Defines.ColorMode.RGBA8Packed, uEye.Defines.ColorConvertMode.Software5X5);
+            radioButtonRGB32Hardware.Enabled =
+                isColorModeSupported(uEye.Defines.ColorMode.RGBA8Packed, uEye.Defines.ColorConvertMode.Hardware3X3);
 
             // select active
             uEye.Defines.ColorMode colorMode;
@@ -108,37 +131,61 @@ namespace Vision.IDS
             statusRet = m_Camera.PixelFormat.Get(out colorMode);
             statusRet = m_Camera.Color.Converter.Get(colorMode, out convertMode);
 
-            radioButtonGray8Normal.Checked = colorMode == uEye.Defines.ColorMode.Mono8 && convertMode == uEye.Defines.ColorConvertMode.Software3X3;
-            radioButtonGray8High.Checked = colorMode == uEye.Defines.ColorMode.Mono8 && convertMode == uEye.Defines.ColorConvertMode.Software5X5;
-            radioButtonGray8Hardware.Checked = colorMode == uEye.Defines.ColorMode.Mono8 && convertMode == uEye.Defines.ColorConvertMode.Hardware3X3;
+            radioButtonGray8Normal.Checked =
+                colorMode == uEye.Defines.ColorMode.Mono8 && convertMode == uEye.Defines.ColorConvertMode.Software3X3;
+            radioButtonGray8High.Checked =
+                colorMode == uEye.Defines.ColorMode.Mono8 && convertMode == uEye.Defines.ColorConvertMode.Software5X5;
+            radioButtonGray8Hardware.Checked =
+                colorMode == uEye.Defines.ColorMode.Mono8 && convertMode == uEye.Defines.ColorConvertMode.Hardware3X3;
 
-            radioButtonGray12Normal.Checked = colorMode == uEye.Defines.ColorMode.Mono12 && convertMode == uEye.Defines.ColorConvertMode.Software3X3;
-            radioButtonGray12High.Checked = colorMode == uEye.Defines.ColorMode.Mono12 && convertMode == uEye.Defines.ColorConvertMode.Software5X5;
-            radioButtonGray12Hardware.Checked = colorMode == uEye.Defines.ColorMode.Mono12 && convertMode == uEye.Defines.ColorConvertMode.Hardware3X3;
+            radioButtonGray12Normal.Checked =
+                colorMode == uEye.Defines.ColorMode.Mono12 && convertMode == uEye.Defines.ColorConvertMode.Software3X3;
+            radioButtonGray12High.Checked =
+                colorMode == uEye.Defines.ColorMode.Mono12 && convertMode == uEye.Defines.ColorConvertMode.Software5X5;
+            radioButtonGray12Hardware.Checked =
+                colorMode == uEye.Defines.ColorMode.Mono12 && convertMode == uEye.Defines.ColorConvertMode.Hardware3X3;
 
-            radioButtonGray16Normal.Checked = colorMode == uEye.Defines.ColorMode.Mono16 && convertMode == uEye.Defines.ColorConvertMode.Software3X3;
-            radioButtonGray16High.Checked = colorMode == uEye.Defines.ColorMode.Mono16 && convertMode == uEye.Defines.ColorConvertMode.Software5X5;
-            radioButtonGray16Hardware.Checked = colorMode == uEye.Defines.ColorMode.Mono16 && convertMode == uEye.Defines.ColorConvertMode.Hardware3X3;
+            radioButtonGray16Normal.Checked =
+                colorMode == uEye.Defines.ColorMode.Mono16 && convertMode == uEye.Defines.ColorConvertMode.Software3X3;
+            radioButtonGray16High.Checked =
+                colorMode == uEye.Defines.ColorMode.Mono16 && convertMode == uEye.Defines.ColorConvertMode.Software5X5;
+            radioButtonGray16Hardware.Checked =
+                colorMode == uEye.Defines.ColorMode.Mono16 && convertMode == uEye.Defines.ColorConvertMode.Hardware3X3;
 
-            radioButtonRaw8Normal.Checked = colorMode == uEye.Defines.ColorMode.SensorRaw8 && convertMode == uEye.Defines.ColorConvertMode.Software3X3;
-            radioButtonRaw8High.Checked = colorMode == uEye.Defines.ColorMode.SensorRaw8 && convertMode == uEye.Defines.ColorConvertMode.Software5X5;
-            radioButtonRaw8Hardware.Checked = colorMode == uEye.Defines.ColorMode.SensorRaw8 && convertMode == uEye.Defines.ColorConvertMode.Hardware3X3;
+            radioButtonRaw8Normal.Checked = colorMode == uEye.Defines.ColorMode.SensorRaw8 &&
+                                            convertMode == uEye.Defines.ColorConvertMode.Software3X3;
+            radioButtonRaw8High.Checked = colorMode == uEye.Defines.ColorMode.SensorRaw8 &&
+                                          convertMode == uEye.Defines.ColorConvertMode.Software5X5;
+            radioButtonRaw8Hardware.Checked = colorMode == uEye.Defines.ColorMode.SensorRaw8 &&
+                                              convertMode == uEye.Defines.ColorConvertMode.Hardware3X3;
 
-            radioButtonRaw12Normal.Checked = colorMode == uEye.Defines.ColorMode.SensorRaw12 && convertMode == uEye.Defines.ColorConvertMode.Software3X3;
-            radioButtonRaw12High.Checked = colorMode == uEye.Defines.ColorMode.SensorRaw12 && convertMode == uEye.Defines.ColorConvertMode.Software5X5;
-            radioButtonRaw12Hardware.Checked = colorMode == uEye.Defines.ColorMode.SensorRaw12 && convertMode == uEye.Defines.ColorConvertMode.Hardware3X3;
+            radioButtonRaw12Normal.Checked = colorMode == uEye.Defines.ColorMode.SensorRaw12 &&
+                                             convertMode == uEye.Defines.ColorConvertMode.Software3X3;
+            radioButtonRaw12High.Checked = colorMode == uEye.Defines.ColorMode.SensorRaw12 &&
+                                           convertMode == uEye.Defines.ColorConvertMode.Software5X5;
+            radioButtonRaw12Hardware.Checked = colorMode == uEye.Defines.ColorMode.SensorRaw12 &&
+                                               convertMode == uEye.Defines.ColorConvertMode.Hardware3X3;
 
-            radioButtonRaw16Normal.Checked = colorMode == uEye.Defines.ColorMode.SensorRaw16 && convertMode == uEye.Defines.ColorConvertMode.Software3X3;
-            radioButtonRaw16High.Checked = colorMode == uEye.Defines.ColorMode.SensorRaw16 && convertMode == uEye.Defines.ColorConvertMode.Software5X5;
-            radioButtonRaw16Hardware.Checked = colorMode == uEye.Defines.ColorMode.SensorRaw16 && convertMode == uEye.Defines.ColorConvertMode.Hardware3X3;
+            radioButtonRaw16Normal.Checked = colorMode == uEye.Defines.ColorMode.SensorRaw16 &&
+                                             convertMode == uEye.Defines.ColorConvertMode.Software3X3;
+            radioButtonRaw16High.Checked = colorMode == uEye.Defines.ColorMode.SensorRaw16 &&
+                                           convertMode == uEye.Defines.ColorConvertMode.Software5X5;
+            radioButtonRaw16Hardware.Checked = colorMode == uEye.Defines.ColorMode.SensorRaw16 &&
+                                               convertMode == uEye.Defines.ColorConvertMode.Hardware3X3;
 
-            radioButtonRGB24Normal.Checked = colorMode == uEye.Defines.ColorMode.BGR8Packed && convertMode == uEye.Defines.ColorConvertMode.Software3X3;
-            radioButtonRGB24High.Checked = colorMode == uEye.Defines.ColorMode.BGR8Packed && convertMode == uEye.Defines.ColorConvertMode.Software5X5;
-            radioButtonRGB24Hardware.Checked = colorMode == uEye.Defines.ColorMode.BGR8Packed && convertMode == uEye.Defines.ColorConvertMode.Hardware3X3;
+            radioButtonRGB24Normal.Checked = colorMode == uEye.Defines.ColorMode.BGR8Packed &&
+                                             convertMode == uEye.Defines.ColorConvertMode.Software3X3;
+            radioButtonRGB24High.Checked = colorMode == uEye.Defines.ColorMode.BGR8Packed &&
+                                           convertMode == uEye.Defines.ColorConvertMode.Software5X5;
+            radioButtonRGB24Hardware.Checked = colorMode == uEye.Defines.ColorMode.BGR8Packed &&
+                                               convertMode == uEye.Defines.ColorConvertMode.Hardware3X3;
 
-            radioButtonRGB32Normal.Checked = colorMode == uEye.Defines.ColorMode.BGRA8Packed && convertMode == uEye.Defines.ColorConvertMode.Software3X3;
-            radioButtonRGB32High.Checked = colorMode == uEye.Defines.ColorMode.BGRA8Packed && convertMode == uEye.Defines.ColorConvertMode.Software5X5;
-            radioButtonRGB32Hardware.Checked = colorMode == uEye.Defines.ColorMode.BGRA8Packed && convertMode == uEye.Defines.ColorConvertMode.Hardware3X3;
+            radioButtonRGB32Normal.Checked = colorMode == uEye.Defines.ColorMode.BGRA8Packed &&
+                                             convertMode == uEye.Defines.ColorConvertMode.Software3X3;
+            radioButtonRGB32High.Checked = colorMode == uEye.Defines.ColorMode.BGRA8Packed &&
+                                           convertMode == uEye.Defines.ColorConvertMode.Software5X5;
+            radioButtonRGB32Hardware.Checked = colorMode == uEye.Defines.ColorMode.BGRA8Packed &&
+                                               convertMode == uEye.Defines.ColorConvertMode.Hardware3X3;
         }
 
         private Boolean isColorModeSupported(uEye.Defines.ColorMode colorMode, uEye.Defines.ColorConvertMode colorConvertMode)

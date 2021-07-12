@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace Vision.IDS
+namespace RASDK.Vision.IDS
 {
     public class ListViewControlItem : ListViewItem
     {
@@ -33,18 +33,12 @@ namespace Vision.IDS
 
         public FormatControl FormatControl
         {
-            get
-            {
-                return m_FormatControl;
-            }
+            get { return m_FormatControl; }
         }
 
         public SizeControl SizeControl
         {
-            get
-            {
-                return m_SizeControl;
-            }
+            get { return m_SizeControl; }
         }
 
         private void InitSettingsList()

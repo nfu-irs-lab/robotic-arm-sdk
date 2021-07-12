@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Vision
+namespace RASDK.Vision
 {
     public class CameraParameter
     {
@@ -63,12 +63,12 @@ namespace Vision
         public double[] TranslationVectors = new double[3];
 
         public CameraParameter(double cx,
-                                       double cy,
-                                       double fx,
-                                       double fy,
-                                       double skew,
-                                       double[] rotationVectors,
-                                       double[] translationVectors)
+                               double cy,
+                               double fx,
+                               double fy,
+                               double skew,
+                               double[] rotationVectors,
+                               double[] translationVectors)
         {
             Cx = cx;
             Cy = cy;

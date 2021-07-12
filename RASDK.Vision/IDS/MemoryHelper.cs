@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 
-namespace Vision.IDS
+namespace RASDK.Vision.IDS
 {
     public static class MemoryHelper
     {

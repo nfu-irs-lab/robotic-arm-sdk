@@ -14,7 +14,7 @@ using uEye.Defines;
 using uEye.Types;
 using DisplayMode = uEye.Defines.DisplayMode;
 
-namespace Vision.IDS
+namespace RASDK.Vision.IDS
 {
     public class IDSCamera : IDevice
     {

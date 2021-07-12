@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace Vision.IDS
+namespace RASDK.Vision.IDS
 {
     public partial class CameraChoose : Form
     {

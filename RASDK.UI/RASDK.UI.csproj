@@ -98,10 +98,10 @@
           <Project>{7b304b62-73e6-4c9a-ab7a-e118c6905b4e}</Project>
           <Name>RASDK.Gripper</Name>
       </ProjectReference>
-    <ProjectReference Include="..\Vision\Vision.csproj">
-      <Project>{f684f835-3e60-44c1-a3fe-410e95d42657}</Project>
-      <Name>Vision</Name>
-    </ProjectReference>
+      <ProjectReference Include="..\RASDK.Vision\RASDK.Vision.csproj">
+          <Project>{f684f835-3e60-44c1-a3fe-410e95d42657}</Project>
+          <Name>RASDK.Vision</Name>
+      </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

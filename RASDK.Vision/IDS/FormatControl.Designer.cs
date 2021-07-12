@@ -1,4 +1,4 @@
-﻿namespace Vision.IDS
+﻿namespace RASDK.Vision.IDS
 {
     partial class FormatControl
     {

@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Vision.Positioning
+namespace RASDK.Vision.Positioning
 {
     /// <summary>
-    /// Vision positioning interface.
+    /// RASDK.Vision positioning interface.
     /// </summary>
     public interface IVisionPositioning
     {

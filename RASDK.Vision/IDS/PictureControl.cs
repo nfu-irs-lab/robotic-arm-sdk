@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace Vision.IDS
+namespace RASDK.Vision.IDS
 {
     public partial class PictureControl : IControl
     {
@@ -33,10 +33,8 @@ namespace Vision.IDS
 
             if (activeMode != uEye.Defines.ActivateMode.Disable)
             {
-                radioButtonWhitebalanceOnce.Checked = (activeMode & uEye.Defines.ActivateMode.Enable)
-                    == uEye.Defines.ActivateMode.Enable;
-                radioButtonWhitebalanceAuto.Checked = (activeMode & uEye.Defines.ActivateMode.Once)
-                    == uEye.Defines.ActivateMode.Once;
+                radioButtonWhitebalanceOnce.Checked = (activeMode & uEye.Defines.ActivateMode.Enable) == uEye.Defines.ActivateMode.Enable;
+                radioButtonWhitebalanceAuto.Checked = (activeMode & uEye.Defines.ActivateMode.Once) == uEye.Defines.ActivateMode.Once;
             }
             else
             {
@@ -267,8 +265,10 @@ namespace Vision.IDS
         private void UpdateGainControls()
         {
             Boolean isRedSupported, isBlueSupported, isGreenSupported, isMasterSupported;
-            m_Camera.Gain.Hardware.GetSupported(out isMasterSupported, out isRedSupported,
-                                                out isGreenSupported, out isBlueSupported);
+            m_Camera.Gain.Hardware.GetSupported(out isMasterSupported,
+                                                out isRedSupported,
+                                                out isGreenSupported,
+                                                out isBlueSupported);
 
             trackBarGainBlue.Enabled = numericUpDownGainBlue.Enabled = isBlueSupported;
             trackBarGainGreen.Enabled = numericUpDownGainGreen.Enabled = isGreenSupported;

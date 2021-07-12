@@ -7,10 +7,10 @@ using Emgu.CV;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
 
-namespace Vision.Positioning
+namespace RASDK.Vision.Positioning
 {
     /// <summary>
-    /// Vision positioning by Camera Calibration with Negative Feedback.<br/>
+    /// RASDK.Vision positioning by Camera Calibration with Negative Feedback.<br/>
     /// 負回授相機標定視覺定位法。
     /// </summary>
     public class CCNF : IVisionPositioning
@@ -22,7 +22,7 @@ namespace Vision.Positioning
         private readonly CameraParameter _cameraParameter;
 
         /// <summary>
-        /// Vision positioning by Camera Calibration with Negative Feedback.<br/>
+        /// RASDK.Vision positioning by Camera Calibration with Negative Feedback.<br/>
         /// 負回授相機標定視覺定位法。
         /// </summary>
         /// <remarks>

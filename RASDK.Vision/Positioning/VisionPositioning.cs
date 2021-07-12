@@ -4,7 +4,7 @@ using Emgu.CV;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
 
-namespace Vision.Positioning
+namespace RASDK.Vision.Positioning
 {
     // public class VisionPositioning
     // {

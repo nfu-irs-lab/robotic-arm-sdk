@@ -4,15 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace Vision.IDS
+namespace RASDK.Vision.IDS
 {
     public class IControl : UserControl
     {
         protected uEye.Camera m_Camera;
 
         public IControl()
-        {
-        }
+        { }
 
         public IControl(uEye.Camera camera)
         {
@@ -20,12 +19,10 @@ namespace Vision.IDS
         }
 
         public virtual void OnControlFocusActive()
-        {
-        }
+        { }
 
         public virtual void OnControlFocusLost()
-        {
-        }
+        { }
 
         public void SetCameraObject(uEye.Camera camera)
         {

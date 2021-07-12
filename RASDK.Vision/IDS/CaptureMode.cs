@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Vision.IDS
+namespace RASDK.Vision.IDS
 {
     public enum CaptureMode
     {
