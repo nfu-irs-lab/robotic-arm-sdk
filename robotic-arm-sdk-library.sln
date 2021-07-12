@@ -13,7 +13,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RASDK.Arm", "RASDK.Arm\RASD
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RASDK.UI", "RASDK.UI\RASDK.UI.csproj", "{70139FBA-9A62-49C0-B9EC-F593328D59E3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arm.TestForms", "Arm.TestForms\Arm.TestForms.csproj", "{3D2A359F-F2ED-457B-8DAE-65D3045533A4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RASDK.Arm.TestForms", "RASDK.Arm.TestForms\RASDK.Arm.TestForms.csproj", "{3D2A359F-F2ED-457B-8DAE-65D3045533A4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

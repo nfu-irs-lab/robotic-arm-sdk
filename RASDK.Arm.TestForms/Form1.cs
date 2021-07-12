@@ -11,7 +11,7 @@ using RASDK.Arm.Hiwin;
 using RASDK.Basic;
 using RASDK.Basic.Message;
 
-namespace Arm.TestForms
+namespace RASDK.Arm.TestForms
 {
     public partial class Form1 : Form
     {
