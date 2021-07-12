@@ -113,6 +113,8 @@ namespace Arm.TestForms
             this.buttonJogXP.TabIndex = 2;
             this.buttonJogXP.Text = "X+";
             this.buttonJogXP.UseVisualStyleBackColor = true;
+            this.buttonJogXP.MouseDown += new System.Windows.Forms.MouseEventHandler(this.buttonJogXP_MouseDown);
+            this.buttonJogXP.MouseUp += new System.Windows.Forms.MouseEventHandler(this.buttonJogXP_MouseUp);
             // 
             // buttonJogXM
             // 
@@ -122,6 +124,8 @@ namespace Arm.TestForms
             this.buttonJogXM.TabIndex = 2;
             this.buttonJogXM.Text = "X-";
             this.buttonJogXM.UseVisualStyleBackColor = true;
+            this.buttonJogXM.MouseDown += new System.Windows.Forms.MouseEventHandler(this.buttonJogXM_MouseDown);
+            this.buttonJogXM.MouseUp += new System.Windows.Forms.MouseEventHandler(this.buttonJogXM_MouseUp);
             // 
             // buttonJogYP
             // 
@@ -142,6 +146,8 @@ namespace Arm.TestForms
             this.buttonJogZM.TabIndex = 2;
             this.buttonJogZM.Text = "Z-";
             this.buttonJogZM.UseVisualStyleBackColor = true;
+            this.buttonJogZM.MouseDown += new System.Windows.Forms.MouseEventHandler(this.buttonJogZM_MouseDown);
+            this.buttonJogZM.MouseUp += new System.Windows.Forms.MouseEventHandler(this.buttonJogZM_MouseUp);
             // 
             // buttonJogYM
             // 
@@ -151,6 +157,8 @@ namespace Arm.TestForms
             this.buttonJogYM.TabIndex = 2;
             this.buttonJogYM.Text = "Y-";
             this.buttonJogYM.UseVisualStyleBackColor = true;
+            this.buttonJogYM.MouseDown += new System.Windows.Forms.MouseEventHandler(this.buttonJogYM_MouseDown);
+            this.buttonJogYM.MouseUp += new System.Windows.Forms.MouseEventHandler(this.buttonJogYM_MouseUp);
             // 
             // buttonJogZP
             // 
@@ -160,6 +168,8 @@ namespace Arm.TestForms
             this.buttonJogZP.TabIndex = 2;
             this.buttonJogZP.Text = "Z+";
             this.buttonJogZP.UseVisualStyleBackColor = true;
+            this.buttonJogZP.MouseDown += new System.Windows.Forms.MouseEventHandler(this.buttonJogZP_MouseDown);
+            this.buttonJogZP.MouseUp += new System.Windows.Forms.MouseEventHandler(this.buttonJogZP_MouseUp);
             // 
             // numericUpDownJogXY
             // 
