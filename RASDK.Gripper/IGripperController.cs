@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using RASDK.Basic;
 
-namespace Gripper
+namespace RASDK.Gripper
 {
     /// <summary>
     /// 夾爪控制介面。

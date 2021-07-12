@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using RASDK.Basic;
 using RASDK.Basic.Message;
 
-namespace Gripper
+namespace RASDK.Gripper
 {
     /// <summary>
     /// 夾爪控制實作。
@@ -104,7 +104,7 @@ namespace Gripper
             }
             catch (Exception ex)
             {
-                Message.Show("Gripper Error.", ex, LoggingLevel.Error);
+                Message.Show("RASDK.Gripper Error.", ex, LoggingLevel.Error);
                 return "";
             }
         }
@@ -151,7 +151,7 @@ namespace Gripper
             }
             catch (Exception ex)
             {
-                Message.Show("Gripper Error.", ex, LoggingLevel.Error);
+                Message.Show("RASDK.Gripper Error.", ex, LoggingLevel.Error);
                 return "";
             }
         }
