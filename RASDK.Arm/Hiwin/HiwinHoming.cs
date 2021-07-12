@@ -18,11 +18,11 @@ namespace RASDK.Arm.Hiwin
             int retuenCode;
             switch (coordinateType)
             {
-                case base.CoordinateType.Descartes:
+                case CoordinateType.Descartes:
                     retuenCode = HRobot.ptp_pos(_id, 0, Default.DescartesHomePosition);
                     break;
 
-                case base.CoordinateType.Joint:
+                case CoordinateType.Joint:
                     retuenCode = HRobot.ptp_axis(_id, 0, Default.JointHomePosition);
                     break;
 

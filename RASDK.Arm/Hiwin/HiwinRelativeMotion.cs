@@ -27,26 +27,26 @@ namespace RASDK.Arm.Hiwin
             int returnCode = 0;
             switch (CoordinateType)
             {
-                case CoordinateType.Descartes when MotionType == base.MotionType.PointToPoint:
+                case CoordinateType.Descartes when MotionType == MotionType.PointToPoint:
                     returnCode = HRobot.ptp_rel_pos(_id,
                                                     _smoothTypeCode,
                                                     _position);
                     break;
 
-                case base.CoordinateType.Descartes when MotionType == base.MotionType.Linear:
+                case CoordinateType.Descartes when MotionType == MotionType.Linear:
                     returnCode = HRobot.lin_rel_pos(_id,
                                                     _smoothTypeCode,
                                                     SmoothValue,
                                                     _position);
                     break;
 
-                case base.CoordinateType.Joint when MotionType == base.MotionType.PointToPoint:
+                case CoordinateType.Joint when MotionType == MotionType.PointToPoint:
                     returnCode = HRobot.ptp_rel_axis(_id,
                                                      _smoothTypeCode,
                                                      _position);
                     break;
 
-                case base.CoordinateType.Joint when MotionType == base.MotionType.Linear:
+                case CoordinateType.Joint when MotionType == MotionType.Linear:
                     returnCode = HRobot.lin_rel_axis(_id,
                                                      _smoothTypeCode,
                                                      SmoothValue,

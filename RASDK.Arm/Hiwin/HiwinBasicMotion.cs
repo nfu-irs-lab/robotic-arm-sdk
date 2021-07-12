@@ -6,8 +6,8 @@ namespace RASDK.Arm.Hiwin
 {
     public abstract class HiwinBasicMotion : HiwinBasicAction
     {
-        public CoordinateType CoordinateType = this.CoordinateType.Descartes;
-        public MotionType MotionType = this.MotionType.PointToPoint;
+        public CoordinateType CoordinateType = CoordinateType.Descartes;
+        public MotionType MotionType = MotionType.PointToPoint;
         public bool NeedWait = true;
         public int SmoothValue = 50;
         protected double[] _position;
@@ -54,12 +54,12 @@ namespace RASDK.Arm.Hiwin
                 SmoothType type = SmoothType.Disable;
                 switch (MotionType)
                 {
-                    case this.MotionType.Circle:
-                    case this.MotionType.PointToPoint:
+                    case MotionType.Circle:
+                    case MotionType.PointToPoint:
                         type = (_smoothTypeCode == 1) ? SmoothType.TwoLinesSpeedSmooth : SmoothType.Disable;
                         break;
 
-                    case this.MotionType.Linear:
+                    case MotionType.Linear:
                         type = SmoothType;
                         break;
                 }
@@ -70,12 +70,12 @@ namespace RASDK.Arm.Hiwin
             {
                 switch (MotionType)
                 {
-                    case this.MotionType.Circle:
-                    case this.MotionType.PointToPoint:
+                    case MotionType.Circle:
+                    case MotionType.PointToPoint:
                         _smoothTypeCode = (value == SmoothType.TwoLinesSpeedSmooth) ? 1 : 0;
                         break;
 
-                    case this.MotionType.Linear:
+                    case MotionType.Linear:
                         _smoothTypeCode = (int)value;
                         break;
 
