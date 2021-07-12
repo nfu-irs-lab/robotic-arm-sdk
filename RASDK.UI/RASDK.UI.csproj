@@ -12,16 +12,16 @@
       <FileAlignment>512</FileAlignment>
       <Deterministic>true</Deterministic>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-      <DocumentationFile>bin\Debug\UI.xml</DocumentationFile>
-  </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+        <DebugSymbols>true</DebugSymbols>
+        <DebugType>full</DebugType>
+        <Optimize>false</Optimize>
+        <OutputPath>bin\Debug\</OutputPath>
+        <DefineConstants>DEBUG;TRACE</DefineConstants>
+        <ErrorReport>prompt</ErrorReport>
+        <WarningLevel>4</WarningLevel>
+        <DocumentationFile>bin\Debug\RASDK.UI.xml</DocumentationFile>
+    </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
         <DebugType>pdbonly</DebugType>
         <Optimize>true</Optimize>
@@ -61,16 +61,16 @@
         <Reference Include="System.Windows.Forms"/>
         <Reference Include="System.Xml"/>
     </ItemGroup>
-  <ItemGroup>
-    <Compile Include="BasicArmController.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="BasicArmController.Designer.cs">
-      <DependentUpon>BasicArmController.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ConnectionButton.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <ItemGroup>
+        <Compile Include="BasicArmController.cs">
+            <SubType>UserControl</SubType>
+        </Compile>
+        <Compile Include="BasicArmController.Designer.cs">
+            <DependentUpon>BasicArmController.cs</DependentUpon>
+        </Compile>
+        <Compile Include="ConnectionButton.cs">
+            <SubType>UserControl</SubType>
+        </Compile>
     <Compile Include="ConnectionButton.Designer.cs">
       <DependentUpon>ConnectionButton.cs</DependentUpon>
     </Compile>
@@ -85,23 +85,23 @@
       <DependentUpon>ConnectionButton.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup>
-      <ProjectReference Include="..\RASDK.Arm\RASDK.Arm.csproj">
-          <Project>{b3e315f9-6979-4acd-a1a5-2fa0bbecfeab}</Project>
-          <Name>RASDK.Arm</Name>
-      </ProjectReference>
-      <ProjectReference Include="..\RASDK.Basic\RASDK.Basic.csproj">
-          <Project>{cd68c0c8-e211-4ecc-93ec-ece9054777a3}</Project>
-          <Name>RASDK.Basic</Name>
-      </ProjectReference>
-      <ProjectReference Include="..\RASDK.Gripper\RASDK.Gripper.csproj">
-          <Project>{7b304b62-73e6-4c9a-ab7a-e118c6905b4e}</Project>
-          <Name>RASDK.Gripper</Name>
-      </ProjectReference>
-      <ProjectReference Include="..\RASDK.Vision\RASDK.Vision.csproj">
-          <Project>{f684f835-3e60-44c1-a3fe-410e95d42657}</Project>
-          <Name>RASDK.Vision</Name>
-      </ProjectReference>
-  </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\RASDK.Arm\RASDK.Arm.csproj">
+            <Project>{b3e315f9-6979-4acd-a1a5-2fa0bbecfeab}</Project>
+            <Name>RASDK.Arm</Name>
+        </ProjectReference>
+        <ProjectReference Include="..\RASDK.Basic\RASDK.Basic.csproj">
+            <Project>{cd68c0c8-e211-4ecc-93ec-ece9054777a3}</Project>
+            <Name>RASDK.Basic</Name>
+        </ProjectReference>
+        <ProjectReference Include="..\RASDK.Gripper\RASDK.Gripper.csproj">
+            <Project>{7b304b62-73e6-4c9a-ab7a-e118c6905b4e}</Project>
+            <Name>RASDK.Gripper</Name>
+        </ProjectReference>
+        <ProjectReference Include="..\RASDK.Vision\RASDK.Vision.csproj">
+            <Project>{f684f835-3e60-44c1-a3fe-410e95d42657}</Project>
+            <Name>RASDK.Vision</Name>
+        </ProjectReference>
+    </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

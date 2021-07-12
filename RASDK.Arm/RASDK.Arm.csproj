@@ -14,15 +14,15 @@
       <Deterministic>true</Deterministic>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-      <DocumentationFile>bin\Debug\Arm.xml</DocumentationFile>
+      <DebugSymbols>true</DebugSymbols>
+      <DebugType>full</DebugType>
+      <Optimize>false</Optimize>
+      <OutputPath>bin\Debug\</OutputPath>
+      <DefineConstants>DEBUG;TRACE</DefineConstants>
+      <ErrorReport>prompt</ErrorReport>
+      <WarningLevel>4</WarningLevel>
+      <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+      <DocumentationFile>bin\Debug\RASDK.Arm.xml</DocumentationFile>
   </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
         <DebugType>pdbonly</DebugType>
@@ -106,11 +106,11 @@
         <Compile Include="Type\PositionType.cs"/>
         <Compile Include="Type\SmoothType.cs"/>
     </ItemGroup>
-  <ItemGroup>
-      <ProjectReference Include="..\RASDK.Basic\RASDK.Basic.csproj">
-          <Project>{cd68c0c8-e211-4ecc-93ec-ece9054777a3}</Project>
-          <Name>RASDK.Basic</Name>
-      </ProjectReference>
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+    <ItemGroup>
+        <ProjectReference Include="..\RASDK.Basic\RASDK.Basic.csproj">
+            <Project>{cd68c0c8-e211-4ecc-93ec-ece9054777a3}</Project>
+            <Name>RASDK.Basic</Name>
+        </ProjectReference>
+    </ItemGroup>
+    <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>
 </Project>
