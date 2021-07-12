@@ -119,5 +119,10 @@ namespace Arm.Hiwin
         {
             return new HiwinHoming(coordinateType, _id, _message, ref _waiting, needWait);
         }
+
+        public override IJog Jog(string axis, bool needWait = true)
+        {
+            return new HiwinJog(axis, _id, _message, ref _waiting, needWait);
+        }
     }
 }
