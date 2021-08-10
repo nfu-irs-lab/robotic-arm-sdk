@@ -1,14 +1,4 @@
-﻿//#define DISABLE_SHOW_MESSAGE
-
-// 選擇一種等待手臂動作完成的做法，都不選就是使用預設方法。
-#define USE_CALLBACK_MOTION_STATE_WAIT
-// #define USE_MOTION_STATE_WAIT
-
-#if (DISABLE_SHOW_MESSAGE)
-#warning Message is disabled.
-#endif
-
-using System;
+﻿using System;
 using System.Threading;
 using System.Windows.Forms;
 using SDKHrobot;
@@ -21,13 +11,15 @@ namespace RASDK.Arm.Hiwin
     {
         private static readonly HRobot.CallBackFun _callBackFun = EventFun;
         private static unsafe bool* _waiting;
+        private readonly string _ip;
 
         public HiwinConnection(string ip,
                                IMessage message,
-                               out int id,
                                ref bool waiting)
             : base(-99, message)
         {
+            _ip = ip;
+
             unsafe
             {
                 fixed (bool* w = &waiting)
@@ -35,9 +27,11 @@ namespace RASDK.Arm.Hiwin
                     _waiting = w;
                 }
             }
+        }
 
-            _id = HRobot.open_connection(ip, 1, _callBackFun);
-            id = _id;
+        public void Open()
+        {
+            _id = HRobot.open_connection(_ip, 1, _callBackFun);
 
             // Check connection.
             if (_id >= 0 && _id <= 65535)
@@ -49,6 +43,35 @@ namespace RASDK.Arm.Hiwin
                 ShowUnsuccessfulConnectMessage();
             }
         }
+
+        public void Close()
+        {
+            int alarmState;
+            int motorState;
+
+            // 將所有錯誤代碼清除。
+            alarmState = HRobot.clear_alarm(_id);
+
+            // 錯誤代碼300代表沒有警報，無法清除警報。
+            alarmState = alarmState == 300 ? 0 : alarmState;
+
+            // 設定控制器: 1為啟動,0為關閉。
+            HRobot.set_motor_state(_id, 0);
+            Thread.Sleep(500);
+
+            // 取得控制器狀態。
+            motorState = HRobot.get_motor_state(_id);
+
+            // 關閉手臂連線。
+            HRobot.disconnect(_id);
+
+            var text = "斷線成功!\r\n" +
+                       $"控制器狀態: {(motorState == 0 ? "關閉" : "開啟")}\r\n" +
+                       $"錯誤代碼: {alarmState}";
+            _message.Show(text, "斷線", MessageBoxButtons.OK, MessageBoxIcon.None);
+        }
+
+        public bool IsOpen => HRobot.network_get_state(_id) == 1;
 
         private static void EventFun(UInt16 cmd, UInt16 rlt, ref UInt16 Msg, int len)
         {
@@ -89,24 +112,20 @@ namespace RASDK.Arm.Hiwin
                                       $"Coor:{infos[14]},{infos[15]},{infos[16]},{infos[17]},{infos[18]},{infos[19]}\r\n" +
                                       $"Joint:{infos[20]},{infos[21]},{infos[22]},{infos[23]},{infos[24]},{infos[25]}\r\n");
 
-#if (USE_CALLBACK_MOTION_STATE_WAIT)
                     unsafe
                     {
                         // Motion state=1: Idle.
                         *_waiting = (infos[8] != "1");
                     }
-#endif
                     break;
 
                 case 4011 when rlt != 0:
-#if (!DISABLE_SHOW_MESSAGE)
                     MessageBox.Show("Update fail. " + rlt,
                                     "HRSS update callback",
                                     MessageBoxButtons.OK,
                                     MessageBoxIcon.Warning,
                                     MessageBoxDefaultButton.Button1,
                                     MessageBoxOptions.DefaultDesktopOnly);
-#endif
                     break;
             }
         }
