@@ -94,7 +94,6 @@
         <Compile Include="HiwinArmAdapter.cs"/>
         <Compile Include="Hiwin\HiwinBasicAction.cs"/>
         <Compile Include="Hiwin\HiwinConnection.cs"/>
-        <Compile Include="Hiwin\HiwinDisconnect.cs"/>
         <Compile Include="HRobot.cs"/>
         <Compile Include="IArm.cs"/>
         <Compile Include="IArmAdapter.cs"/>

@@ -23,13 +23,12 @@ namespace RASDK.Arm
 
         bool IDevice.Disconnect()
         {
-            _arm.Disconnect();
             return !Connected;
         }
 
         bool IDevice.Connect()
         {
-            _arm.Connect();
+            _arm.Connection();
             return Connected;
         }
     }

@@ -16,9 +16,7 @@ namespace RASDK.Arm
 
         public abstract IGetConnectionState GetConnectionState(out bool connected);
 
-        public abstract IConnection Connect();
-
-        public abstract IDisconnect Disconnect();
+        public abstract IConnection Connection();
 
         public abstract IAbsoluteMotion AbsoluteMotion(double[] position,
                                                        AdditionalMotionParameters additionalMotionParameters = null);

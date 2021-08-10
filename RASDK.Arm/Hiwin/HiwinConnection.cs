@@ -11,14 +11,25 @@ namespace RASDK.Arm.Hiwin
     {
         private static readonly HRobot.CallBackFun _callBackFun = EventFun;
         private static unsafe bool* _waiting;
+        private static unsafe int* _idPointer;
+        private const int _defaultID = -99;
         private readonly string _ip;
 
         public HiwinConnection(string ip,
                                IMessage message,
+                               ref int id,
                                ref bool waiting)
-            : base(-99, message)
+            : base(_defaultID, message)
         {
             _ip = ip;
+
+            unsafe
+            {
+                fixed (int* i = &id)
+                {
+                    _idPointer = i;
+                }
+            }
 
             unsafe
             {
@@ -41,6 +52,11 @@ namespace RASDK.Arm.Hiwin
             else
             {
                 ShowUnsuccessfulConnectMessage();
+            }
+
+            unsafe
+            {
+                *_idPointer = _id;
             }
         }
 
@@ -76,7 +92,6 @@ namespace RASDK.Arm.Hiwin
         private static void EventFun(UInt16 cmd, UInt16 rlt, ref UInt16 Msg, int len)
         {
             // 該 Method 的內容請參考 HRSDK-SampleCode： 11.CallbackNotify。
-            // 此處不受 IMessage 影響。
 
             // Get info.
             String info = "";
@@ -92,6 +107,7 @@ namespace RASDK.Arm.Hiwin
             }
             var infos = info.Split(',');
 
+            // 此處不受 IMessage 影響。
             // Show in Console.
             Console.WriteLine($"Command:{cmd}, Result:{rlt}");
             switch (cmd)
@@ -169,23 +185,23 @@ namespace RASDK.Arm.Hiwin
             switch (_id)
             {
                 case -1:
-                    errorMessage = "-1：連線失敗。";
+                    errorMessage = $"{_id}：連線失敗。";
                     break;
 
                 case -2:
-                    errorMessage = "-2：回傳機制創建失敗。";
+                    errorMessage = $"{_id}：回傳機制創建失敗。";
                     break;
 
                 case -3:
-                    errorMessage = "-3：無法連線至Robot。";
+                    errorMessage = $"{_id}：無法連線至Robot。";
                     break;
 
                 case -4:
-                    errorMessage = "-4：版本不相符。";
+                    errorMessage = $"{_id}：版本不相符。";
                     break;
 
-                case -99:
-                    errorMessage = "-99：自定義錯誤碼。建構子預設 ID，從未進行連線，請檢測程式。";
+                case _defaultID:
+                    errorMessage = $"{_id}：自定義錯誤碼，預設 ID。從未進行連線，請檢測程式。";
                     break;
 
                 default:

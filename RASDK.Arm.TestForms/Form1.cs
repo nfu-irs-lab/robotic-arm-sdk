@@ -34,12 +34,12 @@ namespace RASDK.Arm.TestForms
                 textBoxIp.Enabled = false;
             }
 
-            _arm.Connect();
+            _arm.Connection().Open();
         }
 
         private void buttonDisconnect_Click(object sender, EventArgs e)
         {
-            _arm.Disconnect();
+            _arm.Connection().Close();
         }
 
         private void buttonHoming_Click(object sender, EventArgs e)
