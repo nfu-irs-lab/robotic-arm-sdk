@@ -87,6 +87,8 @@ namespace RASDK.Arm.Hiwin
             _message.Show(text, "斷線", MessageBoxButtons.OK, MessageBoxIcon.None);
         }
 
+        // Return 1: Connected
+        // Return 0: Didn't connected. 
         public bool IsOpen => HRobot.network_get_state(_id) == 1;
 
         private static void EventFun(UInt16 cmd, UInt16 rlt, ref UInt16 Msg, int len)
