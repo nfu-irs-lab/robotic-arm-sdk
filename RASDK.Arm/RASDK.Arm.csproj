@@ -66,6 +66,7 @@
     <ItemGroup>
         <Compile Include="AdditionalMotionParameters.cs"/>
         <Compile Include="Hiwin\Default.cs"/>
+        <Compile Include="Hiwin\HiwinAdditionalMotionParameters.cs"/>
         <Compile Include="Hiwin\HiwinBasicMotion.cs"/>
         <Compile Include="Hiwin\ReturnCodeCheck.cs"/>
         <Compile Include="IMotion.cs"/>
