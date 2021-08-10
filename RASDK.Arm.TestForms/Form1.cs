@@ -18,8 +18,8 @@ namespace RASDK.Arm.TestForms
         private ArmActionFactory _arm;
 
         private IMessage _message =
-            //new GeneralMessage(new EmptyLog());
-            new EmptyMessage();
+            new GeneralMessage(new EmptyLog());
+        //new EmptyMessage();
 
         public Form1()
         {
@@ -30,28 +30,42 @@ namespace RASDK.Arm.TestForms
         {
             if (_arm == null)
             {
-                _arm = new HiwinArmActionFactory(textBoxIp.Text, _message);
+                _arm = new Hiwin.HiwinArm(textBoxIp.Text, _message);
                 textBoxIp.Enabled = false;
             }
 
-            _arm.Connect();
+            _arm.Connection().Open();
         }
 
         private void buttonDisconnect_Click(object sender, EventArgs e)
         {
-            _arm.Disconnect();
+            _arm.Connection().Close();
         }
 
         private void buttonHoming_Click(object sender, EventArgs e)
         {
-            _arm.Homing();
+            _arm.Motion().Homing();
         }
 
         private void buttonMove1_Click(object sender, EventArgs e)
         {
-            _arm.RelativeMotion(100, 0, 0, 0, 0, 0, new AdditionalMotionParameters() { NeedWait = false });
+            _arm.Motion().
+                 Relative(100,
+                          0,
+                          0,
+                          0,
+                          0,
+                          0,
+                          new AdditionalMotionParameters { NeedWait = false });
             MessageBox.Show("1");
-            _arm.RelativeMotion(-100, 0, 0, 0, 0, 0, new AdditionalMotionParameters() { NeedWait = true });
+            _arm.Motion().
+                 Relative(-100,
+                          0,
+                          0,
+                          0,
+                          0,
+                          0,
+                          new AdditionalMotionParameters { NeedWait = false });
             MessageBox.Show("2");
         }
 
@@ -63,12 +77,12 @@ namespace RASDK.Arm.TestForms
         private void JogStart(int indexOfAxis, double value)
         {
             var dir = value >= 0 ? '+' : '-';
-            _arm.Jog($"{dir}{indexOfAxis}");
+            _arm.Motion().Jog($"{dir}{indexOfAxis}");
         }
 
         private void JogStop()
         {
-            _arm.AbortMotion();
+            _arm.Motion().Abort();
         }
 
         #region X
