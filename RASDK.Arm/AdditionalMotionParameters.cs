@@ -1,6 +1,6 @@
 ﻿using RASDK.Arm.Type;
 
-namespace RASDK.Arm.Hiwin
+namespace RASDK.Arm
 {
     public class AdditionalMotionParameters
     {
