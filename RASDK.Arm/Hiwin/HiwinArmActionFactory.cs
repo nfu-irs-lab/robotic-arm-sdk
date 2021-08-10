@@ -22,9 +22,9 @@ namespace RASDK.Arm.Hiwin
             return new HiwinGetConnectionState(_id, _message, out connected);
         }
 
-        public override IConnect Connect()
+        public override IConnection Connect()
         {
-            return new HiwinConnect(_ip, _message, out _id, ref _waiting);
+            return new HiwinConnection(_ip, _message, out _id, ref _waiting);
         }
 
         public override IDisconnect Disconnect()

@@ -16,7 +16,7 @@ namespace RASDK.Arm
 
         public abstract IGetConnectionState GetConnectionState(out bool connected);
 
-        public abstract IConnect Connect();
+        public abstract IConnection Connect();
 
         public abstract IDisconnect Disconnect();
 

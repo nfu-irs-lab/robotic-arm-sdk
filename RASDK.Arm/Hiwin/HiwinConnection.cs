@@ -17,15 +17,15 @@ using RASDK.Basic.Message;
 
 namespace RASDK.Arm.Hiwin
 {
-    public class HiwinConnect : HiwinBasicAction, IConnect
+    public class HiwinConnection : HiwinBasicAction, IConnection
     {
         private static readonly HRobot.CallBackFun _callBackFun = EventFun;
         private static unsafe bool* _waiting;
 
-        public HiwinConnect(string ip,
-                            IMessage message,
-                            out int id,
-                            ref bool waiting)
+        public HiwinConnection(string ip,
+                               IMessage message,
+                               out int id,
+                               ref bool waiting)
             : base(-99, message)
         {
             unsafe

@@ -86,14 +86,14 @@
         <Compile Include="Arm.cs"/>
         <Compile Include="ArmActionFactory.cs"/>
         <Compile Include="Axis.cs"/>
-        <Compile Include="IConnect.cs"/>
+        <Compile Include="IConnection.cs"/>
         <Compile Include="IDisconnect.cs"/>
         <Compile Include="HiwinArm.cs"/>
         <Compile Include="Hiwin\HiwinAbsoluteMotion.cs"/>
         <Compile Include="Hiwin\HiwinArmActionFactory.cs"/>
         <Compile Include="HiwinArmAdapter.cs"/>
         <Compile Include="Hiwin\HiwinBasicAction.cs"/>
-        <Compile Include="Hiwin\HiwinConnect.cs"/>
+        <Compile Include="Hiwin\HiwinConnection.cs"/>
         <Compile Include="Hiwin\HiwinDisconnect.cs"/>
         <Compile Include="HRobot.cs"/>
         <Compile Include="IArm.cs"/>
