@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Text.RegularExpressions;
-using SDKHrobot;
 using RASDK.Basic.Message;
 using RASDK.Arm.Type;
 

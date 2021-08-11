@@ -2,7 +2,7 @@
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace SDKHrobot
+namespace RASDK.Arm.Hiwin
 {
     internal enum CartesianCoordinates
     {
