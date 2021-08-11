@@ -1,5 +1,4 @@
 ﻿using System;
-using RASDK.Arm.Action;
 using RASDK.Basic.Message;
 using RASDK.Arm.Hiwin;
 using RASDK.Arm.Type;
