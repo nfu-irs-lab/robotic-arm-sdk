@@ -11,15 +11,14 @@ using System.Windows.Forms;
 using RASDK.Basic;
 using RASDK.Basic.Message;
 using RASDK.Arm;
-using RASDK.Arm.Action;
 using RASDK.Arm.Type;
 
 namespace RASDK.UI
 {
     public partial class BasicArmController : UserControl
     {
-        private IArm _arm;
         private IMessage _message;
+        private ArmActionFactory _arm;
 
         public BasicArmController()
         {
@@ -46,7 +45,7 @@ namespace RASDK.UI
             };
         }
 
-        public void DependencyInjection(IArm armController, IMessage message)
+        public void DependencyInjection(ArmActionFactory armController, IMessage message)
         {
             _message = message;
             _arm = armController;
@@ -54,7 +53,7 @@ namespace RASDK.UI
 
         private void UpdateNowPosition()
         {
-            _nowPosition = _arm.GetPosition(_nowCoordinateType);
+            // _nowPosition = _arm.GetPosition(_nowCoordinateType);
         }
 
         #region Type
@@ -252,19 +251,19 @@ namespace RASDK.UI
         {
             if (checkBoxArmSlowlyHoming.Checked)
             {
-                _arm.Speed = 5;
-                _arm.Acceleration = 10;
+                // _arm.Speed = 5;
+                // _arm.Acceleration = 10;
 
                 Thread.Sleep(300);
 
-                _arm.Do(new Homing(_nowCoordinateType));
+                _arm.Motion().Homing(_nowCoordinateType);
 
-                _arm.Speed = _nowSpeed;
-                _arm.Acceleration = _nowAcceleration;
+                // _arm.Speed = _nowSpeed;
+                // _arm.Acceleration = _nowAcceleration;
             }
             else
             {
-                _arm.Do(new Homing(_nowCoordinateType));
+                _arm.Motion().Homing(_nowCoordinateType);
             }
 
             UpdateNowPosition();
@@ -272,23 +271,27 @@ namespace RASDK.UI
 
         private void buttonArmMotionStart_Click(object sender, EventArgs e)
         {
-            IArmAction act;
+            // IArmAction act;
             switch (_nowPositionType)
             {
                 case PositionType.Absolute:
-                    act = new AbsoluteMotion(_targetPosition)
-                    {
-                        MotionType = _nowMotionType,
-                        CoordinateType = _nowCoordinateType
-                    };
+                    _arm.Motion().
+                         Absolute(_targetPosition,
+                                  new AdditionalMotionParameters
+                                  {
+                                      MotionType = _nowMotionType,
+                                      CoordinateType = _nowCoordinateType
+                                  });
                     break;
 
                 case PositionType.Relative:
-                    act = new RelativeMotion(_targetPosition)
-                    {
-                        MotionType = _nowMotionType,
-                        CoordinateType = _nowCoordinateType
-                    };
+                    _arm.Motion().
+                         Relative(_targetPosition,
+                                  new AdditionalMotionParameters
+                                  {
+                                      MotionType = _nowMotionType,
+                                      CoordinateType = _nowCoordinateType
+                                  });
                     break;
 
                 default:
@@ -306,13 +309,13 @@ namespace RASDK.UI
 
         private void buttonSetSpeedAndAcceleration_Click(object sender, EventArgs e)
         {
-            _arm.Speed = _nowSpeed;
-            _arm.Acceleration = _nowAcceleration;
+            // _arm.Speed = _nowSpeed;
+            // _arm.Acceleration = _nowAcceleration;
 
             Thread.Sleep(300);
 
-            _nowSpeed = _arm.Speed;
-            _nowAcceleration = _arm.Acceleration;
+            // _nowSpeed = _arm.Speed;
+            // _nowAcceleration = _arm.Acceleration;
         }
 
         private void radioButtonCoordinateTypeDescartes_CheckedChanged(object sender, EventArgs e)

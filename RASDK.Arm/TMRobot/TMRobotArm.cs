@@ -6,22 +6,22 @@ using System.Threading;
 using RASDK.Basic;
 using RASDK.Basic.Message;
 using System.Windows.Forms;
+using AELTA_test;
 
 namespace RASDK.Arm.TMRobot
 {
     public class TMRobotArm : ArmActionFactory, IDevice
     {
-        private readonly string _ip;
-        private readonly int _port;
-
         private static IPAddress _ipAddress = IPAddress.Parse("127.0.0.1");
         private static int _portNumber = 10001;
-
-        string[] data = new string[10];
-        double[] dataint = new double[] { 0, 0, 0, 0, 0, 0 };
+        private readonly string _ip;
+        private readonly int _port;
+        private SocketClientObject _socketClientObject;
+        private TcpClient ClientSockt = default;
+        private string[] data = new string[10];
+        private double[] dataint = new double[] { 0, 0, 0, 0, 0, 0 };
 
         private TcpListener ServerListener = new TcpListener(_ipAddress, _portNumber);
-        private TcpClient ClientSockt = default;
 
         public TMRobotArm(string ip, int port, IMessage message) : base(message)
         {
@@ -34,12 +34,17 @@ namespace RASDK.Arm.TMRobot
 
         public override IConnection Connection()
         {
-            return new Connection(_ip, _port, _message);
+            if (_socketClientObject == null)
+            {
+                _socketClientObject = new SocketClientObject(_ip, _port);
+            }
+
+            return new Connection(_ip, _port, _message, _socketClientObject);
         }
 
         public override IMotion Motion()
         {
-            throw new System.NotImplementedException();
+            return new Motion(_socketClientObject);
         }
 
         #region IDevice
@@ -66,31 +71,6 @@ namespace RASDK.Arm.TMRobot
 
         #region --通訊--
 
-        private void THREAD_MOD(int teste)
-        {
-            // socketmsg.Text += Environment.NewLine + teste;
-            //
-            // socketmsg.SelectionStart = socketmsg.TextLength;
-            // socketmsg.ScrollToCaret();
-        }
-
-        private void THREAD_MOD2(string teste)
-        {
-            // socketmsg.Text += Environment.NewLine + teste;
-            //
-            // socketmsg.SelectionStart = socketmsg.TextLength;
-            // socketmsg.ScrollToCaret();
-        }
-
-        private void Thread_Point1(string teste)
-        {
-            // socketmsg.Text += Environment.NewLine + teste;
-            //
-            // socketmsg.SelectionStart = socketmsg.TextLength;
-            // socketmsg.ScrollToCaret();
-
-        }
-
         private void StartServer()
         {
             // System.Action<int> DelegateTeste_ModifyText = THREAD_MOD;
@@ -109,7 +89,6 @@ namespace RASDK.Arm.TMRobot
             {
                 try
                 {
-
                     NetworkStream networkStream = ClientSockt.GetStream();
                     byte[] bytesFrom = new byte[128];
                     int byteRead = networkStream.Read(bytesFrom, 0, 128);
@@ -151,15 +130,11 @@ namespace RASDK.Arm.TMRobot
                         // Invoke(DelegateTeste_ModifyText2, "dataint " + dataint[5]);
 
                         // Invoke(Tolist, dataint[0], dataint[1], dataint[2], dataint[3], dataint[4], dataint[5]);
-
-
                     }
                     catch
                     {
-
                         // Invoke(DelegateTeste_ModifyText2, "error 1 ");
                     }
-
                 }
                 catch
                 {
@@ -168,13 +143,36 @@ namespace RASDK.Arm.TMRobot
                     ServerListener.Start();
                     ClientSockt = ServerListener.AcceptTcpClient();
                 }
-
             }
         }
 
-        #endregion
+        private void THREAD_MOD(int teste)
+        {
+            // socketmsg.Text += Environment.NewLine + teste;
+            //
+            // socketmsg.SelectionStart = socketmsg.TextLength;
+            // socketmsg.ScrollToCaret();
+        }
 
-        int CoordinateConversionCount = 0;
+        private void THREAD_MOD2(string teste)
+        {
+            // socketmsg.Text += Environment.NewLine + teste;
+            //
+            // socketmsg.SelectionStart = socketmsg.TextLength;
+            // socketmsg.ScrollToCaret();
+        }
+
+        private void Thread_Point1(string teste)
+        {
+            // socketmsg.Text += Environment.NewLine + teste;
+            //
+            // socketmsg.SelectionStart = socketmsg.TextLength;
+            // socketmsg.ScrollToCaret();
+        }
+
+        #endregion --通訊--
+
+        private int CoordinateConversionCount = 0;
 
         private void CoordinateConversion2(double d1,
                                            double d2,
@@ -209,7 +207,6 @@ namespace RASDK.Arm.TMRobot
             d5 = RotateBuffer_y;
             d6 = RotateBuffer_z;
 
-
             if (d1 > xmax)
                 d1 = xmax;
             if (d1 < xmin)
@@ -225,7 +222,6 @@ namespace RASDK.Arm.TMRobot
             if (d3 < zmin)
                 d3 = zmin;
 
-
             // System.Action<double, double, double, double, double, double> Tolist2 = ToDataPointList;
 
             // Invoke(Tolist2, d1, d2, d3, d4, d5, d6);
@@ -236,17 +232,6 @@ namespace RASDK.Arm.TMRobot
             CoordinateConversionCount++;
         }
 
-        private void WriteDataGrid(int count,
-                                   double d1,
-                                   double d2,
-                                   double d3,
-                                   double d4,
-                                   double d5,
-                                   double d6)
-        {
-            // this.PointDataGrid.Rows.Add(count, d1, d2, d3, d4, d5, d6);
-        }
-
         private void ToDataPointList(double d1,
                                      double d2,
                                      double d3,
@@ -254,7 +239,6 @@ namespace RASDK.Arm.TMRobot
                                      double d5,
                                      double d6)
         {
-
             // this.PointDataList.BeginUpdate();
             //
             // ListViewItem pdl = new ListViewItem();
@@ -273,6 +257,17 @@ namespace RASDK.Arm.TMRobot
             // Action<double, double, double, double, double, double> Toarm = armMove2;
             //
             // Invoke(Toarm, d1, d2, d3, d4, d5, d6);
+        }
+
+        private void WriteDataGrid(int count,
+                                   double d1,
+                                   double d2,
+                                   double d3,
+                                   double d4,
+                                   double d5,
+                                   double d6)
+        {
+            // this.PointDataGrid.Rows.Add(count, d1, d2, d3, d4, d5, d6);
         }
 
         #endregion 底層

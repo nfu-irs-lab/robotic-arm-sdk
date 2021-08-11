@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading;
 using System.Windows.Forms;
-using SDKHrobot;
 using RASDK.Basic;
 using RASDK.Basic.Message;
 
