@@ -148,7 +148,7 @@ namespace RASDK.Arm.TMRobot
                 homePosString += ",";
             }
 
-            string command = $"1,PTP(\"CPP\",{homePosString}){speed},200,0,false)";
+            string command = $"1,PTP(\"CPP\",{homePosString}{speed},200,0,false)";
             _commandSender.Send(command);
         }
 
