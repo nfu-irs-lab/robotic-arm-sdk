@@ -64,8 +64,7 @@ namespace RASDK.Arm.TMRobot
                     break;
 
                 case MotionType.Circle:
-                    motionTypeString = "Circle";
-                    break;
+                    throw new NotImplementedException("還未實作 Circle 的控制方法。");
 
                 default:
                     throw new Exception();
