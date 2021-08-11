@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 using AELTA_test;
+using RASDK.Arm.Hiwin;
 using RASDK.Arm.Type;
 
 namespace RASDK.Arm.TMRobot
@@ -68,7 +70,7 @@ namespace RASDK.Arm.TMRobot
                     throw new Exception();
             }
 
-            string command = $"1,{motionTypeString}(\"{coordianteTypeChar}PP\",{positionString}100,200,0,false)";
+            string command = $"1,{motionTypeString}(\"{coordianteTypeChar}PP\",{positionString}50,200,0,false)";
             _commandSender.Send(command);
         }
 
@@ -118,7 +120,7 @@ namespace RASDK.Arm.TMRobot
                     throw new Exception();
             }
 
-            string command = $"1,{motionTypeString}(\"{coordianteTypeChar}PP\",{positionString}100,200,0,false)";
+            string command = $"1,{motionTypeString}(\"{coordianteTypeChar}PP\",{positionString}50,200,0,false)";
             _commandSender.Send(command);
         }
 
@@ -141,9 +143,92 @@ namespace RASDK.Arm.TMRobot
             _commandSender.Send(command);
         }
 
+        #region Jog
+
+        private readonly string InputRegexPattern = "[+-][a-cx-zA-CX-Z0-5]";
+
         public void Jog(string axis)
         {
-            throw new System.NotImplementedException();
+            // Remove all whitespace char.
+            axis = Regex.Replace(axis, @"\s", "");
+
+            if (CheckArgs(axis))
+            {
+                double[] pos = { 0.0, 0, 0, 0, 0, 0 };
+                pos[PatseAxis(axis)] = ParseDirection(axis);
+                Relative(pos);
+            }
+            else
+            {
+                throw new ArgumentException($"Input regex: {InputRegexPattern}");
+            }
         }
+
+        private bool CheckArgs(string text)
+        {
+            return Regex.IsMatch(text, InputRegexPattern);
+        }
+
+        private int ParseDirection(string text)
+        {
+            if (text.Substring(0, 1) == "+")
+            {
+                return 1;
+            }
+            else if (text.Substring(0, 1) == "-")
+            {
+                return -1;
+            }
+            throw new ArgumentException();
+        }
+
+        private int PatseAxis(string text)
+        {
+            int val;
+            switch (text.Substring(1, 1))
+            {
+                case "x":
+                case "X":
+                case "0":
+                    val = 0;
+                    break;
+
+                case "y":
+                case "Y":
+                case "1":
+                    val = 1;
+                    break;
+
+                case "z":
+                case "Z":
+                case "2":
+                    val = 2;
+                    break;
+
+                case "a":
+                case "A":
+                case "3":
+                    val = 3;
+                    break;
+
+                case "b":
+                case "B":
+                case "4":
+                    val = 4;
+                    break;
+
+                case "c":
+                case "C":
+                case "5":
+                    val = 5;
+                    break;
+
+                default:
+                    throw new ArgumentException();
+            }
+            return val;
+        }
+
+        #endregion Jog
     }
 }
