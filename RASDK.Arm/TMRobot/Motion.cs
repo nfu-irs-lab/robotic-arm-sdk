@@ -42,6 +42,7 @@ namespace RASDK.Arm.TMRobot
             }
 
             _additionalMotionParameters = addPara;
+            int speed = 50;
 
             string positionString = "";
             foreach (var p in position)
@@ -70,7 +71,7 @@ namespace RASDK.Arm.TMRobot
                     throw new Exception();
             }
 
-            string command = $"1,{motionTypeString}(\"{coordianteTypeChar}PP\",{positionString}50,200,0,false)";
+            string command = $"1,{motionTypeString}(\"{coordianteTypeChar}PP\",{positionString}{speed},200,0,false)";
             _commandSender.Send(command);
         }
 
@@ -92,6 +93,7 @@ namespace RASDK.Arm.TMRobot
                 throw new ArgumentException("Length of position must be 6");
             }
 
+            int speed = 50;
             _additionalMotionParameters = addPara;
 
             string positionString = "";
@@ -120,7 +122,7 @@ namespace RASDK.Arm.TMRobot
                     throw new Exception();
             }
 
-            string command = $"1,{motionTypeString}(\"{coordianteTypeChar}PP\",{positionString}50,200,0,false)";
+            string command = $"1,{motionTypeString}(\"{coordianteTypeChar}PP\",{positionString}{speed},200,0,false)";
             _commandSender.Send(command);
         }
 
@@ -171,13 +173,14 @@ namespace RASDK.Arm.TMRobot
 
         private int ParseDirection(string text)
         {
+            int value = 10;
             if (text.Substring(0, 1) == "+")
             {
-                return 1;
+                return value;
             }
             else if (text.Substring(0, 1) == "-")
             {
-                return -1;
+                return -value;
             }
             throw new ArgumentException();
         }
