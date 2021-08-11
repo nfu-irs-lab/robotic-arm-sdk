@@ -1,4 +1,6 @@
-﻿using System;
+﻿// #define DISABLE_SHOW_MESSAGE
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -7,7 +9,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using RASDK.Arm.Hiwin;
 using RASDK.Basic;
 using RASDK.Basic.Message;
 
@@ -17,21 +18,28 @@ namespace RASDK.Arm.TestForms
     {
         private ArmActionFactory _arm;
 
-        private IMessage _message =
+        private readonly IMessage _message =
+#if DISABLE_SHOW_MESSAGE
+            new EmptyMessage();
+#else
             new GeneralMessage(new EmptyLog());
-        //new EmptyMessage();
+#endif
 
         public Form1()
         {
             InitializeComponent();
+            comboBoxArmType.SelectedIndex = 0;
         }
 
         private void buttonConnect_Click(object sender, EventArgs e)
         {
             if (_arm == null)
             {
-                _arm = new Hiwin.HiwinArm(textBoxIp.Text, _message);
+                _arm = GetArmType();
+
                 textBoxIp.Enabled = false;
+                textBoxPort.Enabled = false;
+                comboBoxArmType.Enabled = false;
             }
 
             _arm.Connection().Open();
@@ -40,6 +48,11 @@ namespace RASDK.Arm.TestForms
         private void buttonDisconnect_Click(object sender, EventArgs e)
         {
             _arm.Connection().Close();
+
+            _arm = null;
+            textBoxIp.Enabled = true;
+            textBoxPort.Enabled = true;
+            comboBoxArmType.Enabled = true;
         }
 
         private void buttonHoming_Click(object sender, EventArgs e)
@@ -50,7 +63,7 @@ namespace RASDK.Arm.TestForms
         private void buttonMove1_Click(object sender, EventArgs e)
         {
             _arm.Motion().
-                 Relative(100,
+                 Relative(-100,
                           0,
                           0,
                           0,
@@ -59,7 +72,7 @@ namespace RASDK.Arm.TestForms
                           new AdditionalMotionParameters { NeedWait = false });
             MessageBox.Show("1");
             _arm.Motion().
-                 Relative(-100,
+                 Relative(100,
                           0,
                           0,
                           0,
@@ -70,7 +83,47 @@ namespace RASDK.Arm.TestForms
         }
 
         private void buttonMove2_Click(object sender, EventArgs e)
-        { }
+        {
+            _arm.Motion().
+                 Relative(100,
+                          0,
+                          0,
+                          0,
+                          0,
+                          0,
+                          new AdditionalMotionParameters { NeedWait = true });
+            MessageBox.Show("1");
+            _arm.Motion().
+                 Relative(-100,
+                          0,
+                          0,
+                          0,
+                          0,
+                          0,
+                          new AdditionalMotionParameters { NeedWait = true });
+            MessageBox.Show("2");
+        }
+
+        private ArmActionFactory GetArmType()
+        {
+            ArmActionFactory armActionFactory;
+            switch (comboBoxArmType.SelectedItem.ToString())
+            {
+                case "HIWIN":
+                    armActionFactory = new Hiwin.HiwinArm(textBoxIp.Text, _message);
+                    break;
+
+                case "TM Robot":
+                    armActionFactory = new TMRobot.TMRobotArm(textBoxIp.Text,
+                                                              Int16.Parse(textBoxPort.Text),
+                                                              _message);
+                    break;
+
+                default:
+                    throw new Exception("未知的手臂類型。");
+            }
+            return armActionFactory;
+        }
 
         #region Jog
 
