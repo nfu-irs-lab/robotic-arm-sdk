@@ -20,6 +20,8 @@ namespace RASDK.Arm.TMRobot
         private TcpClient ClientSockt = default;
         private string[] data = new string[10];
         private double[] dataint = new double[] { 0, 0, 0, 0, 0, 0 };
+        private double _speed;
+        private double _acceleration;
 
         private TcpListener ServerListener = new TcpListener(_ipAddress, _portNumber);
 
@@ -28,9 +30,41 @@ namespace RASDK.Arm.TMRobot
             _ip = ip;
             _port = port;
 
+            _speed = 50;
+            _acceleration = 200;
+
             Thread threadingServer = new Thread(StartServer);
             threadingServer.Start();
         }
+
+        #region Speed & Acceleration
+
+        public override double Speed
+        {
+            get => _speed;
+
+            set
+            {
+                if (value > 100 || value < 1)
+                {
+                    _message.Show($"手臂速度應爲1% ~ 100%之間。輸入值爲： {value}",
+                                  LoggingLevel.Warn);
+                }
+                else
+                {
+                    _speed = value;
+                }
+            }
+        }
+
+        public override double Acceleration
+        {
+            get => _acceleration;
+
+            set { _acceleration = value; }
+        }
+
+        #endregion Speed & Acceleration
 
         public override IConnection Connection()
         {
@@ -44,7 +78,7 @@ namespace RASDK.Arm.TMRobot
 
         public override IMotion Motion()
         {
-            return new Motion(_socketClientObject);
+            return new Motion(_speed, _acceleration, _socketClientObject);
         }
 
         #region IDevice
