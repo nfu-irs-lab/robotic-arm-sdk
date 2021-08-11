@@ -17,11 +17,25 @@ namespace RASDK.Arm.TMRobot
         private SocketClientObject _tcpClientObject;
         // private StringBuilder showRecvDataLog = new StringBuilder();
 
-        public Connection(string ip, int port, IMessage message)
+        public Connection(string ip, int port, IMessage message, SocketClientObject socketClientObject)
         {
             _ip = ip;
             _port = port;
             _message = message;
+
+            _tcpClientObject = socketClientObject;
+            //socketClientObject = _tcpClientObject;
+        }
+
+        public bool IsOpen { get; }
+
+        public void Close()
+        {
+            if ((this._tcpClientObject != null) && this._tcpClientObject.Disconnect())
+            {
+                this._tcpClientObject.ReceiveData -= new SocketClientObject.TCPReceiveData(this.ShowReceiveData);
+                this._tcpClientObject = null;
+            }
         }
 
         public void Open()
@@ -32,7 +46,7 @@ namespace RASDK.Arm.TMRobot
                 int result = 0;
                 if (CheckIpAddressValid(_ip))
                 {
-                    this._tcpClientObject = new SocketClientObject(_ip, result);
+                    // this._tcpClientObject = new SocketClientObject(_ip, _port);
                     if (this._tcpClientObject != null)
                     {
                         this._tcpClientObject.ConnectStatusResponse +=
@@ -57,17 +71,12 @@ namespace RASDK.Arm.TMRobot
             }
         }
 
-        public void Close()
+        public void ShowReceiveData(object sender, string recv_data)
         {
-            if ((this._tcpClientObject != null) && this._tcpClientObject.Disconnect())
-            {
-                this._tcpClientObject.ReceiveData -= new SocketClientObject.TCPReceiveData(this.ShowReceiveData);
-                this._tcpClientObject = null;
-            }
+            string str = string.Format("[{0}] {1}", DateTime.Now.ToString("HH:mm:ss:fff"), recv_data);
+            // this.showRecvDataLog.AppendLine(str);
+            // AddReceiveData(showRecvDataLog.ToString(), TB_RecvData);
         }
-
-        public bool IsOpen { get; }
-
 
         private bool CheckIpAddressValid(string ip)
         {
@@ -101,14 +110,6 @@ namespace RASDK.Arm.TMRobot
         //         _label.Text = _connectstatus;
         //     }
         // }
-
-        public void ShowReceiveData(object sender, string recv_data)
-        {
-            string str = string.Format("[{0}] {1}", DateTime.Now.ToString("HH:mm:ss:fff"), recv_data);
-            // this.showRecvDataLog.AppendLine(str);
-            // AddReceiveData(showRecvDataLog.ToString(), TB_RecvData);
-        }
-
         // private void AddReceiveData(string _receivedata, TextBox _textbox)
         // {
         //     if (this.InvokeRequired)
