@@ -35,7 +35,8 @@ namespace RASDK.Arm.TMRobot
                     this._tcpClientObject = new SocketClientObject(_ip, result);
                     if (this._tcpClientObject != null)
                     {
-                        // this._tcpClientObject.ConnectStatusResponse += new SocketClientObject.TCPConnectStatusResponse(this.showConnectStatus);
+                        this._tcpClientObject.ConnectStatusResponse +=
+                            new SocketClientObject.TCPConnectStatusResponse(this.showConnectStatus);
                         if (threadStart == null)
                         {
                             threadStart = delegate
@@ -79,6 +80,27 @@ namespace RASDK.Arm.TMRobot
 
             return IPAddress.TryParse(ip, out address);
         }
+
+        private void showConnectStatus(object sender, string resp)
+        {
+            // AddConnectStatus(resp, LB_ConnectionStatus);
+
+            _message.Show(resp);
+        }
+
+        // private delegate void AddConnectDataDelegate(string _connectstatus, Label _label);
+        // private void AddConnectStatus(string _connectstatus, Label _label)
+        // {
+        //     if (this.InvokeRequired)
+        //     {
+        //         AddConnectDataDelegate ConnectStatus = new AddConnectDataDelegate(AddConnectStatus);
+        //         this.Invoke(ConnectStatus, _connectstatus, _label);
+        //     }
+        //     else
+        //     {
+        //         _label.Text = _connectstatus;
+        //     }
+        // }
 
         public void ShowReceiveData(object sender, string recv_data)
         {
