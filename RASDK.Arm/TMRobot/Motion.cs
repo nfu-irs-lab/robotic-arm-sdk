@@ -85,7 +85,41 @@ namespace RASDK.Arm.TMRobot
 
         public void Relative(double[] position, AdditionalMotionParameters addPara = null)
         {
-            throw new System.NotImplementedException();
+            if (position.Length != 6)
+            {
+                throw new ArgumentException("Length of position must be 6");
+            }
+
+            _additionalMotionParameters = addPara;
+
+            string positionString = "";
+            foreach (var p in position)
+            {
+                positionString += p.ToString();
+                positionString += ',';
+            }
+
+            var coordianteTypeChar = _coordinateType == CoordinateType.Descartes ? 'C' : 'J';
+            string motionTypeString;
+            switch (_motionType)
+            {
+                case MotionType.PointToPoint:
+                    motionTypeString = "Move_PTP";
+                    break;
+
+                case MotionType.Linear:
+                    motionTypeString = "Move_Line";
+                    break;
+
+                case MotionType.Circle:
+                    throw new Exception("沒有 Circle 的相對運動方式。");
+
+                default:
+                    throw new Exception();
+            }
+
+            string command = $"1,{motionTypeString}(\"{coordianteTypeChar}PP\",{positionString}100,200,0,false)";
+            _commandSender.Send(command);
         }
 
         public void Relative(double xJ1,
@@ -96,7 +130,7 @@ namespace RASDK.Arm.TMRobot
                              double cJ6,
                              AdditionalMotionParameters addPara = null)
         {
-            throw new System.NotImplementedException();
+            Relative(new[] { xJ1, yJ2, zJ3, aJ4, bJ5, cJ6 }, addPara);
         }
 
         public void Homing(CoordinateType coordinateType = CoordinateType.Descartes, bool needWait = true)
