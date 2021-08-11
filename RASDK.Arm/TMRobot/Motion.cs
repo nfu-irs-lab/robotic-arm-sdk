@@ -1,9 +1,17 @@
-﻿using RASDK.Arm.Type;
+﻿using AELTA_test;
+using RASDK.Arm.Type;
 
 namespace RASDK.Arm.TMRobot
 {
     public class Motion : IMotion
     {
+        private CommandSender _commandSender;
+
+        public Motion(SocketClientObject socketClientObject)
+        {
+            _commandSender = new CommandSender(socketClientObject);
+        }
+
         public void Abort()
         {
             throw new System.NotImplementedException();
@@ -43,7 +51,10 @@ namespace RASDK.Arm.TMRobot
 
         public void Homing(CoordinateType coordinateType = CoordinateType.Descartes, bool needWait = true)
         {
-            throw new System.NotImplementedException();
+            int speed = 100;
+            double sp_pc = 1.0;
+            string command = @"1,PTP(""CPP"",519,-122,458,185,0,90," + string.Format("{0:000}", speed * sp_pc) + ",200,0,false)";
+            _commandSender.Send(command);
         }
 
         public void Jog(string axis)
