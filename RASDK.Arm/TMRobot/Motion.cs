@@ -42,6 +42,7 @@ namespace RASDK.Arm.TMRobot
             }
 
             _additionalMotionParameters = addPara;
+            int speed = 50;
 
             string positionString = "";
             foreach (var p in position)
@@ -63,14 +64,13 @@ namespace RASDK.Arm.TMRobot
                     break;
 
                 case MotionType.Circle:
-                    motionTypeString = "Circle";
-                    break;
+                    throw new NotImplementedException("還未實作 Circle 的控制方法。");
 
                 default:
                     throw new Exception();
             }
 
-            string command = $"1,{motionTypeString}(\"{coordianteTypeChar}PP\",{positionString}50,200,0,false)";
+            string command = $"1,{motionTypeString}(\"{coordianteTypeChar}PP\",{positionString}{speed},200,0,false)";
             _commandSender.Send(command);
         }
 
@@ -92,6 +92,7 @@ namespace RASDK.Arm.TMRobot
                 throw new ArgumentException("Length of position must be 6");
             }
 
+            int speed = 50;
             _additionalMotionParameters = addPara;
 
             string positionString = "";
@@ -120,7 +121,7 @@ namespace RASDK.Arm.TMRobot
                     throw new Exception();
             }
 
-            string command = $"1,{motionTypeString}(\"{coordianteTypeChar}PP\",{positionString}50,200,0,false)";
+            string command = $"1,{motionTypeString}(\"{coordianteTypeChar}PP\",{positionString}{speed},200,0,false)";
             _commandSender.Send(command);
         }
 
@@ -138,8 +139,16 @@ namespace RASDK.Arm.TMRobot
         public void Homing(CoordinateType coordinateType = CoordinateType.Descartes, bool needWait = true)
         {
             int speed = 100;
-            double sp_pc = 1.0;
-            string command = @"1,PTP(""CPP"",519,-122,458,185,0,90," + string.Format("{0:000}", speed * sp_pc) + ",200,0,false)";
+
+            var homePos = coordinateType == CoordinateType.Descartes ? Default.DescartesHomePosition : Default.JointHomePosition;
+            string homePosString = "";
+            foreach (var p in homePos)
+            {
+                homePosString += p.ToString();
+                homePosString += ",";
+            }
+
+            string command = $"1,PTP(\"CPP\",{homePosString}){speed},200,0,false)";
             _commandSender.Send(command);
         }
 
@@ -171,13 +180,14 @@ namespace RASDK.Arm.TMRobot
 
         private int ParseDirection(string text)
         {
+            int value = 10;
             if (text.Substring(0, 1) == "+")
             {
-                return 1;
+                return value;
             }
             else if (text.Substring(0, 1) == "-")
             {
-                return -1;
+                return -value;
             }
             throw new ArgumentException();
         }
