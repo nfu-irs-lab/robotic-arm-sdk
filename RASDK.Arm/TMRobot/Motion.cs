@@ -139,8 +139,16 @@ namespace RASDK.Arm.TMRobot
         public void Homing(CoordinateType coordinateType = CoordinateType.Descartes, bool needWait = true)
         {
             int speed = 100;
-            double sp_pc = 1.0;
-            string command = @"1,PTP(""CPP"",519,-122,458,185,0,90," + string.Format("{0:000}", speed * sp_pc) + ",200,0,false)";
+
+            var homePos = coordinateType == CoordinateType.Descartes ? Default.DescartesHomePosition : Default.JointHomePosition;
+            string homePosString = "";
+            foreach (var p in homePos)
+            {
+                homePosString += p.ToString();
+                homePosString += ",";
+            }
+
+            string command = $"1,PTP(\"CPP\",{homePosString}){speed},200,0,false)";
             _commandSender.Send(command);
         }
 
