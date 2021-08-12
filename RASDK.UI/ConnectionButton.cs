@@ -37,7 +37,7 @@ namespace RASDK.UI
                 _devices[i].Connect();
             }
 
-            buttonConnect.Enabled = !buttonConnect.Enabled;
+            buttonConnect.Enabled = false;
         }
 
         private void buttonDisconnect_Click(object sender, EventArgs e)
