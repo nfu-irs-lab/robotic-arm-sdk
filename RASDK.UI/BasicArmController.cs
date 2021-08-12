@@ -17,8 +17,8 @@ namespace RASDK.UI
 {
     public partial class BasicArmController : UserControl
     {
-        private IMessage _message;
         private ArmActionFactory _arm;
+        private IMessage _message;
 
         public BasicArmController()
         {
@@ -253,9 +253,13 @@ namespace RASDK.UI
             UpdateNowPosition();
         }
 
+        private void buttonArmMotionAbort_Click(object sender, EventArgs e)
+        {
+            _arm.Motion().Abort();
+        }
+
         private void buttonArmMotionStart_Click(object sender, EventArgs e)
         {
-            // IArmAction act;
             switch (_nowPositionType)
             {
                 case PositionType.Absolute:
