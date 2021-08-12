@@ -4,7 +4,7 @@ using RASDK.Arm.Type;
 
 namespace RASDK.Arm.Hiwin
 {
-    public abstract class HiwinBasicMotion : HiwinBasicAction
+    public abstract class BasicMotion : BasicAction
     {
         public CoordinateType CoordinateType = CoordinateType.Descartes;
         public MotionType MotionType = MotionType.PointToPoint;
@@ -28,9 +28,9 @@ namespace RASDK.Arm.Hiwin
             }
         }
 
-        public HiwinBasicMotion(int id,
-                                IMessage message,
-                                ref bool waitingState)
+        public BasicMotion(int id,
+                           IMessage message,
+                           ref bool waitingState)
             : base(id, message)
         {
             SmoothType = SmoothType.TwoLinesSpeedSmooth;

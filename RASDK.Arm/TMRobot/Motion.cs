@@ -11,6 +11,8 @@ namespace RASDK.Arm.TMRobot
         private CommandSender _commandSender;
         private CoordinateType _coordinateType = CoordinateType.Descartes;
         private MotionType _motionType = MotionType.PointToPoint;
+        private int _speed;
+        private int _acceleration;
 
         private AdditionalMotionParameters _additionalMotionParameters
         {
@@ -24,8 +26,11 @@ namespace RASDK.Arm.TMRobot
             }
         }
 
-        public Motion(SocketClientObject socketClientObject)
+        public Motion(double speed, double acceleration, SocketClientObject socketClientObject)
         {
+            _speed = (int)Math.Round(speed);
+            _acceleration = (int)Math.Round(acceleration);
+
             _commandSender = new CommandSender(socketClientObject);
         }
 
@@ -42,7 +47,6 @@ namespace RASDK.Arm.TMRobot
             }
 
             _additionalMotionParameters = addPara;
-            int speed = 50;
 
             string positionString = "";
             foreach (var p in position)
@@ -70,7 +74,7 @@ namespace RASDK.Arm.TMRobot
                     throw new Exception();
             }
 
-            string command = $"1,{motionTypeString}(\"{coordianteTypeChar}PP\",{positionString}{speed},200,0,false)";
+            string command = $"1,{motionTypeString}(\"{coordianteTypeChar}PP\",{positionString}{_speed},{_acceleration},0,false)";
             _commandSender.Send(command);
         }
 
@@ -92,7 +96,6 @@ namespace RASDK.Arm.TMRobot
                 throw new ArgumentException("Length of position must be 6");
             }
 
-            int speed = 50;
             _additionalMotionParameters = addPara;
 
             string positionString = "";
@@ -121,7 +124,7 @@ namespace RASDK.Arm.TMRobot
                     throw new Exception();
             }
 
-            string command = $"1,{motionTypeString}(\"{coordianteTypeChar}PP\",{positionString}{speed},200,0,false)";
+            string command = $"1,{motionTypeString}(\"{coordianteTypeChar}PP\",{positionString}{_speed},{_acceleration},0,false)";
             _commandSender.Send(command);
         }
 
@@ -136,10 +139,8 @@ namespace RASDK.Arm.TMRobot
             Relative(new[] { xJ1, yJ2, zJ3, aJ4, bJ5, cJ6 }, addPara);
         }
 
-        public void Homing(CoordinateType coordinateType = CoordinateType.Descartes, bool needWait = true)
+        public void Homing(bool slowly = true, CoordinateType coordinateType = CoordinateType.Descartes, bool needWait = true)
         {
-            int speed = 100;
-
             var homePos = coordinateType == CoordinateType.Descartes ? Default.DescartesHomePosition : Default.JointHomePosition;
             string homePosString = "";
             foreach (var p in homePos)
@@ -148,7 +149,8 @@ namespace RASDK.Arm.TMRobot
                 homePosString += ",";
             }
 
-            string command = $"1,PTP(\"CPP\",{homePosString}{speed},200,0,false)";
+            var speed = slowly ? Default.SpeedOfHomingSlowly : _speed;
+            var command = $"1,PTP(\"CPP\",{homePosString}{speed},{_acceleration},0,false)";
             _commandSender.Send(command);
         }
 

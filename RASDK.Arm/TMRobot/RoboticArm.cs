@@ -7,10 +7,11 @@ using RASDK.Basic;
 using RASDK.Basic.Message;
 using System.Windows.Forms;
 using AELTA_test;
+using RASDK.Arm.Type;
 
 namespace RASDK.Arm.TMRobot
 {
-    public class TMRobotArm : ArmActionFactory, IDevice
+    public class RoboticArm : ArmActionFactory, IDevice
     {
         private static IPAddress _ipAddress = IPAddress.Parse("127.0.0.1");
         private static int _portNumber = 10001;
@@ -20,16 +21,55 @@ namespace RASDK.Arm.TMRobot
         private TcpClient ClientSockt = default;
         private string[] data = new string[10];
         private double[] dataint = new double[] { 0, 0, 0, 0, 0, 0 };
+        private double _speed;
+        private double _acceleration;
 
         private TcpListener ServerListener = new TcpListener(_ipAddress, _portNumber);
 
-        public TMRobotArm(string ip, int port, IMessage message) : base(message)
+        public RoboticArm(string ip, int port, IMessage message) : base(message)
         {
             _ip = ip;
             _port = port;
 
+            _speed = 50;
+            _acceleration = 200;
+
             Thread threadingServer = new Thread(StartServer);
             threadingServer.Start();
+        }
+
+        #region Speed & Acceleration
+
+        public override double Speed
+        {
+            get => _speed;
+
+            set
+            {
+                if (value > 100 || value < 1)
+                {
+                    _message.Show($"手臂速度應爲1% ~ 100%之間。輸入值爲： {value}",
+                                  LoggingLevel.Warn);
+                }
+                else
+                {
+                    _speed = value;
+                }
+            }
+        }
+
+        public override double Acceleration
+        {
+            get => _acceleration;
+
+            set { _acceleration = value; }
+        }
+
+        #endregion Speed & Acceleration
+
+        public override double[] NowPosition(CoordinateType coordinateType = CoordinateType.Descartes)
+        {
+            throw new NotImplementedException();
         }
 
         public override IConnection Connection()
@@ -44,7 +84,7 @@ namespace RASDK.Arm.TMRobot
 
         public override IMotion Motion()
         {
-            return new Motion(_socketClientObject);
+            return new Motion(_speed, _acceleration, _socketClientObject);
         }
 
         #region IDevice

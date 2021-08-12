@@ -5,11 +5,11 @@ using RASDK.Arm.Type;
 
 namespace RASDK.Arm.Hiwin
 {
-    public class HiwinMotion : HiwinBasicMotion, IMotion
+    public class Motion : BasicMotion, IMotion
     {
-        public HiwinMotion(int id,
-                           IMessage message,
-                           ref bool waitingState)
+        public Motion(int id,
+                      IMessage message,
+                      ref bool waitingState)
             : base(id, message, ref waitingState)
         { }
 
@@ -125,10 +125,19 @@ namespace RASDK.Arm.Hiwin
         }
 
 
-        public void Homing(CoordinateType coordinateType = CoordinateType.Descartes, bool needWait = true)
+        public void Homing(bool slowly = true,
+                           CoordinateType coordinateType = CoordinateType.Descartes,
+                           bool needWait = true)
         {
             CoordinateType = coordinateType;
             NeedWait = needWait;
+
+            var speed = new Speed(_id, _message);
+            var oriSpeedValue = speed.Value;
+            if (slowly)
+            {
+                speed.Value = Default.SpeedOfHomingSlowly;
+            }
 
             int retuenCode;
             switch (CoordinateType)
@@ -146,6 +155,11 @@ namespace RASDK.Arm.Hiwin
             }
 
             WaitForMotionComplete(retuenCode);
+
+            if (slowly)
+            {
+                speed.Value = oriSpeedValue;
+            }
         }
 
         #region Jog
