@@ -139,7 +139,7 @@ namespace RASDK.Arm.TMRobot
             Relative(new[] { xJ1, yJ2, zJ3, aJ4, bJ5, cJ6 }, addPara);
         }
 
-        public void Homing(CoordinateType coordinateType = CoordinateType.Descartes, bool needWait = true)
+        public void Homing(bool slowly = true, CoordinateType coordinateType = CoordinateType.Descartes, bool needWait = true)
         {
             var homePos = coordinateType == CoordinateType.Descartes ? Default.DescartesHomePosition : Default.JointHomePosition;
             string homePosString = "";
@@ -149,7 +149,8 @@ namespace RASDK.Arm.TMRobot
                 homePosString += ",";
             }
 
-            string command = $"1,PTP(\"CPP\",{homePosString}{_speed},{_acceleration},0,false)";
+            var speed = slowly ? Default.SpeedOfHomingSlowly : _speed;
+            var command = $"1,PTP(\"CPP\",{homePosString}{speed},{_acceleration},0,false)";
             _commandSender.Send(command);
         }
 

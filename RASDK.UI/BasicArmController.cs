@@ -249,23 +249,7 @@ namespace RASDK.UI
 
         private void buttonArmHoming_Click(object sender, EventArgs e)
         {
-            if (checkBoxArmSlowlyHoming.Checked)
-            {
-                // _arm.Speed = 5;
-                // _arm.Acceleration = 10;
-
-                Thread.Sleep(300);
-
-                _arm.Motion().Homing(_nowCoordinateType);
-
-                // _arm.Speed = _nowSpeed;
-                // _arm.Acceleration = _nowAcceleration;
-            }
-            else
-            {
-                _arm.Motion().Homing(_nowCoordinateType);
-            }
-
+            _arm.Motion().Homing(checkBoxArmSlowlyHoming.Checked, _nowCoordinateType);
             UpdateNowPosition();
         }
 
