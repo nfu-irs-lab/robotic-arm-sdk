@@ -70,6 +70,7 @@
         <Compile Include="Hiwin\AdditionalMotionParameters.cs"/>
         <Compile Include="Hiwin\BasicMotion.cs"/>
         <Compile Include="Hiwin\HRobot.cs"/>
+        <Compile Include="Hiwin\NowPosition.cs"/>
         <Compile Include="Hiwin\ReturnCodeCheck.cs"/>
         <Compile Include="Hiwin\Speed.cs"/>
         <Compile Include="IMotion.cs"/>
