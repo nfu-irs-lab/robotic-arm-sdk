@@ -67,8 +67,8 @@
         <Compile Include="AdditionalMotionParameters.cs"/>
         <Compile Include="Hiwin\Acceleration.cs"/>
         <Compile Include="Hiwin\Default.cs"/>
-        <Compile Include="Hiwin\HiwinAdditionalMotionParameters.cs"/>
-        <Compile Include="Hiwin\HiwinBasicMotion.cs"/>
+        <Compile Include="Hiwin\AdditionalMotionParameters.cs"/>
+        <Compile Include="Hiwin\BasicMotion.cs"/>
         <Compile Include="Hiwin\HRobot.cs"/>
         <Compile Include="Hiwin\ReturnCodeCheck.cs"/>
         <Compile Include="Hiwin\Speed.cs"/>
@@ -76,10 +76,10 @@
         <Compile Include="ArmActionFactory.cs"/>
         <Compile Include="Axis.cs"/>
         <Compile Include="IConnection.cs"/>
-        <Compile Include="Hiwin\HiwinMotion.cs"/>
-        <Compile Include="Hiwin\HiwinArm.cs"/>
-        <Compile Include="Hiwin\HiwinBasicAction.cs"/>
-        <Compile Include="Hiwin\HiwinConnection.cs"/>
+        <Compile Include="Hiwin\Motion.cs"/>
+        <Compile Include="Hiwin\RoboticArm.cs"/>
+        <Compile Include="Hiwin\BasicAction.cs"/>
+        <Compile Include="Hiwin\Connection.cs"/>
         <Compile Include="Properties\AssemblyInfo.cs"/>
         <Compile Include="TMRobot\CommandSender.cs"/>
         <Compile Include="TMRobot\Connection.cs"/>

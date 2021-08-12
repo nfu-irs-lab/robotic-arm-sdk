@@ -5,11 +5,11 @@ using RASDK.Arm.Type;
 
 namespace RASDK.Arm.Hiwin
 {
-    public class HiwinMotion : HiwinBasicMotion, IMotion
+    public class Motion : BasicMotion, IMotion
     {
-        public HiwinMotion(int id,
-                           IMessage message,
-                           ref bool waitingState)
+        public Motion(int id,
+                      IMessage message,
+                      ref bool waitingState)
             : base(id, message, ref waitingState)
         { }
 

@@ -6,7 +6,7 @@ using RASDK.Basic.Message;
 
 namespace RASDK.Arm.Hiwin
 {
-    public class HiwinConnection : HiwinBasicAction, IConnection
+    public class Connection : BasicAction, IConnection
     {
         private static readonly HRobot.CallBackFun _callBackFun = EventFun;
         private static unsafe bool* _waiting;
@@ -14,10 +14,10 @@ namespace RASDK.Arm.Hiwin
         private const int _defaultID = -99;
         private readonly string _ip;
 
-        public HiwinConnection(string ip,
-                               IMessage message,
-                               ref int id,
-                               ref bool waiting)
+        public Connection(string ip,
+                          IMessage message,
+                          ref int id,
+                          ref bool waiting)
             : base(_defaultID, message)
         {
             _ip = ip;

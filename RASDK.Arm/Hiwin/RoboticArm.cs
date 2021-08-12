@@ -5,13 +5,13 @@ using RASDK.Basic;
 
 namespace RASDK.Arm.Hiwin
 {
-    public class HiwinArm : ArmActionFactory, IDevice
+    public class RoboticArm : ArmActionFactory, IDevice
     {
         private readonly string _ip;
         private int _id;
         private static bool _waiting = false;
 
-        public HiwinArm(string ip, IMessage message) : base(message)
+        public RoboticArm(string ip, IMessage message) : base(message)
         {
             _ip = ip;
         }
@@ -32,12 +32,12 @@ namespace RASDK.Arm.Hiwin
 
         public override IConnection Connection()
         {
-            return new HiwinConnection(_ip, _message, ref _id, ref _waiting);
+            return new Connection(_ip, _message, ref _id, ref _waiting);
         }
 
         public override IMotion Motion()
         {
-            return new HiwinMotion(_id, _message, ref _waiting);
+            return new Motion(_id, _message, ref _waiting);
         }
 
         #region IDevice

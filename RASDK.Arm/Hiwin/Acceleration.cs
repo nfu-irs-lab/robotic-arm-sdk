@@ -4,7 +4,7 @@ using RASDK.Basic.Message;
 
 namespace RASDK.Arm.Hiwin
 {
-    public class Acceleration : HiwinBasicAction
+    public class Acceleration : BasicAction
     {
         public Acceleration(int id, IMessage message) : base(id, message)
         { }

@@ -110,7 +110,7 @@ namespace RASDK.Arm.TestForms
             switch (comboBoxArmType.SelectedItem.ToString())
             {
                 case "HIWIN":
-                    armActionFactory = new Hiwin.HiwinArm(textBoxIp.Text, _message);
+                    armActionFactory = new Hiwin.RoboticArm(textBoxIp.Text, _message);
                     break;
 
                 case "TM Robot":
