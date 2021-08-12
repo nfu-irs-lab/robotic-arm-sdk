@@ -6,5 +6,6 @@
         public static readonly double[] JointHomePosition = { 0, 0, 0, 0, 0, 0 };
         public static readonly int SpeedOfPowerOn = 10;
         public static readonly int AccelerationOfPowerOn = 20;
+        public static readonly int SpeedOfHomingSlowly = 5;
     }
 }

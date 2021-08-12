@@ -26,7 +26,7 @@ namespace RASDK.Arm
                       double cJ6,
                       AdditionalMotionParameters addPara = null);
 
-        void Homing(CoordinateType coordinateType = CoordinateType.Descartes, bool needWait = true);
+        void Homing(bool slowly = true, CoordinateType coordinateType = CoordinateType.Descartes, bool needWait = true);
 
         void Jog(string axis);
     }
