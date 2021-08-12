@@ -10,7 +10,7 @@ using AELTA_test;
 
 namespace RASDK.Arm.TMRobot
 {
-    public class TMRobotArm : ArmActionFactory, IDevice
+    public class RoboticArm : ArmActionFactory, IDevice
     {
         private static IPAddress _ipAddress = IPAddress.Parse("127.0.0.1");
         private static int _portNumber = 10001;
@@ -25,7 +25,7 @@ namespace RASDK.Arm.TMRobot
 
         private TcpListener ServerListener = new TcpListener(_ipAddress, _portNumber);
 
-        public TMRobotArm(string ip, int port, IMessage message) : base(message)
+        public RoboticArm(string ip, int port, IMessage message) : base(message)
         {
             _ip = ip;
             _port = port;

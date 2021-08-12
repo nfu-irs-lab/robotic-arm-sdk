@@ -87,7 +87,7 @@
         <Compile Include="TMRobot\Motion.cs"/>
         <Compile Include="TMRobot\SLogger.cs"/>
         <Compile Include="TMRobot\SocketClientObject.cs"/>
-        <Compile Include="TMRobot\TMRobotArm.cs"/>
+        <Compile Include="TMRobot\RoboticArm.cs"/>
         <Compile Include="Type\CoordinateType.cs"/>
         <Compile Include="Type\MotionTypo.cs"/>
         <Compile Include="Type\PositionType.cs"/>
