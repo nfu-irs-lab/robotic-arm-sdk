@@ -216,7 +216,7 @@ namespace RASDK.UI
 
         private int _nowAcceleration
         {
-            get { return Convert.ToInt32(numericUpDownArmAcceleration); }
+            get { return Convert.ToInt32(numericUpDownArmAcceleration.Value); }
 
             set
             {
@@ -228,7 +228,7 @@ namespace RASDK.UI
 
         private int _nowSpeed
         {
-            get { return Convert.ToInt32(numericUpDownArmSpeed); }
+            get { return Convert.ToInt32(numericUpDownArmSpeed.Value); }
 
             set
             {
