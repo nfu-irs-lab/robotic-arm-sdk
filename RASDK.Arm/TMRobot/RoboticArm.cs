@@ -67,9 +67,10 @@ namespace RASDK.Arm.TMRobot
 
         #endregion Speed & Acceleration
 
+        // XXX 還不知道如果取得目前位置。
         public override double[] NowPosition(CoordinateType coordinateType = CoordinateType.Descartes)
         {
-            throw new NotImplementedException();
+            return Hiwin.Default.DescartesHomePosition;
         }
 
         public override IConnection Connection()
