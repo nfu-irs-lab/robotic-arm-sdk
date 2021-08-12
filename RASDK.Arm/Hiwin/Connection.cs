@@ -46,6 +46,9 @@ namespace RASDK.Arm.Hiwin
             // Check connection.
             if (_id >= 0 && _id <= 65535)
             {
+                new Speed(_id, _message).Value = Default.SpeedOfPowerOn;
+                new Acceleration(_id, _message).Value = Default.AccelerationOfPowerOn;
+
                 ShowSuccessfulConnectMessage();
             }
             else
