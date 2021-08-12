@@ -65,11 +65,13 @@
     </ItemGroup>
     <ItemGroup>
         <Compile Include="AdditionalMotionParameters.cs"/>
+        <Compile Include="Hiwin\Acceleration.cs"/>
         <Compile Include="Hiwin\Default.cs"/>
         <Compile Include="Hiwin\HiwinAdditionalMotionParameters.cs"/>
         <Compile Include="Hiwin\HiwinBasicMotion.cs"/>
         <Compile Include="Hiwin\HRobot.cs"/>
         <Compile Include="Hiwin\ReturnCodeCheck.cs"/>
+        <Compile Include="Hiwin\Speed.cs"/>
         <Compile Include="IMotion.cs"/>
         <Compile Include="ArmActionFactory.cs"/>
         <Compile Include="Axis.cs"/>
