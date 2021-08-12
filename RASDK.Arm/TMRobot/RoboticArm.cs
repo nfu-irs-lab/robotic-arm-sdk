@@ -7,6 +7,7 @@ using RASDK.Basic;
 using RASDK.Basic.Message;
 using System.Windows.Forms;
 using AELTA_test;
+using RASDK.Arm.Type;
 
 namespace RASDK.Arm.TMRobot
 {
@@ -65,6 +66,11 @@ namespace RASDK.Arm.TMRobot
         }
 
         #endregion Speed & Acceleration
+
+        public override double[] NowPosition(CoordinateType coordinateType = CoordinateType.Descartes)
+        {
+            throw new NotImplementedException();
+        }
 
         public override IConnection Connection()
         {
