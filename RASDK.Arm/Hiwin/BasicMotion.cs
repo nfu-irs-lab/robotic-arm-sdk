@@ -4,38 +4,35 @@ using RASDK.Arm.Type;
 
 namespace RASDK.Arm.Hiwin
 {
-    public abstract class HiwinBasicMotion : HiwinBasicAction
+    public abstract class BasicMotion : BasicAction
     {
         public CoordinateType CoordinateType = CoordinateType.Descartes;
         public MotionType MotionType = MotionType.PointToPoint;
         public bool NeedWait = true;
         public int SmoothValue = 50;
-        protected double[] _position;
         protected int _smoothTypeCode;
         protected unsafe bool* _waitingState;
 
-        public HiwinBasicMotion(double xJ1,
-                                double yJ2,
-                                double zJ3,
-                                double aJ4,
-                                double bJ5,
-                                double cJ6,
-                                int id,
-                                IMessage message,
-                                ref bool waitingState,
-                                AdditionalMotionParameters additionalPara = null)
+        protected AdditionalMotionParameters _additionalMotionParameters
+        {
+            set
+            {
+                if (value != null)
+                {
+                    MotionType = value.MotionType;
+                    CoordinateType = value.CoordinateType;
+                    SmoothType = value.SmoothType;
+                    SmoothValue = value.SmoothValue;
+                    NeedWait = value.NeedWait;
+                }
+            }
+        }
+
+        public BasicMotion(int id,
+                           IMessage message,
+                           ref bool waitingState)
             : base(id, message)
         {
-            if (additionalPara != null)
-            {
-                MotionType = additionalPara.MotionType;
-                CoordinateType = additionalPara.CoordinateType;
-                SmoothType = additionalPara.SmoothType;
-                SmoothValue = additionalPara.SmoothValue;
-                NeedWait = additionalPara.NeedWait;
-            }
-
-            _position = new[] { xJ1, yJ2, zJ3, aJ4, bJ5, cJ6 };
             SmoothType = SmoothType.TwoLinesSpeedSmooth;
 
             unsafe

@@ -1,4 +1,6 @@
-﻿using System;
+﻿// #define DISABLE_SHOW_MESSAGE
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -7,7 +9,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using RASDK.Arm.Hiwin;
 using RASDK.Basic;
 using RASDK.Basic.Message;
 
@@ -17,58 +18,124 @@ namespace RASDK.Arm.TestForms
     {
         private ArmActionFactory _arm;
 
-        private IMessage _message =
-            //new GeneralMessage(new EmptyLog());
+        private readonly IMessage _message =
+#if DISABLE_SHOW_MESSAGE
             new EmptyMessage();
+#else
+            new GeneralMessage(new EmptyLog());
+#endif
 
         public Form1()
         {
             InitializeComponent();
+            comboBoxArmType.SelectedIndex = 0;
         }
 
         private void buttonConnect_Click(object sender, EventArgs e)
         {
             if (_arm == null)
             {
-                _arm = new HiwinArmActionFactory(textBoxIp.Text, _message);
+                _arm = GetArmType();
+
                 textBoxIp.Enabled = false;
+                textBoxPort.Enabled = false;
+                comboBoxArmType.Enabled = false;
             }
 
-            _arm.Connect();
+            _arm.Connection().Open();
         }
 
         private void buttonDisconnect_Click(object sender, EventArgs e)
         {
-            _arm.Disconnect();
+            _arm.Connection().Close();
+
+            _arm = null;
+            textBoxIp.Enabled = true;
+            textBoxPort.Enabled = true;
+            comboBoxArmType.Enabled = true;
         }
 
         private void buttonHoming_Click(object sender, EventArgs e)
         {
-            _arm.Homing();
+            _arm.Motion().Homing();
         }
 
         private void buttonMove1_Click(object sender, EventArgs e)
         {
-            _arm.RelativeMotion(100, 0, 0, 0, 0, 0, new AdditionalMotionParameters() { NeedWait = false });
+            _arm.Motion().
+                 Relative(-100,
+                          0,
+                          0,
+                          0,
+                          0,
+                          0,
+                          new AdditionalMotionParameters { NeedWait = false });
             MessageBox.Show("1");
-            _arm.RelativeMotion(-100, 0, 0, 0, 0, 0, new AdditionalMotionParameters() { NeedWait = true });
+            _arm.Motion().
+                 Relative(100,
+                          0,
+                          0,
+                          0,
+                          0,
+                          0,
+                          new AdditionalMotionParameters { NeedWait = false });
             MessageBox.Show("2");
         }
 
         private void buttonMove2_Click(object sender, EventArgs e)
-        { }
+        {
+            _arm.Motion().
+                 Relative(100,
+                          0,
+                          0,
+                          0,
+                          0,
+                          0,
+                          new AdditionalMotionParameters { NeedWait = true });
+            MessageBox.Show("1");
+            _arm.Motion().
+                 Relative(-100,
+                          0,
+                          0,
+                          0,
+                          0,
+                          0,
+                          new AdditionalMotionParameters { NeedWait = true });
+            MessageBox.Show("2");
+        }
+
+        private ArmActionFactory GetArmType()
+        {
+            ArmActionFactory armActionFactory;
+            switch (comboBoxArmType.SelectedItem.ToString())
+            {
+                case "HIWIN":
+                    armActionFactory = new Hiwin.RoboticArm(textBoxIp.Text, _message);
+                    break;
+
+                case "TM Robot":
+                    armActionFactory = new TMRobot.RoboticArm(textBoxIp.Text,
+                                                              Int16.Parse(textBoxPort.Text),
+                                                              _message);
+                    break;
+
+                default:
+                    throw new Exception("未知的手臂類型。");
+            }
+            return armActionFactory;
+        }
 
         #region Jog
 
         private void JogStart(int indexOfAxis, double value)
         {
             var dir = value >= 0 ? '+' : '-';
-            _arm.Jog($"{dir}{indexOfAxis}");
+            _arm.Motion().Jog($"{dir}{indexOfAxis}");
         }
 
         private void JogStop()
         {
-            _arm.AbortMotion();
+            _arm.Motion().Abort();
         }
 
         #region X

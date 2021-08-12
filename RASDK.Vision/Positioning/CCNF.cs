@@ -15,11 +15,33 @@ namespace RASDK.Vision.Positioning
     /// </summary>
     public class CCNF : IVisionPositioning
     {
-        public double OffsetX = 0;
-        public double OffsetY = 0;
+        /// <summary>
+        /// 誤差逼近算法。
+        /// </summary>
+        public delegate void Approximation(double errorX,
+                                           double errorY,
+                                           ref double valueX,
+                                           ref double valueY);
 
-        private readonly double _allowableError;
+        /// <summary>
+        /// 座標轉換算法。
+        /// </summary>
+        public delegate void TransferFunctionOfVirtualCheckBoardToArm(double vX,
+                                                                      double vY,
+                                                                      out double armX,
+                                                                      out double armY);
+
+        private Approximation _approximation;
+        private TransferFunctionOfVirtualCheckBoardToArm _transferFunctionOfVirtualCheckBoardToArm;
+
         private readonly CameraParameter _cameraParameter;
+        private double _allowableError;
+
+        public double AllowableError
+        {
+            get => _allowableError;
+            set => _allowableError = value;
+        }
 
         /// <summary>
         /// RASDK.Vision positioning by Camera Calibration with Negative Feedback.<br/>
@@ -28,13 +50,18 @@ namespace RASDK.Vision.Positioning
         /// <remarks>
         /// 此方法的運作方式爲先給定一個預測虛擬定位板座標作，將其透過相機標定法來算出對應的預測像素座標。<br/>
         /// 如果預測像素座標與實際像素座標的差距大於容許誤差，就調整預測虛擬定位板座標，再重複上述步驟。<br/>
-        /// 如果預測像素座標與實際像素座標的差距小於等於容許誤差，就視目前的預測虛擬定位板座標爲正確的，再將其透過一組平移變換來轉換成手臂座標。<br/>
+        /// 如果預測像素座標與實際像素座標的差距小於等於容許誤差，就視目前的預測虛擬定位板座標爲正確的，再將其透過一組變換來轉換成手臂座標。<br/>
         /// 虛擬定位板座標是一個以相機成像平面投影到實物平面的假想平面座標系。其原點在鏡頭中心，也就是主點的投影位置。
         /// </remarks>
-        public CCNF(CameraParameter cameraParameter, double allowableError = 3)
+        public CCNF(CameraParameter cameraParameter,
+                    TransferFunctionOfVirtualCheckBoardToArm tf,
+                    Approximation approximation = null)
         {
+            _allowableError = 3;
             _cameraParameter = cameraParameter;
-            _allowableError = allowableError;
+
+            _transferFunctionOfVirtualCheckBoardToArm = tf ?? BasicTransferFunctionOfVirtualCheckBoardToArm;
+            _approximation = approximation ?? BasicApproximation;
         }
 
         public void ImageToArm(int pixelX, int pixelY, out double armX, out double armY)
@@ -61,7 +88,7 @@ namespace RASDK.Vision.Positioning
                 if (Math.Abs(errorX) > _allowableError || Math.Abs(errorY) > _allowableError)
                 {
                     // 差距大於容許誤差，調整預測虛擬定位板座標。
-                    CalOffset(errorX, errorY, ref virtualCheckBoardX, ref virtualCheckBoardY);
+                    _approximation(errorX, errorY, ref virtualCheckBoardX, ref virtualCheckBoardY);
                 }
                 else
                 {
@@ -71,10 +98,19 @@ namespace RASDK.Vision.Positioning
             }
 
             // 將虛擬定位板座標轉換成手臂座標。
-            VirtualCheckBoardToArm(virtualCheckBoardX, virtualCheckBoardY, out armX, out armY);
+            _transferFunctionOfVirtualCheckBoardToArm(virtualCheckBoardX,
+                                                      virtualCheckBoardY,
+                                                      out armX,
+                                                      out armY);
         }
 
-        private void CalOffset(double errorX, double errorY, ref double vX, ref double vY)
+        private void BasicTransferFunctionOfVirtualCheckBoardToArm(double vX, double vY, out double armX, out double armY)
+        {
+            armX = vX;
+            armY = vY;
+        }
+
+        private void BasicApproximation(double errorX, double errorY, ref double vX, ref double vY)
         {
             if (errorX > 0)
                 vX++;
@@ -85,12 +121,6 @@ namespace RASDK.Vision.Positioning
                 vY++;
             else if (errorY < 0)
                 vY--;
-        }
-
-        private void VirtualCheckBoardToArm(double vX, double vY, out double armX, out double armY)
-        {
-            armX = vX + OffsetX;
-            armY = vY + OffsetY + 368;
         }
     }
 }
