@@ -4,6 +4,12 @@
 [![GitHub repo size](https://img.shields.io/github/repo-size/nfu-irs-lab/robotic-arm-sdk)](https://github.com/nfu-irs-lab/robotic-arm-sdk)
 [![GitHub issues](https://img.shields.io/github/issues/nfu-irs-lab/robotic-arm-sdk.svg)](https://github.com/nfu-irs-lab/robotic-arm-sdk/issues)
 
+機械手臂 SDK。目前主要支援：
+- HIWIN 機械手臂
+- HIWIN 電動夾爪
+- TM Robot 機械手臂
+- IDS 工業攝影機
+
 > Forked from [HRTK 1.4.0](https://github.com/nfu-irs-lab/hiwinrobot-toolkit/releases/tag/v1.4.0)
 
 # 各 Project 功能
