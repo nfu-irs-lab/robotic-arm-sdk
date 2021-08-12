@@ -11,14 +11,13 @@ namespace RASDK.Arm.Hiwin
         private static readonly HRobot.CallBackFun _callBackFun = EventFun;
         private static unsafe bool* _waiting;
         private static unsafe int* _idPointer;
-        private const int _defaultID = -99;
         private readonly string _ip;
 
         public Connection(string ip,
                           IMessage message,
                           ref int id,
                           ref bool waiting)
-            : base(_defaultID, message)
+            : base(id, message)
         {
             _ip = ip;
 
@@ -202,10 +201,6 @@ namespace RASDK.Arm.Hiwin
 
                 case -4:
                     errorMessage = $"{_id}：版本不相符。";
-                    break;
-
-                case _defaultID:
-                    errorMessage = $"{_id}：自定義錯誤碼，預設 ID。從未進行連線，請檢測程式。";
                     break;
 
                 default:
