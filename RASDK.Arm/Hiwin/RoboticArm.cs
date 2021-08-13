@@ -30,9 +30,9 @@ namespace RASDK.Arm.Hiwin
             set => new Acceleration(_id, _message).Value = (int)Math.Round(value);
         }
 
-        public override double[] NowPosition(CoordinateType coordinateType = CoordinateType.Descartes)
+        public override double[] GetNowPosition(CoordinateType coordinateType = CoordinateType.Descartes)
         {
-            return new NowPosition(_id, _message).Get(coordinateType);
+            return new GetNowPosition(_id, _message).Value(coordinateType);
         }
 
         public override IConnection Connection => new Connection(_ip, _message, ref _id, ref _waiting);

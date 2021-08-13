@@ -4,12 +4,12 @@ using RASDK.Basic.Message;
 
 namespace RASDK.Arm.Hiwin
 {
-    public class NowPosition : BasicAction
+    public class GetNowPosition : BasicAction
     {
-        public NowPosition(int id, IMessage message) : base(id, message)
+        public GetNowPosition(int id, IMessage message) : base(id, message)
         { }
 
-        public double[] Get(CoordinateType coordinateType = CoordinateType.Descartes)
+        public double[] Value(CoordinateType coordinateType = CoordinateType.Descartes)
         {
             var position = new double[6];
             Func<int, double[], int> action;

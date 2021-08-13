@@ -53,7 +53,7 @@ namespace RASDK.UI
 
         private void UpdateNowPosition()
         {
-            _nowPosition = _arm.NowPosition(_nowCoordinateType);
+            _nowPosition = _arm.GetNowPosition(_nowCoordinateType);
         }
 
         #region Type
