@@ -20,8 +20,8 @@ namespace RASDK.Arm
 
         public abstract double[] NowPosition(CoordinateType coordinateType = CoordinateType.Descartes);
 
-        public abstract IConnection Connection();
+        public abstract IConnection Connection { get; }
 
-        public abstract IMotion Motion();
+        public abstract IMotion Motion { get; }
     }
 }
