@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using AELTA_test;
 using RASDK.Arm.Hiwin;
 
@@ -27,6 +28,14 @@ namespace RASDK.Arm.TMRobot
             get
             {
                 _commandSender.Send("1,ListenSend(90,GetString(Robot[0].CoordRobot))");
+                for (int i = 0; i < 25; i++)
+                {
+                    Thread.Sleep(50);
+                    if (_position != null)
+                    {
+                        break;
+                    }
+                }
                 return _position;
             }
         }
