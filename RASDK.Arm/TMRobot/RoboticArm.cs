@@ -67,9 +67,9 @@ namespace RASDK.Arm.TMRobot
 
         #endregion Speed & Acceleration
 
-        public override double[] NowPosition(CoordinateType coordinateType = CoordinateType.Descartes)
+        public override double[] GetNowPosition(CoordinateType coordinateType = CoordinateType.Descartes)
         {
-            return new NowPosition(_socketClientObject).Value;
+            return new GetNowPosition(_socketClientObject).Value;
         }
 
         public override IConnection Connection
