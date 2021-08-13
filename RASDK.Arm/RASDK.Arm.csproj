@@ -86,6 +86,7 @@
     <Compile Include="TMRobot\Connection.cs" />
     <Compile Include="TMRobot\Default.cs" />
     <Compile Include="TMRobot\Motion.cs" />
+    <Compile Include="TMRobot\NowPosition.cs"/>
     <Compile Include="TMRobot\SLogger.cs" />
     <Compile Include="TMRobot\SocketClientObject.cs" />
     <Compile Include="TMRobot\RoboticArm.cs" />
