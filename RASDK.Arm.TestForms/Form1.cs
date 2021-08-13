@@ -42,12 +42,12 @@ namespace RASDK.Arm.TestForms
                 comboBoxArmType.Enabled = false;
             }
 
-            _arm.Connection().Open();
+            _arm.Connection.Open();
         }
 
         private void buttonDisconnect_Click(object sender, EventArgs e)
         {
-            _arm.Connection().Close();
+            _arm.Connection.Close();
 
             _arm = null;
             textBoxIp.Enabled = true;
@@ -57,12 +57,12 @@ namespace RASDK.Arm.TestForms
 
         private void buttonHoming_Click(object sender, EventArgs e)
         {
-            _arm.Motion().Homing();
+            _arm.Motion.Homing();
         }
 
         private void buttonMove1_Click(object sender, EventArgs e)
         {
-            _arm.Motion().
+            _arm.Motion.
                  Relative(-100,
                           0,
                           0,
@@ -71,7 +71,7 @@ namespace RASDK.Arm.TestForms
                           0,
                           new AdditionalMotionParameters { NeedWait = false });
             MessageBox.Show("1");
-            _arm.Motion().
+            _arm.Motion.
                  Relative(100,
                           0,
                           0,
@@ -84,7 +84,7 @@ namespace RASDK.Arm.TestForms
 
         private void buttonMove2_Click(object sender, EventArgs e)
         {
-            _arm.Motion().
+            _arm.Motion.
                  Relative(100,
                           0,
                           0,
@@ -93,7 +93,7 @@ namespace RASDK.Arm.TestForms
                           0,
                           new AdditionalMotionParameters { NeedWait = true });
             MessageBox.Show("1");
-            _arm.Motion().
+            _arm.Motion.
                  Relative(-100,
                           0,
                           0,
@@ -130,12 +130,12 @@ namespace RASDK.Arm.TestForms
         private void JogStart(int indexOfAxis, double value)
         {
             var dir = value >= 0 ? '+' : '-';
-            _arm.Motion().Jog($"{dir}{indexOfAxis}");
+            _arm.Motion.Jog($"{dir}{indexOfAxis}");
         }
 
         private void JogStop()
         {
-            _arm.Motion().Abort();
+            _arm.Motion.Abort();
         }
 
         #region X
