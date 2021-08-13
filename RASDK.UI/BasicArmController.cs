@@ -17,8 +17,8 @@ namespace RASDK.UI
 {
     public partial class BasicArmController : UserControl
     {
-        private IMessage _message;
         private ArmActionFactory _arm;
+        private IMessage _message;
 
         public BasicArmController()
         {
@@ -45,15 +45,15 @@ namespace RASDK.UI
             };
         }
 
-        public void DependencyInjection(ArmActionFactory armController, IMessage message)
+        public void DependencyInjection(ArmActionFactory arm, IMessage message)
         {
             _message = message;
-            _arm = armController;
+            _arm = arm;
         }
 
         private void UpdateNowPosition()
         {
-            // _nowPosition = _arm.GetPosition(_nowCoordinateType);
+            _nowPosition = _arm.NowPosition(_nowCoordinateType);
         }
 
         #region Type
@@ -253,9 +253,13 @@ namespace RASDK.UI
             UpdateNowPosition();
         }
 
+        private void buttonArmMotionAbort_Click(object sender, EventArgs e)
+        {
+            _arm.Motion().Abort();
+        }
+
         private void buttonArmMotionStart_Click(object sender, EventArgs e)
         {
-            // IArmAction act;
             switch (_nowPositionType)
             {
                 case PositionType.Absolute:
@@ -293,13 +297,13 @@ namespace RASDK.UI
 
         private void buttonSetSpeedAndAcceleration_Click(object sender, EventArgs e)
         {
-            // _arm.Speed = _nowSpeed;
-            // _arm.Acceleration = _nowAcceleration;
+            _arm.Speed = _nowSpeed;
+            _arm.Acceleration = _nowAcceleration;
 
-            Thread.Sleep(300);
+            Thread.Sleep(150);
 
-            // _nowSpeed = _arm.Speed;
-            // _nowAcceleration = _arm.Acceleration;
+            _nowSpeed = (int)_arm.Speed;
+            _nowAcceleration = (int)_arm.Acceleration;
         }
 
         private void radioButtonCoordinateTypeDescartes_CheckedChanged(object sender, EventArgs e)
