@@ -67,41 +67,41 @@ namespace RASDK.Arm.TMRobot
 
         #endregion Speed & Acceleration
 
-        public override double[] NowPosition(CoordinateType coordinateType = CoordinateType.Descartes)
+        public override double[] GetNowPosition(CoordinateType coordinateType = CoordinateType.Descartes)
         {
-            return new NowPosition(_socketClientObject).Value;
+            return new GetNowPosition(_socketClientObject).Value;
         }
 
-        public override IConnection Connection()
+        public override IConnection Connection
         {
-            if (_socketClientObject == null)
+            get
             {
-                _socketClientObject = new SocketClientObject(_ip, _port);
+                if (_socketClientObject == null)
+                {
+                    _socketClientObject = new SocketClientObject(_ip, _port);
+                }
+
+                return new Connection(_ip, _port, _message, _socketClientObject);
             }
-
-            return new Connection(_ip, _port, _message, _socketClientObject);
         }
 
-        public override IMotion Motion()
-        {
-            return new Motion(_speed, _acceleration, _socketClientObject);
-        }
+        public override IMotion Motion => new Motion(_speed, _acceleration, _socketClientObject);
 
         #region IDevice
 
         // IDevice 在這層實作是爲了遵守介面隔離原則。
 
-        public bool Connected => Connection().IsOpen;
+        public bool Connected => Connection.IsOpen;
 
         public bool Connect()
         {
-            Connection().Open();
+            Connection.Open();
             return Connected;
         }
 
         public bool Disconnect()
         {
-            Connection().Close();
+            Connection.Close();
             return !Connected;
         }
 

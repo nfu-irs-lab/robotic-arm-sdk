@@ -5,20 +5,20 @@ using RASDK.Arm.Hiwin;
 
 namespace RASDK.Arm.TMRobot
 {
-    public class NowPosition
+    public class GetNowPosition
     {
         private SocketClientObject _socketClientObject;
         private CommandSender _commandSender;
         private double[] _position;
 
-        public NowPosition(SocketClientObject socketClientObject)
+        public GetNowPosition(SocketClientObject socketClientObject)
         {
             _commandSender = new CommandSender(socketClientObject);
             _socketClientObject = socketClientObject;
             _socketClientObject.ReceiveData += ReceiveDataHandler;
         }
 
-        ~NowPosition()
+        ~GetNowPosition()
         {
             _socketClientObject.ReceiveData -= ReceiveDataHandler;
         }

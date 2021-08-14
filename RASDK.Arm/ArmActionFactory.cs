@@ -18,10 +18,10 @@ namespace RASDK.Arm
         public abstract double Speed { get; set; }
         public abstract double Acceleration { get; set; }
 
-        public abstract double[] NowPosition(CoordinateType coordinateType = CoordinateType.Descartes);
+        public abstract double[] GetNowPosition(CoordinateType coordinateType = CoordinateType.Descartes);
 
-        public abstract IConnection Connection();
+        public abstract IConnection Connection { get; }
 
-        public abstract IMotion Motion();
+        public abstract IMotion Motion { get; }
     }
 }

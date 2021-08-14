@@ -53,7 +53,7 @@ namespace RASDK.UI
 
         private void UpdateNowPosition()
         {
-            _nowPosition = _arm.NowPosition(_nowCoordinateType);
+            _nowPosition = _arm.GetNowPosition(_nowCoordinateType);
         }
 
         #region Type
@@ -249,13 +249,13 @@ namespace RASDK.UI
 
         private void buttonArmHoming_Click(object sender, EventArgs e)
         {
-            _arm.Motion().Homing(checkBoxArmSlowlyHoming.Checked, _nowCoordinateType);
+            _arm.Motion.Homing(checkBoxArmSlowlyHoming.Checked, _nowCoordinateType);
             UpdateNowPosition();
         }
 
         private void buttonArmMotionAbort_Click(object sender, EventArgs e)
         {
-            _arm.Motion().Abort();
+            _arm.Motion.Abort();
         }
 
         private void buttonArmMotionStart_Click(object sender, EventArgs e)
@@ -263,7 +263,7 @@ namespace RASDK.UI
             switch (_nowPositionType)
             {
                 case PositionType.Absolute:
-                    _arm.Motion().
+                    _arm.Motion.
                          Absolute(_targetPosition,
                                   new AdditionalMotionParameters
                                   {
@@ -273,7 +273,7 @@ namespace RASDK.UI
                     break;
 
                 case PositionType.Relative:
-                    _arm.Motion().
+                    _arm.Motion.
                          Relative(_targetPosition,
                                   new AdditionalMotionParameters
                                   {
