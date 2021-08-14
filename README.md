@@ -10,6 +10,8 @@
 - TM Robot 機械手臂
 - IDS 工業攝影機
 
+支援的環境為 64-bit .NET Framework 4.7.2
+
 > Forked from [HRTK 1.4.0](https://github.com/nfu-irs-lab/hiwinrobot-toolkit/releases/tag/v1.4.0)
 
 # 各 Project 功能
