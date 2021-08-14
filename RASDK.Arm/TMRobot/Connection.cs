@@ -7,7 +7,7 @@ using RASDK.Basic.Message;
 
 namespace RASDK.Arm.TMRobot
 {
-    public class Connection : IConnection
+    internal class Connection : IConnection
     {
         private readonly IMessage _message;
         private string _ip;

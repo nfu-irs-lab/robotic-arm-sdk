@@ -2,7 +2,7 @@
 
 namespace RASDK.Arm.TMRobot
 {
-    public class CommandSender
+    internal class CommandSender
     {
         private readonly SocketClientObject _socketClientObject;
 
