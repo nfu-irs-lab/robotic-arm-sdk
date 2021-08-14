@@ -2,7 +2,6 @@
 using System.Net;
 using System.Text;
 using System.Threading;
-using AELTA_test;
 using RASDK.Basic;
 using RASDK.Basic.Message;
 

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading;
-using AELTA_test;
 using RASDK.Arm.Hiwin;
 
 namespace RASDK.Arm.TMRobot

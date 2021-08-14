@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Text.RegularExpressions;
-using AELTA_test;
 using RASDK.Arm.Hiwin;
 using RASDK.Arm.Type;
 

@@ -1,5 +1,4 @@
 ﻿using System.Text;
-using AELTA_test;
 
 namespace RASDK.Arm.TMRobot
 {
