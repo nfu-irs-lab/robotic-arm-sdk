@@ -4,7 +4,7 @@ using RASDK.Basic.Message;
 
 namespace RASDK.Arm.Hiwin
 {
-    public class GetNowPosition : BasicAction
+    internal class GetNowPosition : BasicAction
     {
         public GetNowPosition(int id, IMessage message) : base(id, message)
         { }

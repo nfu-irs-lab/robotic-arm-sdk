@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using RASDK.Arm.TMRobot;
 using RASDK.Basic;
 using RASDK.Basic.Message;
 

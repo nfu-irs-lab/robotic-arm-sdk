@@ -6,7 +6,6 @@ using System.Threading;
 using RASDK.Basic;
 using RASDK.Basic.Message;
 using System.Windows.Forms;
-using AELTA_test;
 using RASDK.Arm.Type;
 
 namespace RASDK.Arm.TMRobot

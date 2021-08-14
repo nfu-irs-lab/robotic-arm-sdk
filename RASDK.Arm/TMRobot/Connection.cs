@@ -2,13 +2,12 @@
 using System.Net;
 using System.Text;
 using System.Threading;
-using AELTA_test;
 using RASDK.Basic;
 using RASDK.Basic.Message;
 
 namespace RASDK.Arm.TMRobot
 {
-    public class Connection : IConnection
+    internal class Connection : IConnection
     {
         private readonly IMessage _message;
         private string _ip;

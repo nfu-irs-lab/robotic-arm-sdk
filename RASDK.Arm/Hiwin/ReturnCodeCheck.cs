@@ -4,7 +4,7 @@ using RASDK.Basic.Message;
 
 namespace RASDK.Arm.Hiwin
 {
-    public static class ReturnCodeCheck
+    internal static class ReturnCodeCheck
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsSuccessful(int code, IMessage message = null, int ignoreCode = 0, int successCode = 0)

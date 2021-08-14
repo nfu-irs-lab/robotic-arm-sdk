@@ -5,7 +5,7 @@ using RASDK.Arm.Type;
 
 namespace RASDK.Arm.Hiwin
 {
-    public class Motion : BasicMotion, IMotion
+    internal class Motion : BasicMotion, IMotion
     {
         public Motion(int id,
                       IMessage message,
