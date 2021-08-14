@@ -4,7 +4,7 @@ using RASDK.Basic.Message;
 
 namespace RASDK.Arm.Hiwin
 {
-    public class Speed : BasicAction
+    internal class Speed : BasicAction
     {
         public Speed(int id, IMessage message) : base(id, message)
         { }

@@ -6,17 +6,16 @@ using System.Threading;
 using RASDK.Basic;
 using RASDK.Basic.Message;
 using System.Windows.Forms;
-using AELTA_test;
 using RASDK.Arm.Type;
 
 namespace RASDK.Arm.TMRobot
 {
     public class RoboticArm : ArmActionFactory, IDevice
     {
-        private static IPAddress _ipAddress = IPAddress.Parse("127.0.0.1");
-        private static int _portNumber = 10001;
-        private readonly string _ip;
-        private readonly int _port;
+        private static IPAddress _pcIp = IPAddress.Parse("127.0.0.1");
+        private static int _pcPort = 10001;
+        private readonly string _armIp;
+        private readonly int _armPort;
         private SocketClientObject _socketClientObject;
         private TcpClient ClientSockt = default;
         private string[] data = new string[10];
@@ -24,15 +23,18 @@ namespace RASDK.Arm.TMRobot
         private double _speed;
         private double _acceleration;
 
-        private TcpListener ServerListener = new TcpListener(_ipAddress, _portNumber);
+        private TcpListener _serverListener;
 
-        public RoboticArm(string ip, int port, IMessage message) : base(message)
+        public RoboticArm(string armIp, int armPort, IMessage message, TcpListener pcTcpListener = null)
+            : base(message)
         {
-            _ip = ip;
-            _port = port;
+            _armIp = armIp;
+            _armPort = armPort;
 
             _speed = 50;
             _acceleration = 200;
+
+            _serverListener = pcTcpListener ?? new TcpListener(_pcIp, _pcPort);
 
             Thread threadingServer = new Thread(StartServer);
             threadingServer.Start();
@@ -78,10 +80,10 @@ namespace RASDK.Arm.TMRobot
             {
                 if (_socketClientObject == null)
                 {
-                    _socketClientObject = new SocketClientObject(_ip, _port);
+                    _socketClientObject = new SocketClientObject(_armIp, _armPort);
                 }
 
-                return new Connection(_ip, _port, _message, _socketClientObject);
+                return new Connection(_armIp, _armPort, _message, _socketClientObject);
             }
         }
 
@@ -120,9 +122,9 @@ namespace RASDK.Arm.TMRobot
 
             System.Action<string> tp1 = Thread_Point1;
 
-            ServerListener.Start();
+            _serverListener.Start();
             // Invoke(DelegateTeste_ModifyText2, "Server waiting connections!");
-            ClientSockt = ServerListener.AcceptTcpClient();
+            ClientSockt = _serverListener.AcceptTcpClient();
             // Invoke(DelegateTeste_ModifyText2, "Server ready!");
 
             while (true)
@@ -179,9 +181,9 @@ namespace RASDK.Arm.TMRobot
                 catch
                 {
                     // Invoke(DelegateTeste_ModifyText2, "error 2");
-                    ServerListener.Stop();
-                    ServerListener.Start();
-                    ClientSockt = ServerListener.AcceptTcpClient();
+                    _serverListener.Stop();
+                    _serverListener.Start();
+                    ClientSockt = _serverListener.AcceptTcpClient();
                 }
             }
         }

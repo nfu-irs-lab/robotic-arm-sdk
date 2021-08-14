@@ -1,11 +1,10 @@
-﻿namespace AELTA_test
-{
-    using System;
-    using System.Diagnostics;
-    using System.IO;
-    using System.Reflection;
-    using System.Runtime.InteropServices;
+﻿using System;
+using System.Diagnostics;
+using System.IO;
+using System.Reflection;
 
+namespace RASDK.Arm.TMRobot
+{
     internal class SLogger
     {
         private static object Locker = new object();

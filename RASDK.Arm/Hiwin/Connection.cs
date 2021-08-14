@@ -6,7 +6,7 @@ using RASDK.Basic.Message;
 
 namespace RASDK.Arm.Hiwin
 {
-    public class Connection : BasicAction, IConnection
+    internal class Connection : BasicAction, IConnection
     {
         private static readonly HRobot.CallBackFun _callBackFun = EventFun;
         private static unsafe bool* _waiting;

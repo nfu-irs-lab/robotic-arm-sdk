@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Threading;
-using AELTA_test;
 using RASDK.Arm.Hiwin;
 
 namespace RASDK.Arm.TMRobot
 {
-    public class GetNowPosition
+    internal class GetNowPosition
     {
         private SocketClientObject _socketClientObject;
         private CommandSender _commandSender;

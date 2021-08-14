@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Text.RegularExpressions;
-using AELTA_test;
 using RASDK.Arm.Hiwin;
 using RASDK.Arm.Type;
 
 namespace RASDK.Arm.TMRobot
 {
-    public class Motion : IMotion
+    internal class Motion : IMotion
     {
         private CommandSender _commandSender;
         private CoordinateType _coordinateType = CoordinateType.Descartes;
