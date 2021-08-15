@@ -7,8 +7,19 @@ using System.Text.RegularExpressions;
 
 namespace RASDK.Basic
 {
+    /// <summary>
+    /// CSV 表格檔案操作。
+    /// </summary>
     public class Csv
     {
+        /// <summary>
+        /// 讀取指定路徑的 CSV 檔案。
+        /// </summary>
+        /// <param name="path">CSV 檔案路徑，包含副檔名。</param>
+        /// <param name="symbolSeparated">分割符號。</param>
+        /// <param name="symbolStringDelimiter">字串分隔符號。</param>
+        /// <returns>讀取完成的資料。<c>stringData[row][column]</c></returns>
+        /// <exception cref="FileNotFoundException"></exception>
         public static List<List<string>> Read(string path,
                                               char symbolSeparated = ',',
                                               char symbolStringDelimiter = '\"')
@@ -41,27 +52,27 @@ namespace RASDK.Basic
             return csvContent;
         }
 
+        /// <summary>
+        /// 建立並寫入指定路徑的 CSV 檔案。
+        /// </summary>
+        /// <param name="path">CSV 檔案路徑，包含副檔名。</param>
+        /// <param name="rowColumnData">要寫入的資料。<c>stringData[row][column]</c></param>
+        /// <param name="columnName">欄名。</param>
+        /// <param name="symbolSeparated">分割符號。</param>
+        /// <param name="symbolStringDelimiter">字串分隔符號。</param>
         public static void Write(string path,
                                  List<List<string>> rowColumnData,
                                  List<string> columnName = null,
                                  char symbolSeparated = ',',
                                  char symbolStringDelimiter = '\"')
         {
-            var file = MakeStreamWriter(path);
-
-            // Write column name.
+            // Insert column name.
             if (columnName != null && !File.Exists(path))
             {
-                // string rowData = "";
-                // foreach (var cn in columnName)
-                // {
-                //     rowData += $"{cn}{symbolSeparated}";
-                // }
-                // rowData = rowData.TrimEnd(symbolSeparated).Trim();
-                // file.WriteLine(rowData);
-                //
                 rowColumnData.Insert(0, columnName);
             }
+
+            var file = MakeStreamWriter(path);
 
             // Write data.
             foreach (var row in rowColumnData)
@@ -69,7 +80,8 @@ namespace RASDK.Basic
                 string rowData = "";
                 foreach (var colData in row)
                 {
-                    if (Regex.IsMatch(colData, @"[,\s]"))
+                    // 判斷要寫入的資料是否包含分割符號、字串分隔符號及空白字元（\s）。
+                    if (Regex.IsMatch(colData, $"[{symbolSeparated}{symbolStringDelimiter}" + @"\s]"))
                     {
                         rowData += $"{symbolStringDelimiter}{colData}{symbolStringDelimiter}{symbolSeparated}";
                     }
@@ -91,7 +103,7 @@ namespace RASDK.Basic
         /// <returns></returns>
         private static StreamWriter MakeStreamWriter(string path)
         {
-            return System.IO.File.AppendText(path);
+            return File.AppendText(path);
         }
     }
 }

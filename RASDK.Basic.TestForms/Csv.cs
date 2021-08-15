@@ -41,7 +41,9 @@ namespace RASDK.Basic.TestForms
                 new List<string> { "21", "22", "32" },
                 new List<string> { "3  1", "3,2", "3\r\n2" }
             };
-            Basic.Csv.Write(textBoxPath.Text, data);
+
+            var colName = new List<string> { "A", "B", "C" };
+            Basic.Csv.Write(textBoxPath.Text, data, colName);
         }
     }
 }
