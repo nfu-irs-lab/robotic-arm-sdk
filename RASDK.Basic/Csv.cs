@@ -50,7 +50,7 @@ namespace RASDK.Basic
             var file = MakeStreamWriter(path);
 
             // Write column name.
-            if (!columnName.Equals(null) && !File.Exists(path))
+            if (columnName != null && !File.Exists(path))
             {
                 // string rowData = "";
                 // foreach (var cn in columnName)

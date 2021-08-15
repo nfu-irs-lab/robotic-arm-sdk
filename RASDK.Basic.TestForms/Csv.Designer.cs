@@ -32,6 +32,7 @@ namespace RASDK.Basic.TestForms
             this.textBoxPath = new System.Windows.Forms.TextBox();
             this.buttonRead = new System.Windows.Forms.Button();
             this.labelReadedFile = new System.Windows.Forms.Label();
+            this.buttonWriteFile = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // textBoxPath
@@ -61,11 +62,22 @@ namespace RASDK.Basic.TestForms
             this.labelReadedFile.TabIndex = 2;
             this.labelReadedFile.Text = "--";
             // 
+            // buttonWriteFile
+            // 
+            this.buttonWriteFile.Location = new System.Drawing.Point(170, 86);
+            this.buttonWriteFile.Name = "buttonWriteFile";
+            this.buttonWriteFile.Size = new System.Drawing.Size(132, 53);
+            this.buttonWriteFile.TabIndex = 3;
+            this.buttonWriteFile.Text = "Write";
+            this.buttonWriteFile.UseVisualStyleBackColor = true;
+            this.buttonWriteFile.Click += new System.EventHandler(this.buttonWriteFile_Click);
+            // 
             // Csv
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(16F, 31F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1016, 805);
+            this.Controls.Add(this.buttonWriteFile);
             this.Controls.Add(this.labelReadedFile);
             this.Controls.Add(this.buttonRead);
             this.Controls.Add(this.textBoxPath);
@@ -81,6 +93,7 @@ namespace RASDK.Basic.TestForms
         private System.Windows.Forms.TextBox textBoxPath;
         private System.Windows.Forms.Button buttonRead;
         private System.Windows.Forms.Label labelReadedFile;
+        private System.Windows.Forms.Button buttonWriteFile;
     }
 }
 
