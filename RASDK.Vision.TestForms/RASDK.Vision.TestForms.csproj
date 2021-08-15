@@ -54,6 +54,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Form1.resx">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -75,6 +78,16 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\RASDK.Basic\RASDK.Basic.csproj">
+      <Project>{cd68c0c8-e211-4ecc-93ec-ece9054777a3}</Project>
+      <Name>RASDK.Basic</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RASDK.Vision\RASDK.Vision.csproj">
+      <Project>{f684f835-3e60-44c1-a3fe-410e95d42657}</Project>
+      <Name>RASDK.Vision</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

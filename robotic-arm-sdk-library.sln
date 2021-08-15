@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RASDK.UI", "RASDK.UI\RASDK.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RASDK.Arm.TestForms", "RASDK.Arm.TestForms\RASDK.Arm.TestForms.csproj", "{3D2A359F-F2ED-457B-8DAE-65D3045533A4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RASDK.Vision.TestForms", "RASDK.Vision.TestForms\RASDK.Vision.TestForms.csproj", "{2AA067AE-69E0-4E60-A3EA-5994000130D5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -71,6 +73,14 @@ Global
 		{3D2A359F-F2ED-457B-8DAE-65D3045533A4}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3D2A359F-F2ED-457B-8DAE-65D3045533A4}.Release|x64.ActiveCfg = Release|x64
 		{3D2A359F-F2ED-457B-8DAE-65D3045533A4}.Release|x64.Build.0 = Release|x64
+		{2AA067AE-69E0-4E60-A3EA-5994000130D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2AA067AE-69E0-4E60-A3EA-5994000130D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2AA067AE-69E0-4E60-A3EA-5994000130D5}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{2AA067AE-69E0-4E60-A3EA-5994000130D5}.Debug|x64.Build.0 = Debug|Any CPU
+		{2AA067AE-69E0-4E60-A3EA-5994000130D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2AA067AE-69E0-4E60-A3EA-5994000130D5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2AA067AE-69E0-4E60-A3EA-5994000130D5}.Release|x64.ActiveCfg = Release|Any CPU
+		{2AA067AE-69E0-4E60-A3EA-5994000130D5}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
