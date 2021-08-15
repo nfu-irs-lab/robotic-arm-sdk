@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace RASDK.Basic.TestForms
 {
-    public partial class Form1 : Form
+    public partial class Csv : Form
     {
-        public Form1()
+        public Csv()
         {
             InitializeComponent();
         }

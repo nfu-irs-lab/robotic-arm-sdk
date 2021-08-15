@@ -1,7 +1,7 @@
 ﻿
 namespace RASDK.Basic.TestForms
 {
-    partial class Form1
+    partial class Csv
     {
         /// <summary>
         /// Required designer variable.
