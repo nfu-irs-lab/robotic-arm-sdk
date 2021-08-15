@@ -62,7 +62,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CsvHandler.cs" />
+    <Compile Include="Csv.cs"/>
     <Compile Include="IDevice.cs" />
     <Compile Include="Message\EmptyMessage.cs" />
     <Compile Include="Message\GeneralMessage.cs" />
