@@ -16,5 +16,8 @@ namespace RASDK.Basic.TestForms
         {
             InitializeComponent();
         }
+
+        private void buttonRead_Click(object sender, EventArgs e)
+        { }
     }
 }
