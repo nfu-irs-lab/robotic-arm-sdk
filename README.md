@@ -46,11 +46,11 @@ arm.Connection.Open();  // 連線。
 arm.Connection.Close(); // 斷線。
 var connected = arm.Connection.IsOped;  // 判斷連線。
 
-arm.Motion.Homing();                           // 復歸，回原點。
-arm.Motion.Absolute(20, 400, 350, 180, 0, 90); // 絕對運動。
-arm.Motion.Relative(0, 15, 0, 0, 0, 0);        // 相對運動。
-arm.Motion.Jog("+X");                          // 吋動。
-arm.Motion.Abort();                            // 停止動作。
+arm.Motion.Homing();                            // 復歸，回原點。
+arm.Motion.Absolute(-20, 400, 350, 180, 0, 90); // 絕對運動。
+arm.Motion.Relative(0, 15, -0.5, 0, 0, 0);      // 相對運動。
+arm.Motion.Jog("+X");                           // 吋動。
+arm.Motion.Abort();                             // 停止動作。
 
 arm.Speed = 25;             // 設定速度。
 arm.Acceleration = 20;      // 設定加速度。
