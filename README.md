@@ -44,7 +44,7 @@ var arm = new RASDK.Arm.Hiwin.RoboticArm("192.168.100.123", message); // 以 HIW
 
 arm.Connection.Open();  // 連線。
 arm.Connection.Close(); // 斷線。
-var connected = arm.Connection.IsOped;  // 判斷連線。
+var connected = arm.Connection.IsOpen;  // 判斷連線。
 
 arm.Motion.Homing();                            // 復歸，回原點。
 arm.Motion.Absolute(-20, 400, 350, 180, 0, 90); // 絕對運動。
