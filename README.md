@@ -38,8 +38,8 @@
 
 ```csharp
 // 實體化。
-ILogHandler logHandler = new RASDK.Basic.EmptyLog();
-IMessage message = new RASDK.Basic.Message.GeneralMessage(logHandler);
+var logHandler = new RASDK.Basic.EmptyLog();
+var message = new RASDK.Basic.Message.GeneralMessage(logHandler);
 var arm = new RASDK.Arm.Hiwin.RoboticArm("192.168.100.123", message); // 以 HIWIN 手臂爲例。
 
 arm.Connection.Open();  // 連線。
