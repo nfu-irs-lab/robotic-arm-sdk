@@ -57,5 +57,5 @@ arm.Acceleration = 20;      // 設定加速度。
 var speed = arm.Speed;      // 取得速度。
 var acc = arm.Acceleration; // 取得加速度。
 
-var nowPosition = arm.GetNowPosition(); // 取得目前座標位置。
+var position = arm.GetNowPosition(); // 取得目前座標位置。
 ```
