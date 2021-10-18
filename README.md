@@ -10,7 +10,7 @@
 - TM Robot 機械手臂
 - IDS 工業攝影機
 
-支援的環境為 64-bit .NET Framework 4.7.2
+支援的環境為 .NET Framework 4.7.2 (64-bit)
 
 > Forked from [HRTK 1.4.0](https://github.com/nfu-irs-lab/hiwinrobot-toolkit/releases/tag/v1.4.0)
 
@@ -34,12 +34,12 @@
 3. 將上述的路徑加入到 Visual Studio 中的套件來源。可參考[ Microsoft 官方說明 ](https://docs.microsoft.com/zh-tw/nuget/consume-packages/install-use-packages-visual-studio#package-sources)。
 4. 在 Visual Studio 爲目標專案或解決方案增加 NuGet Package「NFUIRSL.RASDK」。可參考[ Microsoft 官方說明 ](https://docs.microsoft.com/zh-tw/nuget/consume-packages/install-use-packages-visual-studio)。
 
-## 基本使用
+## 機械手臂（RASDK.Arm）
 
 ```csharp
 // 實體化。
-var logHandler = new RASDK.Basic.EmptyLog();
-var message = new RASDK.Basic.Message.GeneralMessage(logHandler);
+var logHandler = new RASDK.Basic.EmptyLog(); // EmptyLog()：不產生 Log 檔。
+var message = new RASDK.Basic.Message.GeneralMessage(logHandler); // GeneralMessage()：一般的訊息框。
 var arm = new RASDK.Arm.Hiwin.RoboticArm("192.168.100.123", message); // 以 HIWIN 手臂爲例。
 
 arm.Connection.Open();  // 連線。
