@@ -39,8 +39,8 @@
 ```csharp
 // 實體化。
 var logHandler = new RASDK.Basic.EmptyLog(); // EmptyLog()：不產生 Log 檔。
-var message = new RASDK.Basic.Message.GeneralMessage(logHandler); // GeneralMessage()：一般的訊息框。
-var arm = new RASDK.Arm.Hiwin.RoboticArm("192.168.100.123", message); // 以 HIWIN 手臂爲例。
+var messageHandler = new RASDK.Basic.Message.GeneralMessage(logHandler); // GeneralMessage()：一般的訊息框。
+var arm = new RASDK.Arm.Hiwin.RoboticArm("192.168.100.123", messageHandler); // 以 HIWIN 手臂爲例。
 
 arm.Connection.Open();  // 連線。
 arm.Connection.Close(); // 斷線。
