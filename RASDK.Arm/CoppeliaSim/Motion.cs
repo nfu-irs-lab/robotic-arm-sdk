@@ -17,7 +17,7 @@ namespace RASDK.Arm.CoppeliaSim
         public Motion(string objectName, int id, IMessage message) : base(id, message)
         {
             _objectName = objectName;
-            UpdateJointHandles();
+            _jointHandles = JointHandle.Get(id, objectName, 6);
         }
 
         private AdditionalMotionParameters _additionalMotionParameters
@@ -83,15 +83,6 @@ namespace RASDK.Arm.CoppeliaSim
                 fArray[i] = (float)value[i];
             }
             return fArray;
-        }
-
-        private void UpdateJointHandles()
-        {
-            for (var i = 0; i < _jointHandles.Length; i++)
-            {
-                var jointName = $"{_objectName}_joint{i + 1}";
-                _jointHandles[i] = CoppeliaSimRemoteApi.GetObjectHandle(_id, jointName);
-            }
         }
     }
 }

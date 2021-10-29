@@ -35,7 +35,7 @@ namespace RASDK.Arm.CoppeliaSim
 
         public override double[] GetNowPosition(CoordinateType coordinateType = CoordinateType.Descartes)
         {
-            throw new NotImplementedException();
+            return new GetNowPosition(_id, _message).Value(coordinateType);
         }
 
         #region IDevice
