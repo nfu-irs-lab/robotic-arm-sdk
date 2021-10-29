@@ -25,7 +25,6 @@ namespace RASDK.Arm.Hiwin
         }
 
         public int Id => _id;
-        public string Ip => _ip;
 
         public override double[] GetNowPosition(CoordinateType coordinate = CoordinateType.Descartes)
         {
