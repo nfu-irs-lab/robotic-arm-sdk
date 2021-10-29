@@ -17,13 +17,13 @@ namespace RASDK.Arm.TestForms
 {
     public partial class Form1 : Form
     {
-        private ArmActionFactory _arm;
-
         private readonly IMessage _message =
 #if DISABLE_SHOW_MESSAGE
             new EmptyMessage();
 #else
             new GeneralMessage(new EmptyLog());
+
+        private ArmActionFactory _arm;
 #endif
 
         public Form1()
@@ -118,6 +118,12 @@ namespace RASDK.Arm.TestForms
                     armActionFactory = new TMRobot.RoboticArm(textBoxIp.Text,
                                                               Int16.Parse(textBoxPort.Text),
                                                               _message);
+                    break;
+
+                case "CoppeliaSim":
+                    armActionFactory = new CoppeliaSim.RoboticArm(textBoxIp.Text,
+                        Int16.Parse(textBoxPort.Text),
+                        _message);
                     break;
 
                 default:

@@ -15,16 +15,18 @@ namespace RASDK.Arm.CoppeliaSim
         private readonly int _port;
         private int _id = -99;
 
-        public RoboticArm(string ip, IMessage message) : base(message)
+        public RoboticArm(string ip, int port, IMessage message) : base(message)
         {
             _ip = ip;
+            _port = port;
         }
 
         public override double Acceleration { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public override IConnection Connection => new Connection(_ip, _port, _message, ref _id);
         public int Id => _id;
-
+        public string Ip => _ip;
         public override IMotion Motion => throw new NotImplementedException();
+        public int Port => _port;
         public override double Speed { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         public override double[] GetNowPosition(CoordinateType coordinateType = CoordinateType.Descartes)

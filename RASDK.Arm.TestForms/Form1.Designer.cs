@@ -51,10 +51,9 @@ namespace RASDK.Arm.TestForms
             // 
             // buttonConnect
             // 
-            this.buttonConnect.Location = new System.Drawing.Point(16, 78);
-            this.buttonConnect.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.buttonConnect.Location = new System.Drawing.Point(12, 63);
             this.buttonConnect.Name = "buttonConnect";
-            this.buttonConnect.Size = new System.Drawing.Size(211, 69);
+            this.buttonConnect.Size = new System.Drawing.Size(158, 56);
             this.buttonConnect.TabIndex = 0;
             this.buttonConnect.Text = "Connect";
             this.buttonConnect.UseVisualStyleBackColor = true;
@@ -62,10 +61,9 @@ namespace RASDK.Arm.TestForms
             // 
             // buttonDisconnect
             // 
-            this.buttonDisconnect.Location = new System.Drawing.Point(16, 155);
-            this.buttonDisconnect.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.buttonDisconnect.Location = new System.Drawing.Point(12, 125);
             this.buttonDisconnect.Name = "buttonDisconnect";
-            this.buttonDisconnect.Size = new System.Drawing.Size(211, 69);
+            this.buttonDisconnect.Size = new System.Drawing.Size(158, 56);
             this.buttonDisconnect.TabIndex = 0;
             this.buttonDisconnect.Text = "Disconnect";
             this.buttonDisconnect.UseVisualStyleBackColor = true;
@@ -73,19 +71,17 @@ namespace RASDK.Arm.TestForms
             // 
             // textBoxIp
             // 
-            this.textBoxIp.Location = new System.Drawing.Point(16, 24);
-            this.textBoxIp.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textBoxIp.Location = new System.Drawing.Point(12, 19);
             this.textBoxIp.Name = "textBoxIp";
-            this.textBoxIp.Size = new System.Drawing.Size(265, 38);
+            this.textBoxIp.Size = new System.Drawing.Size(200, 31);
             this.textBoxIp.TabIndex = 1;
             this.textBoxIp.Text = "192.168.100.111";
             // 
             // buttonHoming
             // 
-            this.buttonHoming.Location = new System.Drawing.Point(16, 232);
-            this.buttonHoming.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.buttonHoming.Location = new System.Drawing.Point(12, 187);
             this.buttonHoming.Name = "buttonHoming";
-            this.buttonHoming.Size = new System.Drawing.Size(211, 69);
+            this.buttonHoming.Size = new System.Drawing.Size(158, 56);
             this.buttonHoming.TabIndex = 0;
             this.buttonHoming.Text = "Homing";
             this.buttonHoming.UseVisualStyleBackColor = true;
@@ -93,10 +89,9 @@ namespace RASDK.Arm.TestForms
             // 
             // buttonMove1
             // 
-            this.buttonMove1.Location = new System.Drawing.Point(16, 309);
-            this.buttonMove1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.buttonMove1.Location = new System.Drawing.Point(12, 249);
             this.buttonMove1.Name = "buttonMove1";
-            this.buttonMove1.Size = new System.Drawing.Size(211, 69);
+            this.buttonMove1.Size = new System.Drawing.Size(158, 56);
             this.buttonMove1.TabIndex = 0;
             this.buttonMove1.Text = "Move1";
             this.buttonMove1.UseVisualStyleBackColor = true;
@@ -104,10 +99,9 @@ namespace RASDK.Arm.TestForms
             // 
             // buttonMove2
             // 
-            this.buttonMove2.Location = new System.Drawing.Point(16, 386);
-            this.buttonMove2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.buttonMove2.Location = new System.Drawing.Point(12, 311);
             this.buttonMove2.Name = "buttonMove2";
-            this.buttonMove2.Size = new System.Drawing.Size(211, 69);
+            this.buttonMove2.Size = new System.Drawing.Size(158, 56);
             this.buttonMove2.TabIndex = 0;
             this.buttonMove2.Text = "Move2";
             this.buttonMove2.UseVisualStyleBackColor = true;
@@ -115,10 +109,9 @@ namespace RASDK.Arm.TestForms
             // 
             // buttonJogXP
             // 
-            this.buttonJogXP.Location = new System.Drawing.Point(601, 191);
-            this.buttonJogXP.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.buttonJogXP.Location = new System.Drawing.Point(451, 154);
             this.buttonJogXP.Name = "buttonJogXP";
-            this.buttonJogXP.Size = new System.Drawing.Size(67, 62);
+            this.buttonJogXP.Size = new System.Drawing.Size(50, 50);
             this.buttonJogXP.TabIndex = 2;
             this.buttonJogXP.Text = "X+";
             this.buttonJogXP.UseVisualStyleBackColor = true;
@@ -127,10 +120,9 @@ namespace RASDK.Arm.TestForms
             // 
             // buttonJogXM
             // 
-            this.buttonJogXM.Location = new System.Drawing.Point(332, 191);
-            this.buttonJogXM.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.buttonJogXM.Location = new System.Drawing.Point(249, 154);
             this.buttonJogXM.Name = "buttonJogXM";
-            this.buttonJogXM.Size = new System.Drawing.Size(67, 62);
+            this.buttonJogXM.Size = new System.Drawing.Size(50, 50);
             this.buttonJogXM.TabIndex = 2;
             this.buttonJogXM.Text = "X-";
             this.buttonJogXM.UseVisualStyleBackColor = true;
@@ -139,10 +131,9 @@ namespace RASDK.Arm.TestForms
             // 
             // buttonJogYP
             // 
-            this.buttonJogYP.Location = new System.Drawing.Point(468, 110);
-            this.buttonJogYP.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.buttonJogYP.Location = new System.Drawing.Point(351, 89);
             this.buttonJogYP.Name = "buttonJogYP";
-            this.buttonJogYP.Size = new System.Drawing.Size(67, 62);
+            this.buttonJogYP.Size = new System.Drawing.Size(50, 50);
             this.buttonJogYP.TabIndex = 2;
             this.buttonJogYP.Text = "Y+";
             this.buttonJogYP.UseVisualStyleBackColor = true;
@@ -151,10 +142,9 @@ namespace RASDK.Arm.TestForms
             // 
             // buttonJogZM
             // 
-            this.buttonJogZM.Location = new System.Drawing.Point(744, 257);
-            this.buttonJogZM.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.buttonJogZM.Location = new System.Drawing.Point(558, 207);
             this.buttonJogZM.Name = "buttonJogZM";
-            this.buttonJogZM.Size = new System.Drawing.Size(67, 62);
+            this.buttonJogZM.Size = new System.Drawing.Size(50, 50);
             this.buttonJogZM.TabIndex = 2;
             this.buttonJogZM.Text = "Z-";
             this.buttonJogZM.UseVisualStyleBackColor = true;
@@ -163,10 +153,9 @@ namespace RASDK.Arm.TestForms
             // 
             // buttonJogYM
             // 
-            this.buttonJogYM.Location = new System.Drawing.Point(468, 274);
-            this.buttonJogYM.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.buttonJogYM.Location = new System.Drawing.Point(351, 221);
             this.buttonJogYM.Name = "buttonJogYM";
-            this.buttonJogYM.Size = new System.Drawing.Size(67, 62);
+            this.buttonJogYM.Size = new System.Drawing.Size(50, 50);
             this.buttonJogYM.TabIndex = 2;
             this.buttonJogYM.Text = "Y-";
             this.buttonJogYM.UseVisualStyleBackColor = true;
@@ -175,10 +164,9 @@ namespace RASDK.Arm.TestForms
             // 
             // buttonJogZP
             // 
-            this.buttonJogZP.Location = new System.Drawing.Point(744, 120);
-            this.buttonJogZP.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.buttonJogZP.Location = new System.Drawing.Point(558, 97);
             this.buttonJogZP.Name = "buttonJogZP";
-            this.buttonJogZP.Size = new System.Drawing.Size(67, 62);
+            this.buttonJogZP.Size = new System.Drawing.Size(50, 50);
             this.buttonJogZP.TabIndex = 2;
             this.buttonJogZP.Text = "Z+";
             this.buttonJogZP.UseVisualStyleBackColor = true;
@@ -188,10 +176,9 @@ namespace RASDK.Arm.TestForms
             // numericUpDownJogXY
             // 
             this.numericUpDownJogXY.DecimalPlaces = 3;
-            this.numericUpDownJogXY.Location = new System.Drawing.Point(421, 205);
-            this.numericUpDownJogXY.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.numericUpDownJogXY.Location = new System.Drawing.Point(316, 165);
             this.numericUpDownJogXY.Name = "numericUpDownJogXY";
-            this.numericUpDownJogXY.Size = new System.Drawing.Size(160, 38);
+            this.numericUpDownJogXY.Size = new System.Drawing.Size(120, 31);
             this.numericUpDownJogXY.TabIndex = 3;
             this.numericUpDownJogXY.Value = new decimal(new int[] {
             10,
@@ -202,10 +189,9 @@ namespace RASDK.Arm.TestForms
             // numericUpDownJogZ
             // 
             this.numericUpDownJogZ.DecimalPlaces = 3;
-            this.numericUpDownJogZ.Location = new System.Drawing.Point(697, 203);
-            this.numericUpDownJogZ.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.numericUpDownJogZ.Location = new System.Drawing.Point(523, 164);
             this.numericUpDownJogZ.Name = "numericUpDownJogZ";
-            this.numericUpDownJogZ.Size = new System.Drawing.Size(160, 38);
+            this.numericUpDownJogZ.Size = new System.Drawing.Size(120, 31);
             this.numericUpDownJogZ.TabIndex = 3;
             this.numericUpDownJogZ.Value = new decimal(new int[] {
             5,
@@ -215,9 +201,10 @@ namespace RASDK.Arm.TestForms
             // 
             // textBoxPort
             // 
-            this.textBoxPort.Location = new System.Drawing.Point(304, 24);
+            this.textBoxPort.Location = new System.Drawing.Point(228, 19);
+            this.textBoxPort.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.textBoxPort.Name = "textBoxPort";
-            this.textBoxPort.Size = new System.Drawing.Size(100, 38);
+            this.textBoxPort.Size = new System.Drawing.Size(76, 31);
             this.textBoxPort.TabIndex = 4;
             this.textBoxPort.Text = "5890";
             // 
@@ -226,17 +213,19 @@ namespace RASDK.Arm.TestForms
             this.comboBoxArmType.FormattingEnabled = true;
             this.comboBoxArmType.Items.AddRange(new object[] {
             "HIWIN",
-            "TM Robot"});
-            this.comboBoxArmType.Location = new System.Drawing.Point(442, 24);
+            "TM Robot",
+            "CoppeliaSim"});
+            this.comboBoxArmType.Location = new System.Drawing.Point(332, 19);
+            this.comboBoxArmType.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.comboBoxArmType.Name = "comboBoxArmType";
-            this.comboBoxArmType.Size = new System.Drawing.Size(187, 39);
+            this.comboBoxArmType.Size = new System.Drawing.Size(141, 33);
             this.comboBoxArmType.TabIndex = 5;
             // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(16F, 31F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1067, 558);
+            this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.comboBoxArmType);
             this.Controls.Add(this.textBoxPort);
             this.Controls.Add(this.numericUpDownJogZ);
@@ -253,7 +242,6 @@ namespace RASDK.Arm.TestForms
             this.Controls.Add(this.buttonHoming);
             this.Controls.Add(this.buttonDisconnect);
             this.Controls.Add(this.buttonConnect);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "Form1";
             this.Text = "RASDK.Arm Test";
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownJogXY)).EndInit();
