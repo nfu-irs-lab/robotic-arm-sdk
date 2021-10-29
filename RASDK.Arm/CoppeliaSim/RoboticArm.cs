@@ -42,21 +42,18 @@ namespace RASDK.Arm.CoppeliaSim
 
         // IDevice 在這層實作是爲了遵守介面隔離原則(ISP)。
 
-        //public bool Connected => Connection.IsOpen;
-        public bool Connected => throw new NotImplementedException();
+        public bool Connected => Connection.IsOpen;
 
         public bool Connect()
         {
-            throw new NotImplementedException();
-            //Connection.Open();
-            //return Connected;
+            Connection.Open();
+            return Connected;
         }
 
         public bool Disconnect()
         {
-            throw new NotImplementedException();
-            //Connection.Close();
-            //return !Connected;
+            Connection.Close();
+            return !Connected;
         }
 
         #endregion IDevice

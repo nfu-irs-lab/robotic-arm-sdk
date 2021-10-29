@@ -10,13 +10,11 @@ namespace RASDK.Arm.CoppeliaSim
 {
     internal class Motion : BasicAction, IMotion
     {
-        private readonly string _objectName;
         private int[] _jointHandles = new int[] { -1, -1, -1, -1, -1, -1 };
         private CoordinateType CoordinateType = CoordinateType.Descartes;
 
         public Motion(string objectName, int id, IMessage message) : base(id, message)
         {
-            _objectName = objectName;
             _jointHandles = JointHandle.Get(id, objectName, 6);
         }
 
