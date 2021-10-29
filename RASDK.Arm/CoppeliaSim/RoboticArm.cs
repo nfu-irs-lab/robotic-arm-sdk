@@ -1,61 +1,56 @@
-﻿using System;
+﻿using RASDK.Arm.Type;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using RASDK.Basic;
-using RASDK.Basic.Message;
-using RASDK.Arm.Type;
 
 namespace RASDK.Arm.CoppeliaSim
 {
-    public class RoboticArm : ArmActionFactory, IDevice
+    public class RoboticArm : RASDK.Arm.RoboticArm
     {
-        private readonly string _ip;
-        private readonly string _objectName;
-        private readonly int _port;
-        private int _id = -99;
-
-        public RoboticArm(string ip, int port, IMessage message, string objectName = "UR5")
-            : base(message)
-        {
-            _ip = ip;
-            _port = port;
-            _objectName = objectName;
-        }
-
         public override double Acceleration { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public override IConnection Connection => new Connection(_ip, _port, _message, ref _id);
-        public int Id => _id;
-        public string Ip => _ip;
-        public override IMotion Motion => new Motion(_objectName, _id, _message);
-        public string ObjectName => _objectName;
-        public int Port => _port;
+        public override bool Connected => throw new NotImplementedException();
         public override double Speed { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
-        public override double[] GetNowPosition(CoordinateType coordinateType = CoordinateType.Descartes)
+        public override void Abort()
         {
-            return new GetNowPosition(_objectName, _id, _message).Value(coordinateType);
+            throw new NotImplementedException();
         }
 
-        #region IDevice
-
-        // IDevice 在這層實作是爲了遵守介面隔離原則(ISP)。
-
-        public bool Connected => Connection.IsOpen;
-
-        public bool Connect()
+        public override bool Connect()
         {
-            Connection.Open();
-            return Connected;
+            throw new NotImplementedException();
         }
 
-        public bool Disconnect()
+        public override bool Disconnect()
         {
-            Connection.Close();
-            return !Connected;
+            throw new NotImplementedException();
         }
 
-        #endregion IDevice
+        public override double[] GetNowPosition(CoordinateType coordinate = CoordinateType.Descartes)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Homing(bool slowly = true, CoordinateType coordinate = CoordinateType.Descartes, bool needWait = true)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Jog(string axis)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void MoveAbsolute(double j1X, double j2Y, double j3Z, double j4A, double j5B, double j6C, AdditionalMotionParameters addParams = null)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void MoveRelative(double j1X, double j2Y, double j3Z, double j4A = 0, double j5B = 0, double j6C = 0, AdditionalMotionParameters addParams = null)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

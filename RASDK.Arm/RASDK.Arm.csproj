@@ -65,14 +65,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AdditionalMotionParameters.cs" />
-    <Compile Include="CoppeliaSim\BasicAction.cs" />
-    <Compile Include="CoppeliaSim\CoppeliaSimRoboticArm.cs" />
-    <Compile Include="CoppeliaSim\GetNowPosition.cs" />
-    <Compile Include="CoppeliaSim\Connection.cs" />
-    <Compile Include="CoppeliaSim\CoppeliaSimRemoteApi.cs" />
-    <Compile Include="CoppeliaSim\JointHandle.cs" />
-    <Compile Include="CoppeliaSim\Motion.cs" />
     <Compile Include="CoppeliaSim\RoboticArm.cs" />
+    <Compile Include="CoppeliaSim\CoppeliaSimRemoteApi.cs" />
     <Compile Include="Hiwin\Default.cs" />
     <Compile Include="Hiwin\RoboticArm.cs" />
     <Compile Include="Hiwin\HRobot.cs" />
