@@ -28,14 +28,14 @@ namespace RASDK.Arm.CoppeliaSim
         public override IConnection Connection => new Connection(_ip, _port, _message, ref _id);
         public int Id => _id;
         public string Ip => _ip;
-        public override IMotion Motion => throw new NotImplementedException();
+        public override IMotion Motion => new Motion(_objectName, _id, _message);
         public string ObjectName => _objectName;
         public int Port => _port;
         public override double Speed { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         public override double[] GetNowPosition(CoordinateType coordinateType = CoordinateType.Descartes)
         {
-            return new GetNowPosition(_id, _message).Value(coordinateType);
+            return new GetNowPosition(_objectName, _id, _message).Value(coordinateType);
         }
 
         #region IDevice
