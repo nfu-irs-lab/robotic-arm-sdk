@@ -19,6 +19,19 @@ namespace RASDK.Arm
             _message = message;
         }
 
+        ~RoboticArm()
+        {
+            try
+            {
+                if (Connected)
+                {
+                    Disconnect();
+                }
+            }
+            catch (Exception)
+            { /* None.*/ }
+        }
+
         public abstract double[] GetNowPosition(CoordinateType coordinate = CoordinateType.Descartes);
 
         #region Speed/Acceleration
@@ -115,16 +128,16 @@ namespace RASDK.Arm
 
         #region Motion.Jog
 
-        private readonly string _inputRegexPattern = "[+-][a-cx-zA-CX-Z0-5]";
+        protected readonly string _inputRegexPattern = "[+-][a-cx-zA-CX-Z0-5]";
 
         public abstract void Jog(string axis);
 
-        private bool CheckJogArg(string text)
+        protected bool CheckJogArg(string text)
         {
             return Regex.IsMatch(text, _inputRegexPattern);
         }
 
-        private int ParseDirection(string text)
+        protected int ParseDirection(string text)
         {
             if (text.Substring(0, 1) == "+")
             {
@@ -137,7 +150,7 @@ namespace RASDK.Arm
             throw new ArgumentException();
         }
 
-        private int PatseAxis(string text)
+        protected int PatseAxis(string text)
         {
             int val;
             switch (text.Substring(1, 1))
@@ -192,7 +205,7 @@ namespace RASDK.Arm
 
         // IDevice
 
-        public abstract bool Connected { get; protected set; }
+        public abstract bool Connected { get; }
 
         public abstract bool Connect();
 

@@ -72,6 +72,7 @@
     <Compile Include="CoppeliaSim\JointHandle.cs" />
     <Compile Include="CoppeliaSim\Motion.cs" />
     <Compile Include="CoppeliaSim\RoboticArm.cs" />
+    <Compile Include="HiwinRoboticArm.cs" />
     <Compile Include="Hiwin\Acceleration.cs" />
     <Compile Include="Hiwin\Default.cs" />
     <Compile Include="Hiwin\AdditionalMotionParameters.cs" />

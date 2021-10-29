@@ -9,8 +9,8 @@ namespace RASDK.Arm.Hiwin
     internal class Connection : BasicAction, IConnection
     {
         private static readonly HRobot.CallBackFun _callBackFun = EventFun;
-        private static unsafe bool* _waiting;
         private static unsafe int* _idPointer;
+        private static unsafe bool* _waiting;
         private readonly string _ip;
 
         public Connection(string ip,
@@ -38,28 +38,9 @@ namespace RASDK.Arm.Hiwin
             }
         }
 
-        public void Open()
-        {
-            _id = HRobot.open_connection(_ip, 1, _callBackFun);
-
-            // Check connection.
-            if (_id >= 0 && _id <= 65535)
-            {
-                new Speed(_id, _message).Value = Default.SpeedOfPowerOn;
-                new Acceleration(_id, _message).Value = Default.AccelerationOfPowerOn;
-
-                ShowSuccessfulConnectMessage();
-            }
-            else
-            {
-                ShowUnsuccessfulConnectMessage();
-            }
-
-            unsafe
-            {
-                *_idPointer = _id;
-            }
-        }
+        // Return 1: Connected
+        // Return 0: Didn't connected.
+        public bool IsOpen => HRobot.network_get_state(_id) == 1;
 
         public void Close()
         {
@@ -88,9 +69,28 @@ namespace RASDK.Arm.Hiwin
             _message.Show(text, "斷線", MessageBoxButtons.OK, MessageBoxIcon.None);
         }
 
-        // Return 1: Connected
-        // Return 0: Didn't connected. 
-        public bool IsOpen => HRobot.network_get_state(_id) == 1;
+        public void Open()
+        {
+            _id = HRobot.open_connection(_ip, 1, _callBackFun);
+
+            // Check connection.
+            if (_id >= 0 && _id <= 65535)
+            {
+                new Speed(_id, _message).Value = Default.SpeedOfPowerOn;
+                new Acceleration(_id, _message).Value = Default.AccelerationOfPowerOn;
+
+                ShowSuccessfulConnectMessage();
+            }
+            else
+            {
+                ShowUnsuccessfulConnectMessage();
+            }
+
+            unsafe
+            {
+                *_idPointer = _id;
+            }
+        }
 
         private static void EventFun(UInt16 cmd, UInt16 rlt, ref UInt16 Msg, int len)
         {
