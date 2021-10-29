@@ -89,6 +89,7 @@
     <Compile Include="Hiwin\BasicAction.cs" />
     <Compile Include="Hiwin\Connection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RoboticArm.cs" />
     <Compile Include="TMRobot\CommandSender.cs" />
     <Compile Include="TMRobot\Connection.cs" />
     <Compile Include="TMRobot\Default.cs" />
