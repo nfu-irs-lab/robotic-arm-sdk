@@ -12,6 +12,7 @@ namespace RASDK.Arm.CoppeliaSim
     public class RoboticArm : ArmActionFactory, IDevice
     {
         private readonly string _ip;
+        private readonly int _port;
         private int _id = -99;
 
         public RoboticArm(string ip, IMessage message) : base(message)
@@ -20,7 +21,7 @@ namespace RASDK.Arm.CoppeliaSim
         }
 
         public override double Acceleration { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public override IConnection Connection => throw new NotImplementedException();
+        public override IConnection Connection => new Connection(_ip, _port, _message, ref _id);
         public int Id => _id;
 
         public override IMotion Motion => throw new NotImplementedException();

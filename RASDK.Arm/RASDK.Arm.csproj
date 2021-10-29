@@ -65,6 +65,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AdditionalMotionParameters.cs" />
+    <Compile Include="CoppeliaSim\BasicAction.cs" />
     <Compile Include="CoppeliaSim\Connection.cs" />
     <Compile Include="CoppeliaSim\CoppeliaSimRemoteApi.cs" />
     <Compile Include="CoppeliaSim\Motion.cs" />

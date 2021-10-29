@@ -20,9 +20,15 @@ namespace RASDK.Arm.CoppeliaSim
         public static extern int GetObjectHandle(int id, string name);
 
         [DllImport("CoppeliaSimRemoteAPI.dll")]
+        public static extern bool IsConnected(int id);
+
+        [DllImport("CoppeliaSimRemoteAPI.dll")]
         public static extern int MoveJoint(int id,
             float[] position,
             int[] jointHandles,
             bool inTorqueForceMode);
+
+        [DllImport("CoppeliaSimRemoteAPI.dll")]
+        public static extern int SendInfo(int id, string message, bool blocking);
     }
 }
