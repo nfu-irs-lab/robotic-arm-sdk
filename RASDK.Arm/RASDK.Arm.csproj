@@ -72,11 +72,11 @@
     <Compile Include="CoppeliaSim\JointHandle.cs" />
     <Compile Include="CoppeliaSim\Motion.cs" />
     <Compile Include="CoppeliaSim\RoboticArm.cs" />
-    <Compile Include="HiwinRoboticArm.cs" />
     <Compile Include="Hiwin\Acceleration.cs" />
     <Compile Include="Hiwin\Default.cs" />
     <Compile Include="Hiwin\AdditionalMotionParameters.cs" />
     <Compile Include="Hiwin\BasicMotion.cs" />
+    <Compile Include="Hiwin\HiwinRoboticArm.cs" />
     <Compile Include="Hiwin\HRobot.cs" />
     <Compile Include="Hiwin\GetNowPosition.cs" />
     <Compile Include="Hiwin\ReturnCodeCheck.cs" />
