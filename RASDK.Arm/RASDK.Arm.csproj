@@ -65,12 +65,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AdditionalMotionParameters.cs" />
+    <Compile Include="CoppeliaSim\BasicAction.cs" />
+    <Compile Include="CoppeliaSim\GetNowPosition.cs" />
+    <Compile Include="CoppeliaSim\Connection.cs" />
+    <Compile Include="CoppeliaSim\CoppeliaSimRemoteApi.cs" />
+    <Compile Include="CoppeliaSim\JointHandle.cs" />
+    <Compile Include="CoppeliaSim\Motion.cs" />
+    <Compile Include="CoppeliaSim\RoboticArm.cs" />
     <Compile Include="Hiwin\Acceleration.cs" />
     <Compile Include="Hiwin\Default.cs" />
     <Compile Include="Hiwin\AdditionalMotionParameters.cs" />
     <Compile Include="Hiwin\BasicMotion.cs" />
     <Compile Include="Hiwin\HRobot.cs" />
-    <Compile Include="Hiwin\GetNowPosition.cs"/>
+    <Compile Include="Hiwin\GetNowPosition.cs" />
     <Compile Include="Hiwin\ReturnCodeCheck.cs" />
     <Compile Include="Hiwin\Speed.cs" />
     <Compile Include="IMotion.cs" />
@@ -86,7 +93,7 @@
     <Compile Include="TMRobot\Connection.cs" />
     <Compile Include="TMRobot\Default.cs" />
     <Compile Include="TMRobot\Motion.cs" />
-      <Compile Include="TMRobot\GetNowPosition.cs"/>
+    <Compile Include="TMRobot\GetNowPosition.cs" />
     <Compile Include="TMRobot\SLogger.cs" />
     <Compile Include="TMRobot\SocketClientObject.cs" />
     <Compile Include="TMRobot\RoboticArm.cs" />
