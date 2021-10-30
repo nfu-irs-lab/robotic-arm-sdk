@@ -19,7 +19,7 @@ namespace RASDK.Arm.Hiwin
         private readonly string _ip;
         private int _id;
 
-        public RoboticArm(string ip, IMessage message) : base(message)
+        public RoboticArm(IMessage message, string ip = Default.Ip) : base(message)
         {
             _ip = ip;
         }
