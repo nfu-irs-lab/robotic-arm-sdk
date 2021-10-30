@@ -18,7 +18,11 @@ namespace RASDK.Arm.CoppeliaSim
         private int _id;
         private int[] _jointHandles;
 
-        public RoboticArm(string ip, int port, string objectName, IMessage message) : base(message)
+        public RoboticArm(IMessage message,
+                          string ip = Default.Ip,
+                          int port = Default.Port,
+                          string objectName = Default.ObjectName)
+            : base(message)
         {
             _ip = ip;
             _port = port;

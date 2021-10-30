@@ -121,9 +121,9 @@ namespace RASDK.Arm.TestForms
                     break;
 
                 case "CoppeliaSim":
-                    armActionFactory = new CoppeliaSim.RoboticArm(textBoxIp.Text,
-                        Int16.Parse(textBoxPort.Text),
-                        _message);
+                    armActionFactory = new CoppeliaSim.RoboticArm(ip: textBoxIp.Text,
+                        port: Int16.Parse(textBoxPort.Text),
+                        objectName: _message);
                     break;
 
                 default:

@@ -65,6 +65,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AdditionalMotionParameters.cs" />
+    <Compile Include="CoppeliaSim\Default.cs" />
     <Compile Include="CoppeliaSim\RoboticArm.cs" />
     <Compile Include="CoppeliaSim\CoppeliaSimRemoteApi.cs" />
     <Compile Include="Hiwin\Default.cs" />
