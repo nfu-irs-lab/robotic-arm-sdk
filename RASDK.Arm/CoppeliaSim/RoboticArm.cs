@@ -121,13 +121,15 @@ namespace RASDK.Arm.CoppeliaSim
         {
             get
             {
-                bool connected = false;
+                bool connected;
                 try
                 {
                     connected = CoppeliaSimRemoteApi.IsConnected(_id);
                 }
                 catch (Exception)
-                { /* None. */ }
+                {
+                    connected = false;
+                }
                 return connected;
             }
         }

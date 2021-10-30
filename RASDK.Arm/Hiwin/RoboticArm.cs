@@ -233,13 +233,15 @@ namespace RASDK.Arm.Hiwin
         {
             get
             {
-                bool connected = false;
+                bool connected;
                 try
                 {
                     connected = HRobot.network_get_state(_id) == 1;
                 }
                 catch (Exception)
-                { /* None. */ }
+                {
+                    connected = false;
+                }
                 return connected;
             }
         }
