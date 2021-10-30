@@ -1,4 +1,4 @@
-﻿// #define DISABLE_SHOW_MESSAGE
+﻿//#define DISABLE_SHOW_MESSAGE
 
 using System;
 using System.Collections.Generic;
@@ -17,14 +17,14 @@ namespace RASDK.Arm.TestForms
 {
     public partial class Form1 : Form
     {
-        private ArmActionFactory _arm;
-
         private readonly IMessage _message =
 #if DISABLE_SHOW_MESSAGE
             new EmptyMessage();
 #else
             new GeneralMessage(new EmptyLog());
+
 #endif
+        private RoboticArm _arm;
 
         public Form1()
         {
@@ -34,23 +34,25 @@ namespace RASDK.Arm.TestForms
 
         private void buttonConnect_Click(object sender, EventArgs e)
         {
-            if (_arm == null)
-            {
-                _arm = GetArmType();
+            _arm = _arm ?? RoboticArmFactory();
 
+            if (_arm.Connect())
+            {
                 textBoxIp.Enabled = false;
                 textBoxPort.Enabled = false;
                 comboBoxArmType.Enabled = false;
             }
-
-            _arm.Connection.Open();
+            else
+            {
+                _arm = null;
+            }
         }
 
         private void buttonDisconnect_Click(object sender, EventArgs e)
         {
-            _arm.Connection.Close();
-
+            _arm?.Disconnect();
             _arm = null;
+
             textBoxIp.Enabled = true;
             textBoxPort.Enabled = true;
             comboBoxArmType.Enabled = true;
@@ -58,13 +60,12 @@ namespace RASDK.Arm.TestForms
 
         private void buttonHoming_Click(object sender, EventArgs e)
         {
-            _arm.Motion.Homing();
+            _arm.Homing();
         }
 
         private void buttonMove1_Click(object sender, EventArgs e)
         {
-            _arm.Motion.
-                 Relative(-100,
+            _arm.MoveRelative(-100,
                           0,
                           0,
                           0,
@@ -72,8 +73,7 @@ namespace RASDK.Arm.TestForms
                           0,
                           new AdditionalMotionParameters { NeedWait = false });
             MessageBox.Show("1");
-            _arm.Motion.
-                 Relative(100,
+            _arm.MoveRelative(100,
                           0,
                           0,
                           0,
@@ -85,8 +85,7 @@ namespace RASDK.Arm.TestForms
 
         private void buttonMove2_Click(object sender, EventArgs e)
         {
-            _arm.Motion.
-                 Relative(100,
+            _arm.MoveRelative(100,
                           0,
                           0,
                           0,
@@ -94,8 +93,7 @@ namespace RASDK.Arm.TestForms
                           0,
                           new AdditionalMotionParameters { NeedWait = true });
             MessageBox.Show("1");
-            _arm.Motion.
-                 Relative(-100,
+            _arm.MoveRelative(-100,
                           0,
                           0,
                           0,
@@ -105,25 +103,31 @@ namespace RASDK.Arm.TestForms
             MessageBox.Show("2");
         }
 
-        private ArmActionFactory GetArmType()
+        private RoboticArm RoboticArmFactory()
         {
-            ArmActionFactory armActionFactory;
+            RoboticArm arm;
             switch (comboBoxArmType.SelectedItem.ToString())
             {
                 case "HIWIN":
-                    armActionFactory = new Hiwin.RoboticArm(textBoxIp.Text, _message);
+                    arm = new Hiwin.RoboticArm(_message, textBoxIp.Text);
                     break;
 
                 case "TM Robot":
-                    armActionFactory = new TMRobot.RoboticArm(textBoxIp.Text,
-                                                              Int16.Parse(textBoxPort.Text),
-                                                              _message);
+                    arm = new TMRobot.RoboticArm(_message,
+                                                 textBoxIp.Text,
+                                                 Int16.Parse(textBoxPort.Text));
+                    break;
+
+                case "CoppeliaSim":
+                    arm = new CoppeliaSim.RoboticArm(_message,
+                                                     textBoxIp.Text,
+                                                     Int16.Parse(textBoxPort.Text));
                     break;
 
                 default:
                     throw new Exception("未知的手臂類型。");
             }
-            return armActionFactory;
+            return arm;
         }
 
         #region Jog
@@ -131,12 +135,12 @@ namespace RASDK.Arm.TestForms
         private void JogStart(int indexOfAxis, double value)
         {
             var dir = value >= 0 ? '+' : '-';
-            _arm.Motion.Jog($"{dir}{indexOfAxis}");
+            _arm.Jog($"{dir}{indexOfAxis}");
         }
 
         private void JogStop()
         {
-            _arm.Motion.Abort();
+            _arm.Abort();
         }
 
         #region X

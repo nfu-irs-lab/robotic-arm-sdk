@@ -8,6 +8,7 @@
 - HIWIN 機械手臂
 - HIWIN 電動夾爪
 - TM Robot 機械手臂
+- CoppeliaSim 機械手臂（不完整）
 - IDS 工業攝影機
 
 支援的環境為 .NET Framework 4.7.2 (64-bit)
@@ -39,18 +40,18 @@
 ```csharp
 // 實體化。
 var logHandler = new RASDK.Basic.EmptyLog(); // EmptyLog()：不產生 Log 檔。
-var messageHandler = new RASDK.Basic.Message.GeneralMessage(logHandler); // GeneralMessage()：一般的訊息框。
-var arm = new RASDK.Arm.Hiwin.RoboticArm("192.168.100.123", messageHandler); // 以 HIWIN 手臂爲例。
+var messageHandler = new RASDK.Basic.Message.GeneralMessage(logHandler); // GeneralMessage()：一般的訊息處理器。
+var arm = new RASDK.Arm.Hiwin.RoboticArm(messageHandler, "192.168.100.123"); // 以 HIWIN 手臂爲例。
 
-arm.Connection.Open();  // 連線。
-arm.Connection.Close(); // 斷線。
-var connected = arm.Connection.IsOpen;  // 判斷連線。
+arm.Connect();    // 連線。
+arm.Disconnect(); // 斷線。
+var connected = arm.Connected;  // 判斷連線。
 
-arm.Motion.Homing();                            // 復歸，回原點。
-arm.Motion.Absolute(-20, 400, 350, 180, 0, 90); // 絕對運動。
-arm.Motion.Relative(0, 15, -0.5, 0, 0, 0);      // 相對運動。
-arm.Motion.Jog("+X");                           // 吋動。
-arm.Motion.Abort();                             // 停止動作。
+arm.Homing();                                // 復歸，回原點。
+arm.MoveAbsolute(-20, 400, 350, 180, 0, 90); // 絕對運動。
+arm.MoveRelative(0, 15, -0.5, 0, 0, 0);      // 相對運動。
+arm.Jog("+X");                               // 吋動。
+arm.Abort();                                 // 停止動作。
 
 arm.Speed = 25;             // 設定速度。
 arm.Acceleration = 20;      // 設定加速度。
