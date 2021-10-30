@@ -115,9 +115,9 @@ namespace RASDK.Arm.TestForms
                     break;
 
                 case "TM Robot":
-                    armActionFactory = new TMRobot.RoboticArm(textBoxIp.Text,
-                                                              Int16.Parse(textBoxPort.Text),
-                                                              _message);
+                    armActionFactory = new TMRobot.RoboticArm(_message,
+                                                              textBoxIp.Text,
+                                                              Int16.Parse(textBoxPort.Text));
                     break;
 
                 case "CoppeliaSim":
