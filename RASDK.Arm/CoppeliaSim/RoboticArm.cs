@@ -152,7 +152,6 @@ namespace RASDK.Arm.CoppeliaSim
             {
                 ShowUnsuccessfulConnectMessage();
             }
-            _id = CoppeliaSimRemoteApi.Connect(_ip, _port);
 
             return Connected;
         }
