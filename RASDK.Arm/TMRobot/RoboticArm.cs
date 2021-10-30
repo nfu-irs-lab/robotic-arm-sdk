@@ -186,16 +186,17 @@ namespace RASDK.Arm.TMRobot
         {
             get
             {
-                bool connected;
-                try
-                {
-                    connected = _socketClientObject.IsConnected;
-                }
-                catch (Exception)
-                {
-                    connected = false;
-                }
-                return connected;
+                throw new NotImplementedException();
+                //bool connected;
+                //try
+                //{
+                //    connected = _socketClientObject.IsConnected;
+                //}
+                //catch (Exception)
+                //{
+                //    connected = false;
+                //}
+                //return connected;
             }
         }
 
@@ -232,7 +233,8 @@ namespace RASDK.Arm.TMRobot
                 _message.Show(ex, LoggingLevel.Error);
             }
 
-            return Connected;
+            return true;
+            //return Connected;
         }
 
         public override bool Disconnect()
@@ -243,7 +245,8 @@ namespace RASDK.Arm.TMRobot
                 _socketClientObject = null;
             }
 
-            return !Connected;
+            return true;
+            //return !Connected;
         }
 
         private bool CheckIpAddressValid(string ip)
