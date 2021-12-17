@@ -39,7 +39,7 @@ jobs:
 
     # 編譯整個項目
     - name: Build the solution
-      run: msbuild /p:Configuration=$env:Configuration -restore
+      run: msbuild /p:Configuration=$env:Configuration /p:AllowUnsafeBlocks=true -restore
       env:
         Configuration: ${{ matrix.configuration }}
 
