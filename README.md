@@ -8,8 +8,7 @@
 - HIWIN 機械手臂
 - HIWIN 電動夾爪
 - TM Robot 機械手臂
-- CoppeliaSim 機械手臂（不完整）
-- IDS 工業攝影機
+- CoppeliaSim 機械手臂（部分功能）
 
 支援的環境為 .NET Framework 4.7.2 (64-bit)
 
@@ -22,9 +21,6 @@
 - [RASDK.Basic](/RASDK.Basic)：基本功能函式庫。
 - [RASDK.Basic.TestForms](/RASDK.Basic.TestForms)：「RASDK.Basic」的測試用視窗程式。不會封裝進 NuGet。
 - [RASDK.Gripper](/RASDK.Gripper)：夾爪函式庫。
-- [RASDK.UI](/RASDK.UI)：使用者介面函式庫。
-- [RASDK.Vision](/RASDK.Vision)：影像及視覺相關函式庫。
-- [RASDK.Vision.TestForms](/RASDK.Vision.TestForms)：「RASDK.Vision」的測試用視窗程式。不會封裝進 NuGet。
 
 # 使用方法
 
