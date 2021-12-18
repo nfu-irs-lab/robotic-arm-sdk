@@ -1,7 +1,7 @@
 # Robotic Arm SDK
 
+[![dotnet](https://github.com/nfu-irs-lab/robotic-arm-sdk/actions/workflows/dotnet.yml/badge.svg?branch=main)](https://github.com/nfu-irs-lab/robotic-arm-sdk/actions/workflows/dotnet.yml?query=branch%3Amain)
 [![GitHub release](https://img.shields.io/github/release/nfu-irs-lab/robotic-arm-sdk.svg)](https://github.com/nfu-irs-lab/robotic-arm-sdk/releases)
-[![GitHub repo size](https://img.shields.io/github/repo-size/nfu-irs-lab/robotic-arm-sdk)](https://github.com/nfu-irs-lab/robotic-arm-sdk)
 [![GitHub issues](https://img.shields.io/github/issues/nfu-irs-lab/robotic-arm-sdk.svg)](https://github.com/nfu-irs-lab/robotic-arm-sdk/issues)
 
 機械手臂 SDK。目前主要支援：
