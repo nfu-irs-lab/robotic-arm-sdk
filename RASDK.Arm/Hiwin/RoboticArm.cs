@@ -226,6 +226,7 @@ namespace RASDK.Arm.Hiwin
 
         private static readonly HRobot.CallBackFun _callBackFun = EventFun;
 
+        // FIXME: HRobot.network_get_state(_id) always return 0, so Connected always false.
         public override bool Connected
         {
             get
@@ -260,7 +261,9 @@ namespace RASDK.Arm.Hiwin
                 ShowUnsuccessfulConnectMessage();
             }
 
-            return Connected;
+            // FIXME: HRobot.network_get_state(_id) always return 0, so the Connected always false.
+            //return Connected;
+            return true;
         }
 
         public override bool Disconnect()
@@ -289,7 +292,9 @@ namespace RASDK.Arm.Hiwin
                        $"錯誤代碼: {alarmState}";
             _message.Show(text, "斷線", MessageBoxButtons.OK, MessageBoxIcon.None);
 
-            return !Connected;
+            // FIXME: HRobot.network_get_state(_id) always return 0, so the Connected always false.
+            //return !Connected;
+            return true;
         }
 
         private static void EventFun(UInt16 cmd, UInt16 rlt, ref UInt16 Msg, int len)
