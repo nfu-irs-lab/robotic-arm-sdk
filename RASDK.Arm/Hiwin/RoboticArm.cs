@@ -15,7 +15,7 @@ namespace RASDK.Arm.Hiwin
 {
     public class RoboticArm : RASDK.Arm.RoboticArm
     {
-        private static unsafe bool* _waiting;
+        private static volatile bool _waiting;
         private readonly string _ip;
         private int _id;
 
@@ -214,12 +214,9 @@ namespace RASDK.Arm.Hiwin
         {
             if (needWait && ReturnCodeCheck.IsSuccessful(returnCode))
             {
-                unsafe
-                {
-                    *_waiting = true;
-                    while (*_waiting)
-                    { /* None. */ }
-                }
+                _waiting = true;
+                while (_waiting)
+                { /* Do nothing. */ }
             }
         }
 
@@ -334,11 +331,8 @@ namespace RASDK.Arm.Hiwin
                                       $"Coor:{infos[14]},{infos[15]},{infos[16]},{infos[17]},{infos[18]},{infos[19]}\r\n" +
                                       $"Joint:{infos[20]},{infos[21]},{infos[22]},{infos[23]},{infos[24]},{infos[25]}\r\n");
 
-                    unsafe
-                    {
-                        // Motion state=1: Idle.
-                        *_waiting = (infos[8] != "1");
-                    }
+                    // Motion state=1: Idle.
+                    _waiting = (infos[8] != "1");
                     break;
 
                 case 4011 when rlt != 0:
