@@ -120,7 +120,7 @@ namespace RASDK.Basic
         /// </summary>
         ~LogHandler()
         {
-            Write("LogHandler Destruct.", LoggingLevel.Fatal);
+            Write("LogHandler destructed, stop logging.", LoggingLevel.Fatal);
         }
 
         /// <summary>
