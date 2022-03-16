@@ -202,7 +202,7 @@ namespace RASDK.Arm
         #region Motion.Jog
 
         /// <summary>
-        /// 吋動的參數輸入正則表達時判讀模板。
+        /// 吋動的參數輸入正則表達式判讀模板。
         /// </summary>
         protected readonly string _inputRegexPattern = "[+-][a-cx-zA-CX-Z0-5]";
 
