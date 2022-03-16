@@ -15,7 +15,7 @@ namespace RASDK.Arm.Hiwin
         /// <param name="successCode">代表成功的代碼。</param>
         /// <returns></returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool IsSuccessful(int code, IMessage message = null, int ignoreCode = 0, int successCode = 0)
+        public static bool IsSuccessful(int code, IMessageHandler message = null, int ignoreCode = 0, int successCode = 0)
         {
             bool successful;
             if ((code == ignoreCode) || (code == successCode))

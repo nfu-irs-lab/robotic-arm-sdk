@@ -27,7 +27,7 @@ namespace RASDK.Arm.Hiwin
         /// </summary>
         /// <param name="message">訊息處理器。</param>
         /// <param name="ip">手臂連線 IP。例如 <c>"192.168.0.3"</c>。</param>
-        public RoboticArm(IMessage message, string ip = Default.Ip) : base(message)
+        public RoboticArm(IMessageHandler message, string ip = Default.Ip) : base(message)
         {
             _ip = ip;
         }

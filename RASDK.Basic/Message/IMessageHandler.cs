@@ -11,7 +11,7 @@ namespace RASDK.Basic.Message
     /// <summary>
     /// 訊息處理器介面。
     /// </summary>
-    public interface IMessage
+    public interface IMessageHandler
     {
         /// <summary>
         /// Log.
