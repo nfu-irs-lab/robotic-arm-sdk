@@ -49,7 +49,7 @@ namespace RASDK.Arm
         /// 取得目前的位置座標。
         /// </summary>
         /// <param name="coordinate">座標系類型。預設爲 <c>Descartes</c>。</param>
-        /// <returns>目前的位置座標。</returns>
+        /// <returns>目前的位置座標陣列。</returns>
         public abstract double[] GetNowPosition(CoordinateType coordinate = CoordinateType.Descartes);
 
         #region Speed/Acceleration
@@ -303,7 +303,7 @@ namespace RASDK.Arm
         // IDevice
 
         /// <summary>
-        /// 已連線。
+        /// 是否已連線。
         /// </summary>
         public abstract bool Connected { get; }
 
