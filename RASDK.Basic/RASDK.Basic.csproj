@@ -71,6 +71,7 @@
     <Compile Include="Message\GeneralMessageHandler.cs" />
     <Compile Include="Message\IMessageHandler.cs" />
     <Compile Include="LogHandler.cs" />
+    <Compile Include="Message\LogOnlyMessageHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SerialPortDevice.cs" />
     <Compile Include="Sign.cs" />
