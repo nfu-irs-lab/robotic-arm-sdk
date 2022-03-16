@@ -13,19 +13,36 @@ using RASDK.Basic.Message;
 
 namespace RASDK.Arm.Hiwin
 {
+    /// <summary>
+    /// 上銀機械手臂。
+    /// </summary>
     public class RoboticArm : RASDK.Arm.RoboticArm
     {
         private static volatile bool _waiting;
         private readonly string _ip;
         private int _id;
 
+        /// <summary>
+        /// 上銀機械手臂。
+        /// </summary>
+        /// <param name="message">訊息處理器。</param>
+        /// <param name="ip">手臂連線 IP。例如 <c>"192.168.0.3"</c>。</param>
         public RoboticArm(IMessage message, string ip = Default.Ip) : base(message)
         {
             _ip = ip;
         }
 
+        /// <summary>
+        /// 機械手臂 ID。
+        /// </summary>
         public int Id => _id;
 
+        /// <summary>
+        /// 取得目前的位置座標。
+        /// </summary>
+        /// <param name="coordinate">座標系類型。預設爲 <c>Descartes</c>。</param>
+        /// <returns>目前的位置座標陣列。</returns>
+        /// <exception cref="ArgumentException"></exception>
         public override double[] GetNowPosition(CoordinateType coordinate = CoordinateType.Descartes)
         {
             var position = new double[6];
@@ -52,11 +69,21 @@ namespace RASDK.Arm.Hiwin
 
         #region Motion
 
+        /// <summary>
+        /// 中止動作。
+        /// </summary>
         public override void Abort()
         {
             HRobot.motion_abort(_id);
         }
 
+        /// <summary>
+        /// 復歸，回原點。
+        /// </summary>
+        /// <param name="slowly">是否要慢速移動。</param>
+        /// <param name="coordinate">座標系類型。</param>
+        /// <param name="needWait">是否需要等待動作完成 (阻塞)。</param>
+        /// <exception cref="ArgumentException"></exception>
         public override void Homing(bool slowly = true, CoordinateType coordinate = CoordinateType.Descartes, bool needWait = true)
         {
             var oriSpeedValue = Speed;
@@ -88,6 +115,11 @@ namespace RASDK.Arm.Hiwin
             }
         }
 
+        /// <summary>
+        /// 吋動。
+        /// </summary>
+        /// <param name="axis">目標軸及方向。例如 <c>"+x"</c> 爲 X 軸增加。</param>
+        /// <exception cref="ArgumentException"></exception>
         public override void Jog(string axis)
         {
             // Remove all whitespace char.
@@ -95,7 +127,7 @@ namespace RASDK.Arm.Hiwin
 
             if (CheckJogArg(axis))
             {
-                HRobot.jog(_id, 0, PatseAxis(axis), ParseDirection(axis));
+                HRobot.jog(_id, 0, ParseAxis(axis), ParseDirection(axis));
             }
             else
             {
@@ -103,6 +135,16 @@ namespace RASDK.Arm.Hiwin
             }
         }
 
+        /// <summary>
+        /// 絕對運動。
+        /// </summary>
+        /// <param name="j1X">目標的 J1 或 X 數值。</param>
+        /// <param name="j2Y">目標的 J2 或 Y 數值。</param>
+        /// <param name="j3Z">目標的 J3 或 Z 數值。</param>
+        /// <param name="j4A">目標的 J4 或 A 數值。</param>
+        /// <param name="j5B">目標的 J5 或 B 數值。</param>
+        /// <param name="j6C">目標的 J6 或 C 數值。</param>
+        /// <param name="addParams">額外的運動參數。</param>
         public override void MoveAbsolute(double j1X,
                                           double j2Y,
                                           double j3Z,
@@ -148,6 +190,16 @@ namespace RASDK.Arm.Hiwin
             WaitForMotionComplete(addParams.NeedWait, returnCode);
         }
 
+        /// <summary>
+        /// 相對運動。
+        /// </summary>
+        /// <param name="j1X">目標的 J1 或 X 數值。</param>
+        /// <param name="j2Y">目標的 J2 或 Y 數值。</param>
+        /// <param name="j3Z">目標的 J3 或 Z 數值。</param>
+        /// <param name="j4A">目標的 J4 或 A 數值。</param>
+        /// <param name="j5B">目標的 J5 或 B 數值。</param>
+        /// <param name="j6C">目標的 J6 或 C 數值。</param>
+        /// <param name="addParams">額外的運動參數。</param>
         public override void MoveRelative(double j1X,
                                           double j2Y,
                                           double j3Z,
@@ -227,6 +279,10 @@ namespace RASDK.Arm.Hiwin
         private static readonly HRobot.CallBackFun _callBackFun = EventFun;
 
         // FIXME: HRobot.network_get_state(_id) always return 0, so Connected always false.
+
+        /// <summary>
+        /// 是否已連線。
+        /// </summary>
         public override bool Connected
         {
             get
@@ -244,6 +300,10 @@ namespace RASDK.Arm.Hiwin
             }
         }
 
+        /// <summary>
+        /// 進行連線。
+        /// </summary>
+        /// <returns>是否連線成功。</returns>
         public override bool Connect()
         {
             _id = HRobot.open_connection(_ip, 1, _callBackFun);
@@ -266,6 +326,10 @@ namespace RASDK.Arm.Hiwin
             return true;
         }
 
+        /// <summary>
+        /// 進行斷線。
+        /// </summary>
+        /// <returns>是否斷線成功。</returns>
         public override bool Disconnect()
         {
             int alarmState;
@@ -416,6 +480,11 @@ namespace RASDK.Arm.Hiwin
 
         #region Speed/Acceleration
 
+        /// <summary>
+        /// 加速度。單位爲 %。<br/>
+        /// 容許的數值範圍爲 1 ~ 100。<br/>
+        /// 回傳 -1 代表取得數值時錯誤。
+        /// </summary>
         public override double Acceleration
         {
             get
@@ -446,6 +515,11 @@ namespace RASDK.Arm.Hiwin
             }
         }
 
+        /// <summary>
+        /// 速度。單位爲 %。<br/>
+        /// 容許的數值範圍爲 1 ~ 100。<br/>
+        /// 回傳 -1 代表取得數值時錯誤。
+        /// </summary>
         public override double Speed
         {
             get
