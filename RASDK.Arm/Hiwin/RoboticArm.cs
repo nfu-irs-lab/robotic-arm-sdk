@@ -95,7 +95,7 @@ namespace RASDK.Arm.Hiwin
 
             if (CheckJogArg(axis))
             {
-                HRobot.jog(_id, 0, PatseAxis(axis), ParseDirection(axis));
+                HRobot.jog(_id, 0, ParseAxis(axis), ParseDirection(axis));
             }
             else
             {

@@ -247,7 +247,7 @@ namespace RASDK.Arm
         /// <param name="text">吋動參數。</param>
         /// <returns>軸。</returns>
         /// <exception cref="ArgumentException"></exception>
-        protected int PatseAxis(string text)
+        protected int ParseAxis(string text)
         {
             int val;
             switch (text.Substring(1, 1))
