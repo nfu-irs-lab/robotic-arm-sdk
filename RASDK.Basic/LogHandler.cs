@@ -169,6 +169,7 @@ namespace RASDK.Basic
                 // 設定目標檔案名稱。
                 var targetFilename = $"{dateTimeNow:MMMdd-HH}_{num}.log";
 
+                // 判斷目前檔案是否已經存在。
                 if (System.IO.File.Exists(Path + targetFilename))
                 {
                     // 若目標檔案已經存在，遞增序號，使檔案名稱不重複 。
