@@ -10,7 +10,7 @@ namespace RASDK.Basic.Message
     /// <summary>
     /// 一般的訊息處理器，會顯示訊息及記錄 Log 檔案。
     /// </summary>
-    public class GeneralMessage : IMessage
+    public class GeneralMessageHandler : IMessageHandler
     {
         private readonly ILogHandler LogHandler = null;
 
@@ -18,7 +18,7 @@ namespace RASDK.Basic.Message
         /// 一般的訊息處理器，會顯示訊息及記錄 Log 檔案。
         /// </summary>
         /// <param name="logHandler">日誌處理器。</param>
-        public GeneralMessage(ILogHandler logHandler)
+        public GeneralMessageHandler(ILogHandler logHandler)
         {
             LogHandler = logHandler;
         }

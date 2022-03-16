@@ -65,11 +65,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Csv.cs"/>
+    <Compile Include="Csv.cs" />
     <Compile Include="IDevice.cs" />
-    <Compile Include="Message\EmptyMessage.cs" />
-    <Compile Include="Message\GeneralMessage.cs" />
-    <Compile Include="Message\IMessage.cs" />
+    <Compile Include="Message\EmptyMessageHandler.cs" />
+    <Compile Include="Message\GeneralMessageHandler.cs" />
+    <Compile Include="Message\IMessageHandler.cs" />
     <Compile Include="LogHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SerialPortDevice.cs" />
