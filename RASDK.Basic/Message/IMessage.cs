@@ -9,7 +9,7 @@ using System.Windows.Forms;
 namespace RASDK.Basic.Message
 {
     /// <summary>
-    /// 訊息處理介面。
+    /// 訊息處理器介面。
     /// </summary>
     public interface IMessage
     {

@@ -93,7 +93,7 @@ namespace RASDK.Arm.TMRobot
             if (CheckJogArg(axis))
             {
                 var pos = new double[] { 0, 0, 0, 0, 0, 0 };
-                pos[PatseAxis(axis)] = ParseDirection(axis) * 10;
+                pos[ParseAxis(axis)] = ParseDirection(axis) * 10;
                 MoveRelative(pos);
             }
             else
