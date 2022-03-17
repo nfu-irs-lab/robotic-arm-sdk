@@ -68,7 +68,7 @@ namespace RASDK.Basic.Message
         /// <param name="ex">例外情況。</param>
         /// <param name="loggingLevel">日誌等級。</param>
         /// <returns>訊息框結果。</returns>
-        public DialogResult Show(string message, Exception ex, LoggingLevel loggingLevel = LoggingLevel.Trace)
+        public override DialogResult Show(string message, Exception ex, LoggingLevel loggingLevel = LoggingLevel.Trace)
         {
             string text = $"{message} \r\n\r\n";
 
@@ -95,11 +95,11 @@ namespace RASDK.Basic.Message
         /// <param name="icon">圖示。</param>
         /// <param name="loggingLevel">日誌等級。</param>
         /// <returns>訊息框結果。</returns>
-        public DialogResult Show(string text,
-                                 string caption,
-                                 MessageBoxButtons buttons,
-                                 MessageBoxIcon icon,
-                                 LoggingLevel loggingLevel = LoggingLevel.Trace)
+        public override DialogResult Show(string text,
+                                          string caption,
+                                          MessageBoxButtons buttons,
+                                          MessageBoxIcon icon,
+                                          LoggingLevel loggingLevel = LoggingLevel.Trace)
         {
             LogHandler.Write($"{caption}: {text}", loggingLevel);
             return _defaultDialogResult;
