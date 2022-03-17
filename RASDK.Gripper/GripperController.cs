@@ -26,11 +26,11 @@ namespace RASDK.Gripper
         public GripperController(string comPort, IMessageHandler message)
         {
             SerialPortDevice = new SerialPortDevice(new SerialPort()
-                                                    {
-                                                        PortName = comPort,
-                                                        BaudRate = 115200,
-                                                        DataBits = 8
-                                                    },
+            {
+                PortName = comPort,
+                BaudRate = 115200,
+                DataBits = 8
+            },
                                                     message);
 
             Message = message;

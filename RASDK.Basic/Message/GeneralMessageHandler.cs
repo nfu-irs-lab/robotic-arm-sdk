@@ -130,10 +130,10 @@ namespace RASDK.Basic.Message
         /// <param name="loggingLevel">日誌等級。</param>
         /// <returns>訊息框結果。</returns>
         public virtual DialogResult Show(string text,
-                                 string caption,
-                                 MessageBoxButtons buttons,
-                                 MessageBoxIcon icon,
-                                 LoggingLevel loggingLevel = LoggingLevel.Trace)
+                                         string caption,
+                                         MessageBoxButtons buttons,
+                                         MessageBoxIcon icon,
+                                         LoggingLevel loggingLevel = LoggingLevel.Trace)
         {
             LogHandler.Write($"{caption}: {text}", loggingLevel);
             return MessageBox.Show(text, caption, buttons, icon);

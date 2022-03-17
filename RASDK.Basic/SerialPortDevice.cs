@@ -51,6 +51,7 @@ namespace RASDK.Basic
         /// 底層 SerialPort。
         /// </summary>
         public SerialPort SerialPort { get; set; }
+
         private IMessageHandler Message { get; set; }
 
         /// <summary>

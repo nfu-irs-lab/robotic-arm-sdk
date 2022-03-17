@@ -20,10 +20,6 @@ namespace RASDK.Arm.TMRobot
         private object lock_WriteSyncData = new object();
         private Socket tcpSynCl = null;
 
-        public event TCPConnectStatusResponse ConnectStatusResponse;
-
-        public event TCPReceiveData ReceiveData;
-
         public SocketClientObject(string ip, int port)
         {
             this.IP = ip;
@@ -31,67 +27,86 @@ namespace RASDK.Arm.TMRobot
             this.SocketClientInit();
         }
 
-        internal void CallException(string ex)
+        ~SocketClientObject()
         {
-            try
-            {
-                if (this.tcpSynCl == null)
-                {
-                    this._connected = false;
-                }
-                this.Close();
-                SLogger.log("Exception:" + ex, "TCP_Client");
-            }
-            catch
-            { }
+            this.Dispose(false);
         }
 
-        private bool CheckSocketConnected()
+        public delegate void TCPConnectStatusResponse(SocketClientObject sender, string resp);
+
+        public delegate void TCPReceiveData(SocketClientObject sender, string data);
+
+        public event TCPConnectStatusResponse ConnectStatusResponse;
+
+        public event TCPReceiveData ReceiveData;
+
+        public enum ConnectionStatusType
         {
-            bool flag = false;
-            if (this._connected)
-            {
-                try
-                {
-                    if (this.isSocketConnected(this.tcpSynCl))
-                    {
-                        flag = true;
-                    }
-                    else
-                    {
-                        flag = false;
-                    }
-                }
-                catch
-                {
-                    flag = false;
-                }
-            }
-            this.IsConnected = flag;
-            return flag;
+            Connect,
+            Idle,
+            FailToConnect,
+            ConnectLost,
+            NoTCPClientSocket,
+            FailToSendData,
+            FailToRecvData
         }
 
-        private void CheckSocketThread()
+        public string IP { get; set; }
+
+        public bool IsConnected
         {
-            Func<bool> condition = null;
-            while (!this.disposed)
+            get
             {
-                try
+                lock (this._IsConnected_Lock)
                 {
-                    if (condition == null)
+                    if (!this._connected)
                     {
-                        condition = () => this.disposed;
+                        return false;
                     }
-                    SpinWait.SpinUntil(condition, 0x3e8);
-                    if (this.disposed)
-                    {
-                        break;
-                    }
-                    this.CheckSocketConnected();
+                    return this._IsConnected;
                 }
-                catch
-                { }
             }
+
+            set
+            {
+                lock (this._IsConnected_Lock)
+                {
+                    this._IsConnected = value;
+                }
+            }
+        }
+
+        public int PORT { get; set; }
+
+        public static string DataToPacket(string header = null, string data = null)
+        {
+            if (string.IsNullOrEmpty(header))
+            {
+                header = "$TMSCT";
+            }
+            if (string.IsNullOrEmpty(data))
+            {
+                data = string.Empty;
+            }
+            List<byte> list = new List<byte>();
+            if (((header != null) && (header.Length >= 1)) && (header[0] != '$'))
+            {
+                list.Add(0x24);
+            }
+            list.AddRange(PacketGetBytes(header));
+            list.Add(0x2c);
+            byte[] collection = PacketGetBytes(data);
+            int length = collection.Length;
+            list.AddRange(PacketGetBytes(length.ToString()));
+            list.Add(0x2c);
+            list.AddRange(collection);
+            list.Add(0x2c);
+            string s = PacketChecksumXOR(list.GetRange(1, list.Count - 1).ToArray()).ToString("X2");
+            list.Add(0x2a);
+            list.AddRange(PacketGetBytes(s));
+            list.Add(13);
+            list.Add(10);
+            return PacketGetString(list, list.Count);
         }
 
         public void Close()
@@ -145,6 +160,199 @@ namespace RASDK.Arm.TMRobot
                     this.ConnectStatusResponse(this, this.showConnectionStatus(2));
                 }
                 return false;
+            }
+        }
+
+        public bool Disconnect()
+        {
+            if (!this.IsConnected)
+            {
+                return false;
+            }
+            this.Close();
+            return true;
+        }
+
+        public void Dispose()
+        {
+            this.Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        public bool WriteSyncData(byte[] write_data)
+        {
+            if (this.tcpSynCl != null)
+            {
+                try
+                {
+                    if (!this.IsConnected)
+                    {
+                        return false;
+                    }
+                    lock (this.lock_WriteSyncData)
+                    {
+                        this.tcpSynCl.Send(write_data, 0, write_data.Length, SocketFlags.None);
+                    }
+                    SLogger.log("send_data=" + Encoding.UTF8.GetString(write_data).ToString(), "TCP_Client");
+                    return true;
+                }
+                catch (Exception exception)
+                {
+                    string str = exception.ToString();
+                    string str2 = "connect lost";
+                    if (exception is SocketException)
+                    {
+                        SocketException exception2 = exception as SocketException;
+                        switch (exception2.ErrorCode)
+                        {
+                            case 0x2714:
+                            case 0x274c:
+                                str2 = "time out";
+                                break;
+                        }
+                        str = string.Format("{0} {1}", exception2.ErrorCode.ToString(), str);
+                    }
+                    this.CallException(exception.ToString());
+                    if (this.ConnectStatusResponse != null)
+                    {
+                        this.ConnectStatusResponse(this, this.showConnectionStatus(5));
+                    }
+                    SLogger.log("WriteSyncData(); ConnectionStatusType.FailToSendData", "TCP_Client");
+                    SLogger.log("WriteSyncData(); Exception:" + str + "ErrorCode=" + str2, "TCP_Client");
+                    return false;
+                }
+            }
+            if (this.ConnectStatusResponse != null)
+            {
+                this.ConnectStatusResponse(this, this.showConnectionStatus(4));
+            }
+            SLogger.log("WriteSyncData(); ConnectionStatusType.NoTCPClientSocket", "TCP_Client");
+            return false;
+        }
+
+        internal void CallException(string ex)
+        {
+            try
+            {
+                if (this.tcpSynCl == null)
+                {
+                    this._connected = false;
+                }
+                this.Close();
+                SLogger.log("Exception:" + ex, "TCP_Client");
+            }
+            catch
+            { }
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!this.disposed)
+            {
+                if (disposing)
+                {
+                    this.Close();
+                }
+                this.disposed = true;
+            }
+        }
+
+        private static byte PacketChecksumXOR(byte[] data)
+        {
+            byte num = 0;
+            if ((data != null) && (data.Length > 0))
+            {
+                for (int i = 0; i < data.Length; i++)
+                {
+                    num = (byte)(num ^ data[i]);
+                }
+            }
+            return num;
+        }
+
+        private static byte[] PacketGetBytes(string s)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(s))
+                {
+                    return new byte[0];
+                }
+                return Encoding.UTF8.GetBytes(s);
+            }
+            catch
+            { }
+            return new byte[0];
+        }
+
+        private static string PacketGetString(List<byte> data, int count)
+        {
+            try
+            {
+                if (data == null)
+                {
+                    return string.Empty;
+                }
+                if (count < 0)
+                {
+                    return string.Empty;
+                }
+                if (count > data.Count)
+                {
+                    count = data.Count;
+                }
+                return Encoding.UTF8.GetString(data.ToArray(), 0, count);
+            }
+            catch
+            { }
+            return string.Empty;
+        }
+
+        private bool CheckSocketConnected()
+        {
+            bool flag = false;
+            if (this._connected)
+            {
+                try
+                {
+                    if (this.isSocketConnected(this.tcpSynCl))
+                    {
+                        flag = true;
+                    }
+                    else
+                    {
+                        flag = false;
+                    }
+                }
+                catch
+                {
+                    flag = false;
+                }
+            }
+            this.IsConnected = flag;
+            return flag;
+        }
+
+        private void CheckSocketThread()
+        {
+            Func<bool> condition = null;
+            while (!this.disposed)
+            {
+                try
+                {
+                    if (condition == null)
+                    {
+                        condition = () => this.disposed;
+                    }
+                    SpinWait.SpinUntil(condition, 0x3e8);
+                    if (this.disposed)
+                    {
+                        break;
+                    }
+                    this.CheckSocketConnected();
+                }
+                catch
+                { }
             }
         }
 
@@ -255,70 +463,6 @@ namespace RASDK.Arm.TMRobot
             SLogger.log("out ConnectStatusResponseThread()", "TCP_Client");
         }
 
-        public static string DataToPacket(string header = null, string data = null)
-        {
-            if (string.IsNullOrEmpty(header))
-            {
-                header = "$TMSCT";
-            }
-            if (string.IsNullOrEmpty(data))
-            {
-                data = string.Empty;
-            }
-            List<byte> list = new List<byte>();
-            if (((header != null) && (header.Length >= 1)) && (header[0] != '$'))
-            {
-                list.Add(0x24);
-            }
-            list.AddRange(PacketGetBytes(header));
-            list.Add(0x2c);
-            byte[] collection = PacketGetBytes(data);
-            int length = collection.Length;
-            list.AddRange(PacketGetBytes(length.ToString()));
-            list.Add(0x2c);
-            list.AddRange(collection);
-            list.Add(0x2c);
-            string s = PacketChecksumXOR(list.GetRange(1, list.Count - 1).ToArray()).ToString("X2");
-            list.Add(0x2a);
-            list.AddRange(PacketGetBytes(s));
-            list.Add(13);
-            list.Add(10);
-            return PacketGetString(list, list.Count);
-        }
-
-        public bool Disconnect()
-        {
-            if (!this.IsConnected)
-            {
-                return false;
-            }
-            this.Close();
-            return true;
-        }
-
-        public void Dispose()
-        {
-            this.Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!this.disposed)
-            {
-                if (disposing)
-                {
-                    this.Close();
-                }
-                this.disposed = true;
-            }
-        }
-
-        ~SocketClientObject()
-        {
-            this.Dispose(false);
-        }
-
         private bool isSocketConnected(Socket sock)
         {
             try
@@ -385,57 +529,6 @@ namespace RASDK.Arm.TMRobot
                 this.SocketDisconnect(sock);
                 return false;
             }
-        }
-
-        private static byte PacketChecksumXOR(byte[] data)
-        {
-            byte num = 0;
-            if ((data != null) && (data.Length > 0))
-            {
-                for (int i = 0; i < data.Length; i++)
-                {
-                    num = (byte)(num ^ data[i]);
-                }
-            }
-            return num;
-        }
-
-        private static byte[] PacketGetBytes(string s)
-        {
-            try
-            {
-                if (string.IsNullOrEmpty(s))
-                {
-                    return new byte[0];
-                }
-                return Encoding.UTF8.GetBytes(s);
-            }
-            catch
-            { }
-            return new byte[0];
-        }
-
-        private static string PacketGetString(List<byte> data, int count)
-        {
-            try
-            {
-                if (data == null)
-                {
-                    return string.Empty;
-                }
-                if (count < 0)
-                {
-                    return string.Empty;
-                }
-                if (count > data.Count)
-                {
-                    count = data.Count;
-                }
-                return Encoding.UTF8.GetString(data.ToArray(), 0, count);
-            }
-            catch
-            { }
-            return string.Empty;
         }
 
         private int Reconnect(ref Socket socket)
@@ -631,98 +724,5 @@ namespace RASDK.Arm.TMRobot
             }
             return false;
         }
-
-        public bool WriteSyncData(byte[] write_data)
-        {
-            if (this.tcpSynCl != null)
-            {
-                try
-                {
-                    if (!this.IsConnected)
-                    {
-                        return false;
-                    }
-                    lock (this.lock_WriteSyncData)
-                    {
-                        this.tcpSynCl.Send(write_data, 0, write_data.Length, SocketFlags.None);
-                    }
-                    SLogger.log("send_data=" + Encoding.UTF8.GetString(write_data).ToString(), "TCP_Client");
-                    return true;
-                }
-                catch (Exception exception)
-                {
-                    string str = exception.ToString();
-                    string str2 = "connect lost";
-                    if (exception is SocketException)
-                    {
-                        SocketException exception2 = exception as SocketException;
-                        switch (exception2.ErrorCode)
-                        {
-                            case 0x2714:
-                            case 0x274c:
-                                str2 = "time out";
-                                break;
-                        }
-                        str = string.Format("{0} {1}", exception2.ErrorCode.ToString(), str);
-                    }
-                    this.CallException(exception.ToString());
-                    if (this.ConnectStatusResponse != null)
-                    {
-                        this.ConnectStatusResponse(this, this.showConnectionStatus(5));
-                    }
-                    SLogger.log("WriteSyncData(); ConnectionStatusType.FailToSendData", "TCP_Client");
-                    SLogger.log("WriteSyncData(); Exception:" + str + "ErrorCode=" + str2, "TCP_Client");
-                    return false;
-                }
-            }
-            if (this.ConnectStatusResponse != null)
-            {
-                this.ConnectStatusResponse(this, this.showConnectionStatus(4));
-            }
-            SLogger.log("WriteSyncData(); ConnectionStatusType.NoTCPClientSocket", "TCP_Client");
-            return false;
-        }
-
-        public string IP { get; set; }
-
-        public bool IsConnected
-        {
-            get
-            {
-                lock (this._IsConnected_Lock)
-                {
-                    if (!this._connected)
-                    {
-                        return false;
-                    }
-                    return this._IsConnected;
-                }
-            }
-
-            set
-            {
-                lock (this._IsConnected_Lock)
-                {
-                    this._IsConnected = value;
-                }
-            }
-        }
-
-        public int PORT { get; set; }
-
-        public enum ConnectionStatusType
-        {
-            Connect,
-            Idle,
-            FailToConnect,
-            ConnectLost,
-            NoTCPClientSocket,
-            FailToSendData,
-            FailToRecvData
-        }
-
-        public delegate void TCPConnectStatusResponse(SocketClientObject sender, string resp);
-
-        public delegate void TCPReceiveData(SocketClientObject sender, string data);
     }
 }

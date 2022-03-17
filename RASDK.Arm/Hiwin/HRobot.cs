@@ -86,6 +86,13 @@ namespace RASDK.Arm.Hiwin
 
     public class Global
     {
+        private static readonly object Mutex = new object();
+
+        private static volatile Global _instance;
+
+        private Global()
+        { }
+
         public enum File_text_type
         {
             folder = -1,
@@ -117,12 +124,6 @@ namespace RASDK.Arm.Hiwin
             SetConnected,
             SetAll,
         };
-
-        private static readonly object Mutex = new object();
-        private static volatile Global _instance;
-
-        private Global()
-        { }
 
         public static Global Instance
         {
