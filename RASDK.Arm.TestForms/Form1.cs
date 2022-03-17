@@ -17,11 +17,11 @@ namespace RASDK.Arm.TestForms
 {
     public partial class Form1 : Form
     {
-        private readonly IMessage _message =
+        private readonly IMessageHandler _message =
 #if DISABLE_SHOW_MESSAGE
             new EmptyMessage();
 #else
-            new GeneralMessage(new EmptyLog());
+            new GeneralMessageHandler(new EmptyLogHandler());
 
 #endif
         private RoboticArm _arm;

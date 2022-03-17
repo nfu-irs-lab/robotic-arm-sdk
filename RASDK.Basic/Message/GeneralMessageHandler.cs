@@ -10,15 +10,18 @@ namespace RASDK.Basic.Message
     /// <summary>
     /// 一般的訊息處理器，會顯示訊息及記錄 Log 檔案。
     /// </summary>
-    public class GeneralMessage : IMessage
+    public class GeneralMessageHandler : IMessageHandler
     {
-        private readonly ILogHandler LogHandler = null;
+        /// <summary>
+        /// 日誌處理器。
+        /// </summary>
+        protected readonly ILogHandler LogHandler = null;
 
         /// <summary>
         /// 一般的訊息處理器，會顯示訊息及記錄 Log 檔案。
         /// </summary>
         /// <param name="logHandler">日誌處理器。</param>
-        public GeneralMessage(ILogHandler logHandler)
+        public GeneralMessageHandler(ILogHandler logHandler)
         {
             LogHandler = logHandler;
         }
@@ -49,8 +52,8 @@ namespace RASDK.Basic.Message
         /// <param name="message">訊息內容。</param>
         /// <param name="loggingLevel">日誌等級。</param>
         /// <returns>訊息框結果。</returns>
-        public DialogResult Show(string message,
-                                 LoggingLevel loggingLevel = LoggingLevel.Trace)
+        public virtual DialogResult Show(string message,
+                                         LoggingLevel loggingLevel = LoggingLevel.Trace)
         {
             LogHandler.Write(message, loggingLevel);
             return MessageBox.Show(message,
@@ -65,8 +68,8 @@ namespace RASDK.Basic.Message
         /// <param name="ex">例外情況。</param>
         /// <param name="loggingLevel">日誌等級。</param>
         /// <returns>訊息框結果。</returns>
-        public DialogResult Show(Exception ex,
-                                 LoggingLevel loggingLevel = LoggingLevel.Trace)
+        public virtual DialogResult Show(Exception ex,
+                                         LoggingLevel loggingLevel = LoggingLevel.Trace)
         {
             string text = "未處理的例外。\r\n\r\n";
 
@@ -94,9 +97,9 @@ namespace RASDK.Basic.Message
         /// <param name="ex">例外情況。</param>
         /// <param name="loggingLevel">日誌等級。</param>
         /// <returns>訊息框結果。</returns>
-        public DialogResult Show(string message,
-                                 Exception ex,
-                                 LoggingLevel loggingLevel = LoggingLevel.Trace)
+        public virtual DialogResult Show(string message,
+                                         Exception ex,
+                                         LoggingLevel loggingLevel = LoggingLevel.Trace)
         {
             string text = $"{message} \r\n\r\n";
 
@@ -126,11 +129,11 @@ namespace RASDK.Basic.Message
         /// <param name="icon">圖示。</param>
         /// <param name="loggingLevel">日誌等級。</param>
         /// <returns>訊息框結果。</returns>
-        public DialogResult Show(string text,
-                                 string caption,
-                                 MessageBoxButtons buttons,
-                                 MessageBoxIcon icon,
-                                 LoggingLevel loggingLevel = LoggingLevel.Trace)
+        public virtual DialogResult Show(string text,
+                                         string caption,
+                                         MessageBoxButtons buttons,
+                                         MessageBoxIcon icon,
+                                         LoggingLevel loggingLevel = LoggingLevel.Trace)
         {
             LogHandler.Write($"{caption}: {text}", loggingLevel);
             return MessageBox.Show(text, caption, buttons, icon);

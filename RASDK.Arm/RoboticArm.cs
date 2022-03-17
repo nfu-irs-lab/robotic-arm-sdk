@@ -18,13 +18,13 @@ namespace RASDK.Arm
         /// <summary>
         /// 訊息處理器。
         /// </summary>
-        protected readonly IMessage _message;
+        protected readonly IMessageHandler _message;
 
         /// <summary>
         /// 機械手臂。
         /// </summary>
         /// <param name="message">訊息處理器。</param>
-        public RoboticArm(IMessage message)
+        public RoboticArm(IMessageHandler message)
         {
             _message = message;
         }
@@ -202,7 +202,7 @@ namespace RASDK.Arm
         #region Motion.Jog
 
         /// <summary>
-        /// 吋動的參數輸入正則表達時判讀模板。
+        /// 吋動的參數輸入正則表達式判讀模板。
         /// </summary>
         protected readonly string _inputRegexPattern = "[+-][a-cx-zA-CX-Z0-5]";
 

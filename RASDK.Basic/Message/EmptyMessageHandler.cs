@@ -10,7 +10,7 @@ namespace RASDK.Basic.Message
     /// <summary>
     /// 不執行任何動作的訊息處理器。
     /// </summary>
-    public class EmptyMessage : IMessage
+    public class EmptyMessageHandler : IMessageHandler
     {
         /// <summary>
         /// 日誌記錄。

@@ -10,8 +10,9 @@
 - TM Robot 機械手臂
 - CoppeliaSim 機械手臂（部分功能）
 
-支援的環境為 .NET Framework 4.7.2 (64-bit)
+更多的功能在 [Extras RASDK](https://github.com/nfu-irs-lab/extras-robotic-arm-sdk)
 
+> 支援的環境為 .NET Framework 4.7.2 (64-bit)  
 > Forked from [HRTK 1.4.0](https://github.com/nfu-irs-lab/hiwinrobot-toolkit/releases/tag/v1.4.0)
 
 # 各 Project 功能

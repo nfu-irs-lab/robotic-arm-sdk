@@ -7,9 +7,9 @@ namespace RASDK.Arm.TMRobot
 {
     internal class SLogger
     {
-        private static object Locker = new object();
         private const string LOG_FOLDER = @".\TCP_Client";
         private const string LOG_PREFIX = "log_";
+        private static object Locker = new object();
         private static bool RdEngMode = false;
         private static bool useSLogger = false;
         private static string versionHMI = Assembly.GetEntryAssembly().GetName().Version.ToString();

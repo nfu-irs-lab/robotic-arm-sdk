@@ -67,7 +67,7 @@ namespace RASDK.Basic
     /// <summary>
     /// 空的日誌處理器。不實際進行動作。
     /// </summary>
-    public class EmptyLog : ILogHandler
+    public class EmptyLogHandler : ILogHandler
     {
         /// <summary>
         /// 日誌檔案路徑。
@@ -100,6 +100,7 @@ namespace RASDK.Basic
         /// 要記錄的日誌等級。
         /// </summary>
         private readonly LoggingLevel LoggingLevel;
+
         private string Filename;
 
         /// <summary>

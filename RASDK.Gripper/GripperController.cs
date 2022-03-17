@@ -20,17 +20,17 @@ namespace RASDK.Gripper
         /// </summary>
         private byte Direction = 2;
 
-        private IMessage Message;
+        private IMessageHandler Message;
         private ISerialPortDevice SerialPortDevice = null;
 
-        public GripperController(string comPort, IMessage message)
+        public GripperController(string comPort, IMessageHandler message)
         {
             SerialPortDevice = new SerialPortDevice(new SerialPort()
-                                                    {
-                                                        PortName = comPort,
-                                                        BaudRate = 115200,
-                                                        DataBits = 8
-                                                    },
+            {
+                PortName = comPort,
+                BaudRate = 115200,
+                DataBits = 8
+            },
                                                     message);
 
             Message = message;
