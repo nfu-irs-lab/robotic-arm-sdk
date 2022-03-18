@@ -29,7 +29,13 @@ namespace RASDK.Arm.Hiwin
         /// <param name="ip">手臂連線 IP。例如 <c>"192.168.0.3"</c>。</param>
         public RoboticArm(MessageHandler message, string ip = Default.Ip) : base(message)
         {
+            var paramNames = new List<string> { nameof(message), nameof(ip) };
+            var paramVals = new List<string> { message.ToString(), ip };
+            _message.LogMethodStart(nameof(RoboticArm), paramNames, paramVals, "上銀機械手臂建構子", LoggingLevel.Info);
+
             _ip = ip;
+
+            _message.LogMethodEnd(nameof(RoboticArm));
         }
 
         /// <summary>
@@ -45,9 +51,7 @@ namespace RASDK.Arm.Hiwin
         /// <exception cref="ArgumentException"></exception>
         public override double[] GetNowPosition(CoordinateType coordinate = CoordinateType.Descartes)
         {
-            _message.Log($"執行：{nameof(GetNowPosition)}()，" +
-                         $"參數 {nameof(coordinate)}：{coordinate}。",
-                         LoggingLevel.Trace);
+            _message.LogMethodStart(nameof(GetNowPosition), nameof(coordinate), coordinate.ToString());
 
             var position = new double[6];
             Func<int, double[], int> action;
@@ -69,10 +73,10 @@ namespace RASDK.Arm.Hiwin
             var returnCode = action(_id, position);
             var noError = ReturnCodeCheck.IsSuccessful(returnCode, _message);
 
-            _message.Log($"完成：{nameof(GetNowPosition)}()，" +
-                         $"回傳：{position[0]},{position[1]},{position[2]},{position[3]},{position[4]},{position[5]}，" +
-                         $"錯誤代碼：{returnCode}。",
-                         noError ? LoggingLevel.Trace : LoggingLevel.Warn);
+            _message.LogMethodEnd(nameof(GetNowPosition),
+                                  $"{position[0]},{position[1]},{position[2]},{position[3]},{position[4]},{position[5]}",
+                                  $"錯誤代碼：{returnCode}",
+                                  noError ? LoggingLevel.Trace : LoggingLevel.Warn);
             return position;
         }
 
@@ -83,7 +87,9 @@ namespace RASDK.Arm.Hiwin
         /// </summary>
         public override void Abort()
         {
+            _message.LogMethodStart(nameof(Abort), "", "");
             HRobot.motion_abort(_id);
+            _message.LogMethodEnd(nameof(Abort));
         }
 
         /// <summary>
@@ -95,6 +101,10 @@ namespace RASDK.Arm.Hiwin
         /// <exception cref="ArgumentException"></exception>
         public override void Homing(bool slowly = true, CoordinateType coordinate = CoordinateType.Descartes, bool needWait = true)
         {
+            var paramNames = new List<string> { nameof(slowly), nameof(coordinate), nameof(needWait) };
+            var paramVals = new List<string> { slowly.ToString(), coordinate.ToString(), needWait.ToString() };
+            _message.LogMethodStart(nameof(Homing), paramNames, paramVals);
+
             var oriSpeedValue = Speed;
             if (slowly)
             {
@@ -122,6 +132,8 @@ namespace RASDK.Arm.Hiwin
             {
                 Speed = oriSpeedValue;
             }
+
+            _message.LogMethodEnd(nameof(Homing));
         }
 
         /// <summary>
@@ -131,6 +143,8 @@ namespace RASDK.Arm.Hiwin
         /// <exception cref="ArgumentException"></exception>
         public override void Jog(string axis)
         {
+            _message.LogMethodStart(nameof(Jog), nameof(axis), axis);
+
             // Remove all whitespace char.
             axis = Regex.Replace(axis, @"\s", "");
 
@@ -142,6 +156,8 @@ namespace RASDK.Arm.Hiwin
             {
                 throw new ArgumentException($"Input regex: {_inputRegexPattern}");
             }
+
+            _message.LogMethodEnd(nameof(Jog));
         }
 
         /// <summary>
@@ -162,6 +178,10 @@ namespace RASDK.Arm.Hiwin
                                           double j6C,
                                           AdditionalMotionParameters addParams = null)
         {
+            var paramNames = new List<string> { nameof(j1X), nameof(j2Y), nameof(j3Z), nameof(j4A), nameof(j5B), nameof(j6C), nameof(addParams) };
+            var paramVals = new List<string> { j1X.ToString(), j2Y.ToString(), j3Z.ToString(), j4A.ToString(), j5B.ToString(), j6C.ToString(), addParams.ToString() };
+            _message.LogMethodStart(nameof(MoveAbsolute), paramNames, paramVals);
+
             addParams = addParams ?? new AdditionalMotionParameters();
             var position = new double[] { j1X, j2Y, j3Z, j4A, j5B, j6C };
             var smoothTypeCode = GetSmoothTypeCode(addParams.SmoothType, addParams.MotionType);
@@ -197,6 +217,8 @@ namespace RASDK.Arm.Hiwin
             }
 
             WaitForMotionComplete(addParams.NeedWait, returnCode);
+
+            _message.LogMethodEnd(nameof(MoveAbsolute));
         }
 
         /// <summary>
@@ -217,6 +239,10 @@ namespace RASDK.Arm.Hiwin
                                           double j6C = 0,
                                           AdditionalMotionParameters addParams = null)
         {
+            var paramNames = new List<string> { nameof(j1X), nameof(j2Y), nameof(j3Z), nameof(j4A), nameof(j5B), nameof(j6C), nameof(addParams) };
+            var paramVals = new List<string> { j1X.ToString(), j2Y.ToString(), j3Z.ToString(), j4A.ToString(), j5B.ToString(), j6C.ToString(), addParams.ToString() };
+            _message.LogMethodStart(nameof(MoveRelative), paramNames, paramVals);
+
             addParams = addParams ?? new AdditionalMotionParameters();
             var position = new double[] { j1X, j2Y, j3Z, j4A, j5B, j6C };
             var smoothTypeCode = GetSmoothTypeCode(addParams.SmoothType, addParams.MotionType);
@@ -252,6 +278,8 @@ namespace RASDK.Arm.Hiwin
             }
 
             WaitForMotionComplete(addParams.NeedWait, returnCode);
+
+            _message.LogMethodEnd(nameof(MoveRelative));
         }
 
         private int GetSmoothTypeCode(SmoothType smoothType, MotionType motionType)
@@ -273,12 +301,18 @@ namespace RASDK.Arm.Hiwin
 
         private void WaitForMotionComplete(bool needWait, int returnCode)
         {
+            _message.LogMethodStart(nameof(WaitForMotionComplete),
+                                    new List<string> { nameof(needWait), nameof(returnCode) },
+                                    new List<string> { needWait.ToString(), returnCode.ToString() });
+
             if (needWait && ReturnCodeCheck.IsSuccessful(returnCode))
             {
                 _waiting = true;
                 while (_waiting)
                 { /* Do nothing. */ }
             }
+
+            _message.LogMethodEnd(nameof(WaitForMotionComplete));
         }
 
         #endregion Motion
@@ -315,6 +349,8 @@ namespace RASDK.Arm.Hiwin
         /// <returns>是否連線成功。</returns>
         public override bool Connect()
         {
+            _message.LogMethodStart(nameof(Connect), "", "");
+
             _id = HRobot.open_connection(_ip, 1, _callBackFun);
 
             // Check connection.
@@ -330,6 +366,8 @@ namespace RASDK.Arm.Hiwin
                 ShowUnsuccessfulConnectMessage();
             }
 
+            _message.LogMethodEnd(nameof(Connect));
+
             // FIXME: HRobot.network_get_state(_id) always return 0, so the Connected always false.
             //return Connected;
             return true;
@@ -341,6 +379,8 @@ namespace RASDK.Arm.Hiwin
         /// <returns>是否斷線成功。</returns>
         public override bool Disconnect()
         {
+            _message.LogMethodStart(nameof(Disconnect), "", "");
+
             int alarmState;
             int motorState;
 
@@ -364,6 +404,8 @@ namespace RASDK.Arm.Hiwin
                        $"控制器狀態: {(motorState == 0 ? "關閉" : "開啟")}\r\n" +
                        $"錯誤代碼: {alarmState}";
             _message.Show(text, "斷線", MessageBoxButtons.OK, MessageBoxIcon.None);
+
+            _message.LogMethodEnd(nameof(Disconnect));
 
             // FIXME: HRobot.network_get_state(_id) always return 0, so the Connected always false.
             //return !Connected;
@@ -498,17 +540,23 @@ namespace RASDK.Arm.Hiwin
         {
             get
             {
+                _message.LogMethodStart($"get {nameof(Acceleration)}", "", "");
+
                 int acc;
                 acc = HRobot.get_acc_dec_ratio(_id);
                 if (acc == -1)
                 {
                     _message.Show("取得手臂加速度時出錯。", LoggingLevel.Error);
                 }
+
+                _message.LogMethodEnd($"get {nameof(Acceleration)}", acc.ToString(), "");
                 return acc;
             }
 
             set
             {
+                _message.LogMethodStart($"set {nameof(Acceleration)}", "value", value.ToString());
+
                 if (value < 1 || value > 100)
                 {
                     _message.Show($"手臂加速度應為1% ~ 100%之間。輸入值為：{value}",
@@ -521,6 +569,8 @@ namespace RASDK.Arm.Hiwin
                     // 執行HRobot.set_acc_dec_ratio時會固定回傳錯誤代碼4000。
                     ReturnCodeCheck.IsSuccessful(returnCode, _message, 4000);
                 }
+
+                _message.LogMethodEnd($"set {nameof(Acceleration)}");
             }
         }
 
@@ -533,16 +583,22 @@ namespace RASDK.Arm.Hiwin
         {
             get
             {
+                _message.LogMethodStart($"get {nameof(Speed)}", "", "");
+
                 var speed = HRobot.get_override_ratio(_id);
                 if (speed == -1)
                 {
                     _message.Show("取得手臂速度時出錯。", LoggingLevel.Error);
                 }
+
+                _message.LogMethodEnd($"get {nameof(Speed)}", speed.ToString(), "");
                 return speed;
             }
 
             set
             {
+                _message.LogMethodStart($"set {nameof(Speed)}", "value", value.ToString());
+
                 if (value < 1 || value > 100)
                 {
                     _message.Show($"手臂速度應為1% ~ 100%之間。輸入值為：{value}",
@@ -553,6 +609,8 @@ namespace RASDK.Arm.Hiwin
                     var returnCode = HRobot.set_override_ratio(_id, (int)value);
                     ReturnCodeCheck.IsSuccessful(returnCode, _message);
                 }
+
+                _message.LogMethodEnd($"set {nameof(Speed)}");
             }
         }
 

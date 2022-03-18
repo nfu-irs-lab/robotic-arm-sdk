@@ -1,4 +1,5 @@
 ﻿//#define DISABLE_SHOW_MESSAGE
+//#define DISABLE_LOG
 
 using System;
 using System.Collections.Generic;
@@ -17,18 +18,30 @@ namespace RASDK.Arm.TestForms
 {
     public partial class Form1 : Form
     {
-        private readonly MessageHandler _message =
-#if DISABLE_SHOW_MESSAGE
-            new EmptyMessage();
-#else
-            new GeneralMessageHandler(new EmptyLogHandler());
+        private readonly LogHandler _logHandler;
 
-#endif
+        private readonly MessageHandler _message;
+
         private RoboticArm _arm;
 
         public Form1()
         {
             InitializeComponent();
+
+            _logHandler =
+#if DISABLE_LOg
+            new EmptyLogHandler();
+#else
+            new GeneralLogHandler("");
+#endif
+
+            _message =
+#if DISABLE_SHOW_MESSAGE
+            new EmptyMessage();
+#else
+            new GeneralMessageHandler(_logHandler);
+#endif
+
             comboBoxArmType.SelectedIndex = 0;
         }
 
