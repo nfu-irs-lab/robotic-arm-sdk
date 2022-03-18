@@ -19,7 +19,7 @@ namespace RASDK.Basic.Message
         /// </summary>
         /// <param name="logHandler">日誌處理器。</param>
         /// <param name="defaultDialogResult">預設的訊息框結果。</param>
-        public LogOnlyMessageHandler(ILogHandler logHandler, DialogResult defaultDialogResult = DialogResult.OK)
+        public LogOnlyMessageHandler(LogHandler logHandler, DialogResult defaultDialogResult = DialogResult.OK)
             : base(logHandler)
         {
             _defaultDialogResult = defaultDialogResult;

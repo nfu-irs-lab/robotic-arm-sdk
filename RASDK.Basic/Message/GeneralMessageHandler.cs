@@ -15,13 +15,13 @@ namespace RASDK.Basic.Message
         /// <summary>
         /// 日誌處理器。
         /// </summary>
-        protected readonly ILogHandler LogHandler = null;
+        protected readonly LogHandler LogHandler = null;
 
         /// <summary>
         /// 一般的訊息處理器，會顯示訊息及記錄 Log 檔案。
         /// </summary>
         /// <param name="logHandler">日誌處理器。</param>
-        public GeneralMessageHandler(ILogHandler logHandler)
+        public GeneralMessageHandler(LogHandler logHandler)
         {
             LogHandler = logHandler;
         }
