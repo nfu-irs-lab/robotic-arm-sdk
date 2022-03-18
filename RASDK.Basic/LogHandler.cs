@@ -55,7 +55,7 @@ namespace RASDK.Basic
         /// <summary>
         /// 日誌檔案路徑。
         /// </summary>
-        public string Path { get; }
+        public string Path { get; protected set; }
 
         /// <summary>
         /// 寫入日誌。
@@ -69,7 +69,10 @@ namespace RASDK.Basic
         /// </summary>
         /// <param name="ex">例外情況。</param>
         /// <param name="loggingLevel">日誌等級。</param>
-        public abstract void Write(Exception ex, LoggingLevel loggingLevel);
+        public virtual void Write(Exception ex, LoggingLevel loggingLevel)
+        {
+            Write($"{ex.Message}. {ex.StackTrace}", loggingLevel);
+        }
 
         /// <summary>
         /// 方法開始時寫入日誌。
@@ -161,14 +164,6 @@ namespace RASDK.Basic
         /// <param name="loggingLevel">日誌等級。</param>
         public override void Write(string message, LoggingLevel loggingLevel)
         { }
-
-        /// <summary>
-        /// 寫入日誌。
-        /// </summary>
-        /// <param name="ex">例外情況。</param>
-        /// <param name="loggingLevel">日誌等級。</param>
-        public override void Write(Exception ex, LoggingLevel loggingLevel)
-        { }
     }
 
     /// <summary>
@@ -179,9 +174,9 @@ namespace RASDK.Basic
         /// <summary>
         /// 要記錄的日誌等級。
         /// </summary>
-        private readonly LoggingLevel LoggingLevel;
+        private readonly LoggingLevel _loggingLevel;
 
-        private string Filename;
+        private string _filename;
 
         /// <summary>
         /// 一般的日誌處理器。
@@ -192,7 +187,7 @@ namespace RASDK.Basic
                                  LoggingLevel loggingLevel = LoggingLevel.Trace)
             : base(path)
         {
-            LoggingLevel = loggingLevel;
+            _loggingLevel = loggingLevel;
             CreateFile();
         }
 
@@ -207,21 +202,11 @@ namespace RASDK.Basic
         /// <summary>
         /// 寫入日誌。
         /// </summary>
-        /// <param name="ex">例外情況。</param>
-        /// <param name="loggingLevel">日誌等級。</param>
-        public override void Write(Exception ex, LoggingLevel loggingLevel)
-        {
-            Write($"{ex.Message}. {ex.StackTrace}", loggingLevel);
-        }
-
-        /// <summary>
-        /// 寫入日誌。
-        /// </summary>
         /// <param name="message">訊息。</param>
         /// <param name="loggingLevel">日誌等級。</param>
         public override void Write(string message, LoggingLevel loggingLevel)
         {
-            if (loggingLevel >= LoggingLevel)
+            if (loggingLevel >= _loggingLevel)
             {
                 string text = DateTime.Now.ToString("HH:mm:ss") +
                               $"[{loggingLevel}]" +
@@ -254,14 +239,14 @@ namespace RASDK.Basic
                 else
                 {
                     // 若目標檔案不存在，使用此檔案名稱。
-                    Filename = targetFilename;
+                    _filename = targetFilename;
                     break;
                 }
             }
 
             var sw = MakeStreamWriter();
             sw.WriteLine($"{dateTimeNow:yyyy-MM-dd_HH:mm:ss}  " +
-                         $"LogLv: {LoggingLevel}\r\n---");
+                         $"LogLv: {_loggingLevel}\r\n---");
             sw.Close();
         }
 
@@ -273,12 +258,12 @@ namespace RASDK.Basic
         {
             try
             {
-                return System.IO.File.AppendText(Path + Filename);
+                return System.IO.File.AppendText(Path + _filename);
             }
             catch (DirectoryNotFoundException)
             {
                 Directory.CreateDirectory(Path);
-                return System.IO.File.AppendText(Path + Filename);
+                return System.IO.File.AppendText(Path + _filename);
             }
         }
     }
