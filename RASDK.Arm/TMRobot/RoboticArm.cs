@@ -24,7 +24,7 @@ namespace RASDK.Arm.TMRobot
         private string[] data = new string[10];
         private double[] dataint = new double[] { 0, 0, 0, 0, 0, 0 };
 
-        public RoboticArm(IMessageHandler message,
+        public RoboticArm(MessageHandler message,
                           string ip = Default.IpOfArmConnection,
                           int port = Default.PortOfArmConnection,
                           TcpListener pcTcpListener = null)
