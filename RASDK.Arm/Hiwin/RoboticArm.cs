@@ -27,7 +27,7 @@ namespace RASDK.Arm.Hiwin
         /// </summary>
         /// <param name="message">訊息處理器。</param>
         /// <param name="ip">手臂連線 IP。例如 <c>"192.168.0.3"</c>。</param>
-        public RoboticArm(IMessageHandler message, string ip = Default.Ip) : base(message)
+        public RoboticArm(MessageHandler message, string ip = Default.Ip) : base(message)
         {
             _ip = ip;
         }
@@ -45,6 +45,10 @@ namespace RASDK.Arm.Hiwin
         /// <exception cref="ArgumentException"></exception>
         public override double[] GetNowPosition(CoordinateType coordinate = CoordinateType.Descartes)
         {
+            _message.Log($"執行：{nameof(GetNowPosition)}()，" +
+                         $"參數 {nameof(coordinate)}：{coordinate}。",
+                         LoggingLevel.Trace);
+
             var position = new double[6];
             Func<int, double[], int> action;
 
@@ -63,7 +67,12 @@ namespace RASDK.Arm.Hiwin
             }
 
             var returnCode = action(_id, position);
-            ReturnCodeCheck.IsSuccessful(returnCode, _message);
+            var noError = ReturnCodeCheck.IsSuccessful(returnCode, _message);
+
+            _message.Log($"完成：{nameof(GetNowPosition)}()，" +
+                         $"回傳：{position[0]},{position[1]},{position[2]},{position[3]},{position[4]},{position[5]}，" +
+                         $"錯誤代碼：{returnCode}。",
+                         noError ? LoggingLevel.Trace : LoggingLevel.Warn);
             return position;
         }
 

@@ -27,7 +27,7 @@ namespace RASDK.Basic
         /// <summary>
         /// 基本 Serial Port 裝置。
         /// </summary>
-        public SerialPortDevice(SerialPort serialPort, IMessageHandler message)
+        public SerialPortDevice(SerialPort serialPort, MessageHandler message)
         {
             SerialPort = serialPort;
             Message = message;
@@ -36,7 +36,7 @@ namespace RASDK.Basic
         /// <summary>
         /// 基本 Serial Port 裝置。
         /// </summary>
-        public SerialPortDevice(string comPort, IMessageHandler message)
+        public SerialPortDevice(string comPort, MessageHandler message)
         {
             SerialPort = new SerialPort(comPort);
             Message = message;
@@ -52,7 +52,7 @@ namespace RASDK.Basic
         /// </summary>
         public SerialPort SerialPort { get; set; }
 
-        private IMessageHandler Message { get; set; }
+        private MessageHandler Message { get; set; }
 
         /// <summary>
         /// 進行連線。

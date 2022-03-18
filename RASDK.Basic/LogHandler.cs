@@ -150,7 +150,7 @@ namespace RASDK.Basic
         /// <summary>
         /// 空的日誌處理器。不實際進行動作。
         /// </summary>
-        public EmptyLogHandler(string path = "") : base(path)
+        public EmptyLogHandler() : base("")
         {
         }
 

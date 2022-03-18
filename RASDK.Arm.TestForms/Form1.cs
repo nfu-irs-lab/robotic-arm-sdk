@@ -17,7 +17,7 @@ namespace RASDK.Arm.TestForms
 {
     public partial class Form1 : Form
     {
-        private readonly IMessageHandler _message =
+        private readonly MessageHandler _message =
 #if DISABLE_SHOW_MESSAGE
             new EmptyMessage();
 #else

@@ -20,10 +20,10 @@ namespace RASDK.Gripper
         /// </summary>
         private byte Direction = 2;
 
-        private IMessageHandler Message;
+        private MessageHandler Message;
         private ISerialPortDevice SerialPortDevice = null;
 
-        public GripperController(string comPort, IMessageHandler message)
+        public GripperController(string comPort, MessageHandler message)
         {
             SerialPortDevice = new SerialPortDevice(new SerialPort()
             {

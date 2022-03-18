@@ -10,7 +10,7 @@ namespace RASDK.Basic.Message
     /// <summary>
     /// 只處理日誌的訊息處理器，會記錄 Log 檔案。
     /// </summary>
-    public class LogOnlyMessageHandler : GeneralMessageHandler
+    public class LogOnlyMessageHandler : MessageHandler
     {
         private readonly DialogResult _defaultDialogResult;
 
@@ -33,7 +33,7 @@ namespace RASDK.Basic.Message
         /// <returns>訊息框結果。</returns>
         public override DialogResult Show(string message, LoggingLevel loggingLevel = LoggingLevel.Trace)
         {
-            LogHandler.Write(message, loggingLevel);
+            _logHandler.Write(message, loggingLevel);
             return _defaultDialogResult;
         }
 
@@ -57,7 +57,7 @@ namespace RASDK.Basic.Message
                 text += "null Exception.";
             }
 
-            LogHandler.Write(text, loggingLevel);
+            _logHandler.Write(text, loggingLevel);
             return _defaultDialogResult;
         }
 
@@ -82,7 +82,7 @@ namespace RASDK.Basic.Message
                 text += "null Exception.";
             }
 
-            LogHandler.Write(text, loggingLevel);
+            _logHandler.Write(text, loggingLevel);
             return _defaultDialogResult;
         }
 
@@ -101,7 +101,7 @@ namespace RASDK.Basic.Message
                                           MessageBoxIcon icon,
                                           LoggingLevel loggingLevel = LoggingLevel.Trace)
         {
-            LogHandler.Write($"{caption}: {text}", loggingLevel);
+            _logHandler.Write($"{caption}: {text}", loggingLevel);
             return _defaultDialogResult;
         }
     }
