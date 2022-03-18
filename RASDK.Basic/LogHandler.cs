@@ -40,103 +40,163 @@ namespace RASDK.Basic
     }
 
     /// <summary>
-    /// 日誌處理器介面。
+    /// 日誌處理器。
     /// </summary>
-    public interface ILogHandler
+    public abstract class LogHandler
     {
+        /// <summary>
+        /// 日誌處理器。
+        /// </summary>
+        public LogHandler(string path = "")
+        {
+            Path = path;
+        }
+
         /// <summary>
         /// 日誌檔案路徑。
         /// </summary>
-        string Path { get; }
+        public string Path { get; protected set; }
 
         /// <summary>
         /// 寫入日誌。
         /// </summary>
         /// <param name="message">訊息。</param>
         /// <param name="loggingLevel">日誌等級。</param>
-        void Write(string message, LoggingLevel loggingLevel);
+        public abstract void Write(string message, LoggingLevel loggingLevel);
 
         /// <summary>
         /// 寫入日誌。
         /// </summary>
         /// <param name="ex">例外情況。</param>
         /// <param name="loggingLevel">日誌等級。</param>
-        void Write(Exception ex, LoggingLevel loggingLevel);
+        public virtual void Write(Exception ex, LoggingLevel loggingLevel)
+        {
+            Write($"{ex.Message}. {ex.StackTrace}", loggingLevel);
+        }
+
+        /// <summary>
+        /// 方法開始時寫入日誌。
+        /// </summary>
+        /// <param name="methodName">方法名稱。</param>
+        /// <param name="parameterName">參數名稱。</param>
+        /// <param name="parameterValue">參數值。</param>
+        /// <param name="additionalMessage">額外訊息。</param>
+        /// <param name="loggingLevel">日誌等級。</param>
+        public virtual void WriteMethodStart(string methodName,
+                                             string parameterName,
+                                             string parameterValue,
+                                             string additionalMessage = "",
+                                             LoggingLevel loggingLevel = LoggingLevel.Trace)
+        {
+            Write($"執行：{methodName}()，參數 {parameterName}：{parameterValue}，{additionalMessage}。",
+                  loggingLevel);
+        }
+
+        /// <summary>
+        /// 方法開始時寫入日誌。
+        /// </summary>
+        /// <param name="methodName">方法名稱。</param>
+        /// <param name="parameterNames">參數名稱。</param>
+        /// <param name="parameterValues">參數值。</param>
+        /// <param name="additionalMessage">額外訊息。</param>
+        /// <param name="loggingLevel">日誌等級。</param>
+        public virtual void WriteMethodStart(string methodName,
+                                             List<string> parameterNames,
+                                             List<string> parameterValues,
+                                             string additionalMessage = "",
+                                             LoggingLevel loggingLevel = LoggingLevel.Trace)
+        {
+            string paramText = "";
+            for (int i = 0; i < parameterNames.Count; i++)
+            {
+                paramText += $"參數 {parameterNames[i]}：{parameterValues[i]}，";
+            }
+            Write($"執行：{methodName}()，{paramText.TrimEnd('，')}，{additionalMessage}。", loggingLevel);
+        }
+
+        /// <summary>
+        /// 方法結束時寫入日誌。
+        /// </summary>
+        /// <param name="methodName">方法名稱。</param>
+        /// <param name="returnValue">回傳值。</param>
+        /// <param name="additionalMessage">額外訊息。</param>
+        /// <param name="loggingLevel">日誌等級。</param>
+        public virtual void WriteMethodEnd(string methodName,
+                                           string returnValue,
+                                           string additionalMessage = "",
+                                           LoggingLevel loggingLevel = LoggingLevel.Trace)
+        {
+            Write($"完成：{methodName}()，回傳：{returnValue}，{additionalMessage}。",
+                  loggingLevel);
+        }
+
+        /// <summary>
+        /// 方法結束時寫入日誌。
+        /// </summary>
+        /// <param name="methodName">方法名稱。</param>
+        /// <param name="additionalMessage">額外訊息。</param>
+        /// <param name="loggingLevel">日誌等級。</param>
+        public virtual void WriteMethodEnd(string methodName,
+                                           string additionalMessage = "",
+                                           LoggingLevel loggingLevel = LoggingLevel.Trace)
+        {
+            Write($"完成：{methodName}()，{additionalMessage}。",
+                  loggingLevel);
+        }
     }
 
     /// <summary>
     /// 空的日誌處理器。不實際進行動作。
     /// </summary>
-    public class EmptyLogHandler : ILogHandler
+    public class EmptyLogHandler : LogHandler
     {
         /// <summary>
-        /// 日誌檔案路徑。
+        /// 空的日誌處理器。不實際進行動作。
         /// </summary>
-        public string Path { get; }
+        public EmptyLogHandler() : base("")
+        {
+        }
 
         /// <summary>
         /// 寫入日誌。
         /// </summary>
         /// <param name="message">訊息。</param>
         /// <param name="loggingLevel">日誌等級。</param>
-        public void Write(string message, LoggingLevel loggingLevel)
-        { }
-
-        /// <summary>
-        /// 寫入日誌。
-        /// </summary>
-        /// <param name="ex">例外情況。</param>
-        /// <param name="loggingLevel">日誌等級。</param>
-        public void Write(Exception ex, LoggingLevel loggingLevel)
+        public override void Write(string message, LoggingLevel loggingLevel)
         { }
     }
 
     /// <summary>
     /// 一般的日誌處理器。
     /// </summary>
-    public class LogHandler : ILogHandler
+    public class GeneralLogHandler : LogHandler
     {
         /// <summary>
         /// 要記錄的日誌等級。
         /// </summary>
-        private readonly LoggingLevel LoggingLevel;
+        private readonly LoggingLevel _loggingLevel;
 
-        private string Filename;
+        private string _filename;
 
         /// <summary>
         /// 一般的日誌處理器。
         /// </summary>
         /// <param name="path">日誌檔案路徑。</param>
         /// <param name="loggingLevel">要記錄的日誌等級。</param>
-        public LogHandler(string path = "",
-                          LoggingLevel loggingLevel = LoggingLevel.Trace)
+        public GeneralLogHandler(string path = "",
+                                 LoggingLevel loggingLevel = LoggingLevel.Trace)
+            : base(path)
         {
-            Path = path;
-            LoggingLevel = loggingLevel;
+            _loggingLevel = loggingLevel;
             CreateFile();
         }
 
         /// <summary>
         /// 解構子。
         /// </summary>
-        ~LogHandler()
+        ~GeneralLogHandler()
         {
             Write("LogHandler destructed, stop logging.", LoggingLevel.Fatal);
-        }
-
-        /// <summary>
-        /// 日誌檔案路徑。
-        /// </summary>
-        public string Path { get; }
-
-        /// <summary>
-        /// 寫入日誌。
-        /// </summary>
-        /// <param name="ex">例外情況。</param>
-        /// <param name="loggingLevel">日誌等級。</param>
-        public void Write(Exception ex, LoggingLevel loggingLevel)
-        {
-            Write($"{ex.Message}. {ex.StackTrace}", loggingLevel);
         }
 
         /// <summary>
@@ -144,9 +204,9 @@ namespace RASDK.Basic
         /// </summary>
         /// <param name="message">訊息。</param>
         /// <param name="loggingLevel">日誌等級。</param>
-        public void Write(string message, LoggingLevel loggingLevel)
+        public override void Write(string message, LoggingLevel loggingLevel)
         {
-            if (loggingLevel >= LoggingLevel)
+            if (loggingLevel >= _loggingLevel)
             {
                 string text = DateTime.Now.ToString("HH:mm:ss") +
                               $"[{loggingLevel}]" +
@@ -179,14 +239,14 @@ namespace RASDK.Basic
                 else
                 {
                     // 若目標檔案不存在，使用此檔案名稱。
-                    Filename = targetFilename;
+                    _filename = targetFilename;
                     break;
                 }
             }
 
             var sw = MakeStreamWriter();
             sw.WriteLine($"{dateTimeNow:yyyy-MM-dd_HH:mm:ss}  " +
-                         $"LogLv: {LoggingLevel}\r\n---");
+                         $"LogLv: {_loggingLevel}\r\n---");
             sw.Close();
         }
 
@@ -198,12 +258,12 @@ namespace RASDK.Basic
         {
             try
             {
-                return System.IO.File.AppendText(Path + Filename);
+                return System.IO.File.AppendText(Path + _filename);
             }
             catch (DirectoryNotFoundException)
             {
                 Directory.CreateDirectory(Path);
-                return System.IO.File.AppendText(Path + Filename);
+                return System.IO.File.AppendText(Path + _filename);
             }
         }
     }

@@ -69,7 +69,7 @@
     <Compile Include="IDevice.cs" />
     <Compile Include="Message\EmptyMessageHandler.cs" />
     <Compile Include="Message\GeneralMessageHandler.cs" />
-    <Compile Include="Message\IMessageHandler.cs" />
+    <Compile Include="Message\MessageHandler.cs" />
     <Compile Include="LogHandler.cs" />
     <Compile Include="Message\LogOnlyMessageHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

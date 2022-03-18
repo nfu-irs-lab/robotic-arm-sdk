@@ -18,13 +18,13 @@ namespace RASDK.Arm
         /// <summary>
         /// 訊息處理器。
         /// </summary>
-        protected readonly IMessageHandler _message;
+        protected readonly MessageHandler _message;
 
         /// <summary>
         /// 機械手臂。
         /// </summary>
         /// <param name="message">訊息處理器。</param>
-        public RoboticArm(IMessageHandler message)
+        public RoboticArm(MessageHandler message)
         {
             _message = message;
         }
