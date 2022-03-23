@@ -75,6 +75,7 @@
     <Compile Include="Hiwin\RoboticArm.cs" />
     <Compile Include="Hiwin\HRobot.cs" />
     <Compile Include="Hiwin\ReturnCodeCheck.cs" />
+    <Compile Include="PositionRecorder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RoboticArm.cs" />
     <Compile Include="TMRobot\Default.cs" />
