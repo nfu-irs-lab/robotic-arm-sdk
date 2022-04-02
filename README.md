@@ -35,14 +35,14 @@
 ## 機械手臂（RASDK.Arm）
 
 ```csharp
-// 實體化。
-var logHandler = new RASDK.Basic.EmptyLog(); // EmptyLog()：不產生 Log 檔。
-var messageHandler = new RASDK.Basic.Message.GeneralMessage(logHandler); // GeneralMessage()：一般的訊息處理器。
+// 實體化 (Instantiation)。
+var logHandler = new RASDK.Basic.EmptyLogHandler(); // EmptyLogHandler：不產生 Log 檔的日誌處理器。
+var messageHandler = new RASDK.Basic.Message.GeneralMessageHandler(logHandler); // GeneralMessageHandler：一般的訊息處理器。
 var arm = new RASDK.Arm.Hiwin.RoboticArm(messageHandler, "192.168.100.123"); // 以 HIWIN 手臂爲例。
 
 arm.Connect();    // 連線。
 arm.Disconnect(); // 斷線。
-var connected = arm.Connected;  // 判斷連線。
+bool connected = arm.Connected;  // 判斷連線。
 
 arm.Homing();                                // 復歸，回原點。
 arm.MoveAbsolute(-20, 400, 350, 180, 0, 90); // 絕對運動。
@@ -50,10 +50,10 @@ arm.MoveRelative(0, 15, -0.5, 0, 0, 0);      // 相對運動。
 arm.Jog("+X");                               // 吋動。
 arm.Abort();                                 // 停止動作。
 
-arm.Speed = 25;             // 設定速度。
-arm.Acceleration = 20;      // 設定加速度。
-var speed = arm.Speed;      // 取得速度。
-var acc = arm.Acceleration; // 取得加速度。
+arm.Speed = 25;                // 設定速度。
+arm.Acceleration = 20;         // 設定加速度。
+double speed = arm.Speed;      // 取得速度。
+double acc = arm.Acceleration; // 取得加速度。
 
-var position = arm.GetNowPosition(); // 取得目前座標位置。
+double[] position = arm.GetNowPosition(); // 取得目前座標位置。
 ```
