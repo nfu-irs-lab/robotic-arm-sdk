@@ -168,6 +168,32 @@ namespace RASDK.Arm
             NeedWait = needWait;
         }
 
+        /// <summary>
+        /// 機械手臂動作。
+        /// </summary>
+        /// <param name="roboticArmMotion">機械手臂動作。</param>
+        public RoboticArmMotion(RoboticArmMotion roboticArmMotion)
+        {
+            if (roboticArmMotion == null)
+            {
+                throw new ArgumentNullException();
+            }
+
+            // Clone.
+            J1X = roboticArmMotion.J1X;
+            J2Y = roboticArmMotion.J2Y;
+            J3Z = roboticArmMotion.J3Z;
+            J4A = roboticArmMotion.J4A;
+            J5B = roboticArmMotion.J5B;
+            J6C = roboticArmMotion.J6C;
+            PositionType = roboticArmMotion.PositionType;
+            CoordinateType = roboticArmMotion.CoordinateType;
+            MotionType = roboticArmMotion.MotionType;
+            SmoothType = roboticArmMotion.SmoothType;
+            SmoothValue = roboticArmMotion.SmoothValue;
+            NeedWait = roboticArmMotion.NeedWait;
+        }
+
         #endregion Constructor
     }
 }
