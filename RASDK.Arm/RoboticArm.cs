@@ -83,6 +83,44 @@ namespace RASDK.Arm
                                     CoordinateType coordinate = CoordinateType.Descartes,
                                     bool needWait = true);
 
+        /// <summary>
+        /// 運動。
+        /// </summary>
+        /// <param name="motion">機械手臂動作。</param>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="ArgumentException"></exception>
+        public virtual void Move(RoboticArmMotion motion)
+        {
+            if (motion == null)
+            {
+                throw new ArgumentNullException();
+            }
+
+            var position = new double[] { motion.J1X, motion.J2Y, motion.J3Z, motion.J4A, motion.J5B, motion.J6C };
+            var addParams = new AdditionalMotionParameters()
+            {
+                NeedWait = motion.NeedWait,
+                CoordinateType = motion.CoordinateType,
+                MotionType = motion.MotionType,
+                SmoothType = motion.SmoothType,
+                SmoothValue = motion.SmoothValue
+            };
+
+            switch (motion.PositionType)
+            {
+                case PositionType.Absolute:
+                    MoveAbsolute(position, addParams);
+                    break;
+
+                case PositionType.Relative:
+                    MoveRelative(position, addParams);
+                    break;
+
+                default:
+                    throw new ArgumentException("'PositionType' must be 'Absolute' or 'Relative'.");
+            }
+        }
+
         #region Motion.Absolute
 
         /// <summary>
