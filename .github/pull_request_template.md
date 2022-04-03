@@ -3,13 +3,13 @@
 
 ## 描述
 <!-- 描述此 Pull Request。 -->
+
+- resolve #ISS_NUM
 <!-- 請將「#ISS_NUM」改成此 PR 關連的 Issue 編號，若有多個 Issue 請自行增加，若無相關的 Issue 請刪除該行。
      例如：
      - Resolve #24
      - Resolve #31
 -->
-
-- Resolve #ISS_NUM
 
 ## 檢查清單
 <!-- 在方括號中填入「x」以完成勾選，保持空白以取消勾選。 -->
