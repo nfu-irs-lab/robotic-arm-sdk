@@ -195,5 +195,61 @@ namespace RASDK.Arm
         }
 
         #endregion Constructor
+
+        /// <summary>
+        /// 偏移位置。
+        /// </summary>
+        /// <param name="j1X">要偏移的座標 J1/X。</param>
+        /// <param name="j2Y">要偏移的座標 J2/Y。</param>
+        /// <param name="j3Z">要偏移的座標 J3/Z。</param>
+        /// <param name="j4A">要偏移的座標 J4/A。</param>
+        /// <param name="j5B">要偏移的座標 J5/B。</param>
+        /// <param name="j6C">要偏移的座標 J6/C。</param>
+        /// <returns>完成位置偏移的機械手臂動作。</returns>
+        public RoboticArmMotion OffsetBy(double j1X = 0,
+                                         double j2Y = 0,
+                                         double j3Z = 0,
+                                         double j4A = 0,
+                                         double j5B = 0,
+                                         double j6C = 0)
+        {
+            var motion = new RoboticArmMotion(this);
+            motion.J1X += j1X;
+            motion.J2Y += j2Y;
+            motion.J3Z += j3Z;
+            motion.J4A += j4A;
+            motion.J5B += j5B;
+            motion.J6C += j6C;
+
+            return motion;
+        }
+
+        /// <summary>
+        /// 偏移位置。
+        /// </summary>
+        /// <param name="position">要偏移的位置數值。</param>
+        /// <returns>完成位置偏移的機械手臂動作。</returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="ArgumentException"></exception>
+        public RoboticArmMotion OffsetBy(double[] position)
+        {
+            if (position == null)
+            {
+                throw new ArgumentNullException();
+            }
+
+            if (position.Length == 3)
+            {
+                return OffsetBy(position[0], position[1], position[2], 0, 0, 0);
+            }
+            else if (position.Length == 6)
+            {
+                return OffsetBy(position[0], position[1], position[2], position[3], position[4], position[5]);
+            }
+            else
+            {
+                throw new ArgumentException("The length of 'position' must be 3 or 6.");
+            }
+        }
     }
 }
