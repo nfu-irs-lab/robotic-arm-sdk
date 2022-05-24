@@ -57,3 +57,6 @@ double acc = arm.Acceleration; // 取得加速度。
 
 double[] position = arm.GetNowPosition(); // 取得目前座標位置。
 ```
+
+## 環境
+- HRSDK `v3.0.7`，支援 HRSS `v3.3.24`。
