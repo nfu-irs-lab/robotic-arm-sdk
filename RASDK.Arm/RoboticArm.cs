@@ -358,5 +358,24 @@ namespace RASDK.Arm
         public abstract bool Disconnect();
 
         #endregion Connect/Disconnect
+
+        #region IO
+
+        public virtual void SetRobotOutput(int index, bool value)
+        {
+            throw new NotImplementedException();
+        }
+
+        public virtual bool GetRobotOutput(int index)
+        {
+            throw new NotImplementedException();
+        }
+
+        public virtual bool GetRobotInput(int index)
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion IO
     }
 }

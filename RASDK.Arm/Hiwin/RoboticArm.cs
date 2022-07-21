@@ -615,5 +615,39 @@ namespace RASDK.Arm.Hiwin
         }
 
         #endregion Speed/Acceleration
+
+        #region IO
+
+        /// <summary>
+        /// Set robot output(RO).
+        /// </summary>
+        /// <param name="index"></param>
+        /// <param name="value"></param>
+        public virtual void SetRobotOutput(int index, bool value)
+        {
+            HRobot.set_robot_output(_id, index, value);
+        }
+
+        /// <summary>
+        /// Get robot output(RO).
+        /// </summary>
+        /// <param name="index"></param>
+        /// <param name="value"></param>
+        public virtual bool GetRobotOutput(int index)
+        {
+           return HRobot.get_robot_output(_id, index);
+        }
+
+        /// <summary>
+        /// Get robot input(RI).
+        /// </summary>
+        /// <param name="index"></param>
+        /// <param name="value"></param>
+        public virtual bool GetRobotInput(int index)
+        {
+           return HRobot.get_robot_input(_id, index);
+        }
+
+        #endregion IO
     }
 }
