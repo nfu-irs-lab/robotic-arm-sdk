@@ -623,7 +623,7 @@ namespace RASDK.Arm.Hiwin
         /// </summary>
         /// <param name="index"></param>
         /// <param name="value"></param>
-        public virtual void SetRobotOutput(int index, bool value)
+        public override void SetRobotOutput(int index, bool value)
         {
             HRobot.set_robot_output(_id, index, value);
         }
@@ -633,9 +633,9 @@ namespace RASDK.Arm.Hiwin
         /// </summary>
         /// <param name="index"></param>
         /// <param name="value"></param>
-        public virtual bool GetRobotOutput(int index)
+        public override bool GetRobotOutput(int index)
         {
-           return HRobot.get_robot_output(_id, index);
+           return HRobot.get_robot_output(_id, index) == 1;
         }
 
         /// <summary>
@@ -643,9 +643,9 @@ namespace RASDK.Arm.Hiwin
         /// </summary>
         /// <param name="index"></param>
         /// <param name="value"></param>
-        public virtual bool GetRobotInput(int index)
+        public override bool GetRobotInput(int index)
         {
-           return HRobot.get_robot_input(_id, index);
+           return HRobot.get_robot_input(_id, index) == 1;
         }
 
         #endregion IO
