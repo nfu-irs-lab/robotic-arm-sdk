@@ -14,11 +14,11 @@ namespace RASDK.Arm
     {
         private readonly string _path;
         private string _filename = "";
+        private bool _fileCreated = false;
 
         public PositionRecorder(string Path = "")
         {
             _path = Path;
-            CreateFile();
         }
 
         #region Write
@@ -32,6 +32,11 @@ namespace RASDK.Arm
         /// <param name="remark">備註。</param>
         public void Write(string name, double[] position, string type, string remark = "")
         {
+            if (!_fileCreated)
+            {
+                CreateFile();
+            }
+
             var col = new List<string>();
 
             DateTime localDate = DateTime.Now;
@@ -208,6 +213,8 @@ namespace RASDK.Arm
 
             var sw = MakeStreamWriter();
             sw.Close();
+
+            _fileCreated = true;
         }
 
         /// <summary>
