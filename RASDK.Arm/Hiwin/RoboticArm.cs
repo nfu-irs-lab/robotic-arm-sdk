@@ -30,7 +30,7 @@ namespace RASDK.Arm.Hiwin
         public RoboticArm(MessageHandler message, string ip = Default.Ip) : base(message)
         {
             var paramNames = new List<string> { nameof(message), nameof(ip) };
-            var paramVals = new List<string> { message.ToString(), ip };
+            var paramVals = new List<string> { message != null ? message.ToString() : "null", ip };
             _message.LogMethodStart(nameof(RoboticArm), paramNames, paramVals, "上銀機械手臂建構子", LoggingLevel.Info);
 
             _ip = ip;
@@ -143,7 +143,7 @@ namespace RASDK.Arm.Hiwin
         /// <exception cref="ArgumentException"></exception>
         public override void Jog(string axis)
         {
-            _message.LogMethodStart(nameof(Jog), nameof(axis), axis);
+            _message.LogMethodStart(nameof(Jog), nameof(axis), axis ?? "null");
 
             // Remove all whitespace char.
             axis = Regex.Replace(axis, @"\s", "");
@@ -178,11 +178,12 @@ namespace RASDK.Arm.Hiwin
                                           double j6C,
                                           AdditionalMotionParameters addParams = null)
         {
+            addParams = addParams ?? new AdditionalMotionParameters();
+
             var paramNames = new List<string> { nameof(j1X), nameof(j2Y), nameof(j3Z), nameof(j4A), nameof(j5B), nameof(j6C), nameof(addParams) };
             var paramVals = new List<string> { j1X.ToString(), j2Y.ToString(), j3Z.ToString(), j4A.ToString(), j5B.ToString(), j6C.ToString(), addParams.ToString() };
             _message.LogMethodStart(nameof(MoveAbsolute), paramNames, paramVals);
 
-            addParams = addParams ?? new AdditionalMotionParameters();
             var position = new double[] { j1X, j2Y, j3Z, j4A, j5B, j6C };
             var smoothTypeCode = GetSmoothTypeCode(addParams.SmoothType, addParams.MotionType);
             int returnCode = 0;
@@ -234,16 +235,17 @@ namespace RASDK.Arm.Hiwin
         public override void MoveRelative(double j1X,
                                           double j2Y,
                                           double j3Z,
-                                          double j4A = 0,
-                                          double j5B = 0,
-                                          double j6C = 0,
+                                          double j4A,
+                                          double j5B,
+                                          double j6C,
                                           AdditionalMotionParameters addParams = null)
         {
+            addParams = addParams ?? new AdditionalMotionParameters();
+
             var paramNames = new List<string> { nameof(j1X), nameof(j2Y), nameof(j3Z), nameof(j4A), nameof(j5B), nameof(j6C), nameof(addParams) };
             var paramVals = new List<string> { j1X.ToString(), j2Y.ToString(), j3Z.ToString(), j4A.ToString(), j5B.ToString(), j6C.ToString(), addParams.ToString() };
             _message.LogMethodStart(nameof(MoveRelative), paramNames, paramVals);
 
-            addParams = addParams ?? new AdditionalMotionParameters();
             var position = new double[] { j1X, j2Y, j3Z, j4A, j5B, j6C };
             var smoothTypeCode = GetSmoothTypeCode(addParams.SmoothType, addParams.MotionType);
             int returnCode = 0;
@@ -635,7 +637,7 @@ namespace RASDK.Arm.Hiwin
         /// <param name="value"></param>
         public override bool GetRobotOutput(int index)
         {
-           return HRobot.get_robot_output(_id, index) == 1;
+            return HRobot.get_robot_output(_id, index) == 1;
         }
 
         /// <summary>
@@ -645,7 +647,7 @@ namespace RASDK.Arm.Hiwin
         /// <param name="value"></param>
         public override bool GetRobotInput(int index)
         {
-           return HRobot.get_robot_input(_id, index) == 1;
+            return HRobot.get_robot_input(_id, index) == 1;
         }
 
         #endregion IO
