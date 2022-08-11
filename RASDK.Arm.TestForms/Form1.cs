@@ -45,6 +45,14 @@ namespace RASDK.Arm.TestForms
             comboBoxArmType.SelectedIndex = 0;
         }
 
+        private void buttonCheckConnect_Click(object sender, EventArgs e)
+        {
+            _arm = _arm ?? RoboticArmFactory();
+
+            var connected = _arm.Connected;
+            _message.Show($"Connected: {connected}.");
+        }
+
         private void buttonConnect_Click(object sender, EventArgs e)
         {
             _arm = _arm ?? RoboticArmFactory();

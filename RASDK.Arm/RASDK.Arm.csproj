@@ -72,9 +72,9 @@
     <Compile Include="CoppeliaSim\RoboticArm.cs" />
     <Compile Include="CoppeliaSim\CoppeliaSimRemoteApi.cs" />
     <Compile Include="Hiwin\Default.cs" />
+    <Compile Include="Hiwin\Exception.cs" />
     <Compile Include="Hiwin\RoboticArm.cs" />
     <Compile Include="Hiwin\HRobot.cs" />
-    <Compile Include="Hiwin\ReturnCodeCheck.cs" />
     <Compile Include="PositionRecorder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RoboticArm.cs" />
