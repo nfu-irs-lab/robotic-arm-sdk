@@ -46,6 +46,7 @@ namespace RASDK.Arm.TestForms
             this.textBoxPort = new System.Windows.Forms.TextBox();
             this.comboBoxArmType = new System.Windows.Forms.ComboBox();
             this.buttonCheckConnect = new System.Windows.Forms.Button();
+            this.buttonTest = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownJogXY)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownJogZ)).BeginInit();
             this.SuspendLayout();
@@ -246,11 +247,22 @@ namespace RASDK.Arm.TestForms
             this.buttonCheckConnect.UseVisualStyleBackColor = true;
             this.buttonCheckConnect.Click += new System.EventHandler(this.buttonCheckConnect_Click);
             // 
+            // buttonTest
+            // 
+            this.buttonTest.Location = new System.Drawing.Point(119, 225);
+            this.buttonTest.Name = "buttonTest";
+            this.buttonTest.Size = new System.Drawing.Size(105, 34);
+            this.buttonTest.TabIndex = 6;
+            this.buttonTest.Text = "Test";
+            this.buttonTest.UseVisualStyleBackColor = true;
+            this.buttonTest.Click += new System.EventHandler(this.buttonTest_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(548, 283);
+            this.Controls.Add(this.buttonTest);
             this.Controls.Add(this.buttonCheckConnect);
             this.Controls.Add(this.comboBoxArmType);
             this.Controls.Add(this.textBoxPort);
@@ -297,6 +309,7 @@ namespace RASDK.Arm.TestForms
         private System.Windows.Forms.TextBox textBoxPort;
         private System.Windows.Forms.ComboBox comboBoxArmType;
         private System.Windows.Forms.Button buttonCheckConnect;
+        private System.Windows.Forms.Button buttonTest;
     }
 }
 

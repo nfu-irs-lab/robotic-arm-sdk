@@ -208,7 +208,7 @@ namespace RASDK.Basic
         {
             if (loggingLevel >= _loggingLevel)
             {
-                string text = DateTime.Now.ToString("HH:mm:ss.FFFF") +
+                string text = DateTime.Now.ToString("HH:mm:ss.ffff") +
                               $"[{loggingLevel}]" +
                               $"{message.Replace("\r", "").Replace("\n", ";").Trim()}";
 
@@ -245,7 +245,7 @@ namespace RASDK.Basic
             }
 
             var sw = MakeStreamWriter();
-            sw.WriteLine($"{dateTimeNow:yyyy-MM-dd_HH:mm:ss.FFFF}  " +
+            sw.WriteLine($"{dateTimeNow:yyyy-MM-dd_HH:mm:ss}  " +
                          $"Log Level: {_loggingLevel}\r\n---");
             sw.Close();
         }
