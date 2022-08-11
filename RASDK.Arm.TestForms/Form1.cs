@@ -82,6 +82,7 @@ namespace RASDK.Arm.TestForms
         private void buttonHoming_Click(object sender, EventArgs e)
         {
             _arm.Homing();
+            _message.Show("Homing done!");
         }
 
         private void buttonMove1_Click(object sender, EventArgs e)
