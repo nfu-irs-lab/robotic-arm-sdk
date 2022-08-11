@@ -85,6 +85,29 @@ namespace RASDK.Arm.TestForms
             _message.Show("Homing done!");
         }
 
+        private void buttonTest_Click(object sender, EventArgs e)
+        {
+            double[] position;
+            switch (comboBoxArmType.SelectedItem.ToString())
+            {
+                case "HIWIN":
+                    position = Hiwin.Default.DescartesHomePosition;
+                    break;
+
+                case "TM Robot":
+                    position = TMRobot.Default.DescartesHomePosition;
+                    break;
+
+                default:
+                    throw new Exception("未知的手臂類型。");
+            }
+            position[0] += 50;
+            position[1] += 50;
+            position[2] -= 100;
+
+            _arm.MoveAbsolute(position, new AdditionalMotionParameters { NeedWait = true });
+        }
+
         private void buttonMove1_Click(object sender, EventArgs e)
         {
             _arm.MoveRelative(-100,

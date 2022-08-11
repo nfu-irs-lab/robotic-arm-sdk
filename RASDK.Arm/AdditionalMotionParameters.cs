@@ -31,5 +31,14 @@ namespace RASDK.Arm
         /// 手臂平滑模式數值。
         /// </summary>
         public int SmoothValue = 50;
+
+        public override string ToString()
+        {
+            return $"NeedWait: {NeedWait}," +
+                   $"CoordinatyType: {CoordinateType}," +
+                   $"MotionType: {MotionType}," +
+                   $"SmoothType: {SmoothType}, " +
+                   $"SmoothValue: {SmoothValue}.";
+        }
     }
 }

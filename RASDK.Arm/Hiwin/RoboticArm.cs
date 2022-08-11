@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -390,6 +391,7 @@ namespace RASDK.Arm.Hiwin
             _message.LogMethodStart(nameof(WaitForMotionComplete), "void", "void");
 
             uint i = 0;
+            var stopWatch = Stopwatch.StartNew();
             do
             {
                 _receivedCallBack = false; // Clear received flag.
@@ -412,9 +414,11 @@ namespace RASDK.Arm.Hiwin
                     }
                 }
             }
-            while (_moving && !_receivedCallBack);
+            while (_moving || !_receivedCallBack);
+            stopWatch.Stop();
+            var elapsed = stopWatch.ElapsedMilliseconds;
 
-            _message.LogMethodEnd(nameof(WaitForMotionComplete));
+            _message.LogMethodEnd(nameof(WaitForMotionComplete), $"Elapsed milliseconds: {elapsed}.", LoggingLevel.Trace);
         }
 
         #endregion Motion
