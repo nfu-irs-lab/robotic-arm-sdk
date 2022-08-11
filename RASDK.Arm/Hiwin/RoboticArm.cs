@@ -18,8 +18,18 @@ namespace RASDK.Arm.Hiwin
     /// </summary>
     public class RoboticArm : RASDK.Arm.RoboticArm
     {
+        /// <summary>
+        /// 正在動作中。
+        /// </summary>
         private static volatile bool _moving;
+
+        /// <summary>
+        /// 已接收到回傳資料。
+        /// </summary>
+        private static volatile bool _receivedCallBack;
+
         private readonly string _ip;
+
         private int _id;
 
         /// <summary>
@@ -35,6 +45,7 @@ namespace RASDK.Arm.Hiwin
 
             _ip = ip;
             _moving = false;
+            _receivedCallBack = false;
 
             _message.LogMethodEnd(nameof(RoboticArm));
         }
@@ -381,6 +392,8 @@ namespace RASDK.Arm.Hiwin
             uint i = 0;
             do
             {
+                _receivedCallBack = false; // Clear received flag.
+
                 i++;
                 if (i > 2000000)
                 {
@@ -391,6 +404,7 @@ namespace RASDK.Arm.Hiwin
                     if (motionState == 1) // Idle.
                     {
                         _moving = false;
+                        break;
                     }
                     else if (motionState == 2 || motionState == 4 || motionState == 5)
                     {
@@ -398,7 +412,7 @@ namespace RASDK.Arm.Hiwin
                     }
                 }
             }
-            while (_moving);
+            while (_moving && !_receivedCallBack);
 
             _message.LogMethodEnd(nameof(WaitForMotionComplete));
         }
@@ -521,6 +535,8 @@ namespace RASDK.Arm.Hiwin
             switch (cmd)
             {
                 case 0 when rlt == 4702:
+                    _receivedCallBack = true; // Set received flag.
+
                     Console.WriteLine($"HRSS Mode:{infos[0]}\r\n" +
                                       $"Operation Mode:{infos[1]}\r\n" +
                                       $"Override Ratio:{infos[2]}\r\n" +
@@ -537,7 +553,7 @@ namespace RASDK.Arm.Hiwin
                                       $"Joint:{infos[20]},{infos[21]},{infos[22]},{infos[23]},{infos[24]},{infos[25]}\r\n");
 
                     // Motion state=1: Idle.
-                    _moving = (infos[8] != "1");
+                    _moving = int.Parse(infos[8]) != 1;
                     break;
 
                 case 4011 when rlt != 0:
