@@ -18,7 +18,7 @@ namespace RASDK.Arm.Hiwin
     /// </summary>
     public class RoboticArm : RASDK.Arm.RoboticArm
     {
-        private static volatile bool _waiting;
+        private static volatile bool _moving;
         private readonly string _ip;
         private int _id;
 
@@ -34,6 +34,7 @@ namespace RASDK.Arm.Hiwin
             _message.LogMethodStart(nameof(RoboticArm), paramNames, paramVals, "上銀機械手臂建構子", LoggingLevel.Info);
 
             _ip = ip;
+            _moving = false;
 
             _message.LogMethodEnd(nameof(RoboticArm));
         }
@@ -67,17 +68,43 @@ namespace RASDK.Arm.Hiwin
                     break;
 
                 default:
-                    throw new ArgumentException("Unknown coordinator type.");
+                    throw new ArgumentException("Unknown coordinator type.", nameof(coordinate));
             }
 
             var returnCode = action(_id, position);
-            var noError = ReturnCodeCheck.IsSuccessful(returnCode, _message);
+            if (!IsSuccessfulReturnCode(returnCode))
+            {
+                throw new HiwinRobotControlException(returnCode, nameof(GetNowPosition));
+            }
 
             _message.LogMethodEnd(nameof(GetNowPosition),
                                   $"{position[0]},{position[1]},{position[2]},{position[3]},{position[4]},{position[5]}",
                                   $"錯誤代碼：{returnCode}",
-                                  noError ? LoggingLevel.Trace : LoggingLevel.Warn);
+                                  LoggingLevel.Trace);
             return position;
+        }
+
+        /// <summary>
+        /// 檢查指令是否成功。
+        /// </summary>
+        /// <param name="code">執行指令回傳的代碼。</param>
+        /// <param name="ignoreCode">要忽略的錯誤代碼。</param>
+        /// <param name="successCode">代表成功的代碼。</param>
+        /// <returns>是否成功無錯誤。</returns>
+        private bool IsSuccessfulReturnCode(int code, bool logging = true, int ignoreCode = 0, int successCode = 0)
+        {
+            if (code == ignoreCode ||
+                code == successCode)
+            {
+                return true; // Successful.
+            }
+
+            if (logging)
+            {
+                _message?.Log($"上銀手臂錯誤，錯誤代碼：{code}。", LoggingLevel.Error);
+            }
+
+            return false; // Otherwise, not successful.
         }
 
         #region Motion
@@ -88,7 +115,13 @@ namespace RASDK.Arm.Hiwin
         public override void Abort()
         {
             _message.LogMethodStart(nameof(Abort), "", "");
-            HRobot.motion_abort(_id);
+
+            var returnCode = HRobot.motion_abort(_id);
+            if (!IsSuccessfulReturnCode(returnCode))
+            {
+                throw new HiwinRobotControlException(returnCode, nameof(Abort));
+            }
+
             _message.LogMethodEnd(nameof(Abort));
         }
 
@@ -99,7 +132,9 @@ namespace RASDK.Arm.Hiwin
         /// <param name="coordinate">座標系類型。</param>
         /// <param name="needWait">是否需要等待動作完成 (阻塞)。</param>
         /// <exception cref="ArgumentException"></exception>
-        public override void Homing(bool slowly = true, CoordinateType coordinate = CoordinateType.Descartes, bool needWait = true)
+        public override void Homing(bool slowly = true,
+                                    CoordinateType coordinate = CoordinateType.Descartes,
+                                    bool needWait = true)
         {
             var paramNames = new List<string> { nameof(slowly), nameof(coordinate), nameof(needWait) };
             var paramVals = new List<string> { slowly.ToString(), coordinate.ToString(), needWait.ToString() };
@@ -126,11 +161,26 @@ namespace RASDK.Arm.Hiwin
                     throw new ArgumentException("Unknown coordinator type.");
             }
 
-            WaitForMotionComplete(needWait, retuenCode);
-
-            if (slowly)
+            if (IsSuccessfulReturnCode(retuenCode))
             {
-                Speed = oriSpeedValue;
+                if (needWait)
+                {
+                    WaitForMotionComplete(); // Blocking.
+
+                    if (slowly)
+                    {
+                        Speed = oriSpeedValue;
+                    }
+                }
+            }
+            else
+            {
+                if (slowly)
+                {
+                    Speed = oriSpeedValue;
+                }
+
+                throw new HiwinRobotControlException(retuenCode, nameof(Homing));
             }
 
             _message.LogMethodEnd(nameof(Homing));
@@ -150,11 +200,15 @@ namespace RASDK.Arm.Hiwin
 
             if (CheckJogArg(axis))
             {
-                HRobot.jog(_id, 0, ParseAxis(axis), ParseDirection(axis));
+                var returnCode = HRobot.jog(_id, 0, ParseAxis(axis), ParseDirection(axis));
+                if (!IsSuccessfulReturnCode(returnCode))
+                {
+                    throw new HiwinRobotControlException(returnCode, nameof(Jog));
+                }
             }
             else
             {
-                throw new ArgumentException($"Input regex: {_inputRegexPattern}");
+                throw new ArgumentException($"Input regex should be: {_inputRegexPattern}, but: {axis}", nameof(axis));
             }
 
             _message.LogMethodEnd(nameof(Jog));
@@ -217,7 +271,15 @@ namespace RASDK.Arm.Hiwin
                     break;
             }
 
-            WaitForMotionComplete(addParams.NeedWait, returnCode);
+            if (!IsSuccessfulReturnCode(returnCode))
+            {
+                throw new HiwinRobotControlException(returnCode, nameof(MoveRelative));
+            }
+
+            if (addParams.NeedWait)
+            {
+                WaitForMotionComplete(); // Blocking.
+            }
 
             _message.LogMethodEnd(nameof(MoveAbsolute));
         }
@@ -279,7 +341,15 @@ namespace RASDK.Arm.Hiwin
                     break;
             }
 
-            WaitForMotionComplete(addParams.NeedWait, returnCode);
+            if (!IsSuccessfulReturnCode(returnCode))
+            {
+                throw new HiwinRobotControlException(returnCode, nameof(MoveRelative));
+            }
+
+            if (addParams.NeedWait)
+            {
+                WaitForMotionComplete(); // Blocking.
+            }
 
             _message.LogMethodEnd(nameof(MoveRelative));
         }
@@ -301,18 +371,34 @@ namespace RASDK.Arm.Hiwin
             return code;
         }
 
-        private void WaitForMotionComplete(bool needWait, int returnCode)
+        /// <summary>
+        /// Blocking.
+        /// </summary>
+        private void WaitForMotionComplete()
         {
-            _message.LogMethodStart(nameof(WaitForMotionComplete),
-                                    new List<string> { nameof(needWait), nameof(returnCode) },
-                                    new List<string> { needWait.ToString(), returnCode.ToString() });
+            _message.LogMethodStart(nameof(WaitForMotionComplete), "void", "void");
 
-            if (needWait && ReturnCodeCheck.IsSuccessful(returnCode))
+            uint i = 0;
+            do
             {
-                _waiting = true;
-                while (_waiting)
-                { /* Do nothing. */ }
+                i++;
+                if (i > 2000000)
+                {
+                    i = 0;
+
+                    // Active update motion state.
+                    var motionState = HRobot.get_motion_state(_id);
+                    if (motionState == 1) // Idle.
+                    {
+                        _moving = false;
+                    }
+                    else if (motionState == 2 || motionState == 4 || motionState == 5)
+                    {
+                        _moving = true;
+                    }
+                }
             }
+            while (_moving);
 
             _message.LogMethodEnd(nameof(WaitForMotionComplete));
         }
@@ -323,8 +409,6 @@ namespace RASDK.Arm.Hiwin
 
         private static readonly HRobot.CallBackFun _callBackFun = EventFun;
 
-        // FIXME: HRobot.network_get_state(_id) always return 0, so Connected always false.
-
         /// <summary>
         /// 是否已連線。
         /// </summary>
@@ -332,16 +416,15 @@ namespace RASDK.Arm.Hiwin
         {
             get
             {
-                bool connected;
                 try
                 {
-                    connected = HRobot.network_get_state(_id) == 1;
+                    // FIXME: HRobot.network_get_state(_id) always return 0, so Connected always false.
+                    return HRobot.network_get_state(_id) == 1;
                 }
-                catch (Exception)
-                {
-                    connected = false;
-                }
-                return connected;
+                catch (Exception ex)
+                { /* Do nothing. */ }
+
+                return false;
             }
         }
 
@@ -454,7 +537,7 @@ namespace RASDK.Arm.Hiwin
                                       $"Joint:{infos[20]},{infos[21]},{infos[22]},{infos[23]},{infos[24]},{infos[25]}\r\n");
 
                     // Motion state=1: Idle.
-                    _waiting = (infos[8] != "1");
+                    _moving = (infos[8] != "1");
                     break;
 
                 case 4011 when rlt != 0:
@@ -548,7 +631,8 @@ namespace RASDK.Arm.Hiwin
                 acc = HRobot.get_acc_dec_ratio(_id);
                 if (acc == -1)
                 {
-                    _message.Show("取得手臂加速度時出錯。", LoggingLevel.Error);
+                    _message?.Log("取得手臂加速度時出錯。", LoggingLevel.Error);
+                    throw new HiwinRobotControlException($"取得手臂加速度時出錯。");
                 }
 
                 _message.LogMethodEnd($"get {nameof(Acceleration)}", acc.ToString(), "");
@@ -561,15 +645,18 @@ namespace RASDK.Arm.Hiwin
 
                 if (value < 1 || value > 100)
                 {
-                    _message.Show($"手臂加速度應為1% ~ 100%之間。輸入值為：{value}",
-                                  LoggingLevel.Warn);
+                    _message?.Log($"手臂加速度應為1% ~ 100%之間。輸入值為：{value}", LoggingLevel.Warn);
+                    throw new HiwinRobotControlException($"手臂加速度應為1% ~ 100%之間。輸入值為：{value}");
                 }
                 else
                 {
                     var returnCode = HRobot.set_acc_dec_ratio(_id, (int)value);
 
                     // 執行HRobot.set_acc_dec_ratio時會固定回傳錯誤代碼4000。
-                    ReturnCodeCheck.IsSuccessful(returnCode, _message, 4000);
+                    if (!IsSuccessfulReturnCode(returnCode, true, 4000))
+                    {
+                        throw new HiwinRobotControlException(returnCode, nameof(Acceleration));
+                    }
                 }
 
                 _message.LogMethodEnd($"set {nameof(Acceleration)}");
@@ -590,7 +677,8 @@ namespace RASDK.Arm.Hiwin
                 var speed = HRobot.get_override_ratio(_id);
                 if (speed == -1)
                 {
-                    _message.Show("取得手臂速度時出錯。", LoggingLevel.Error);
+                    _message?.Log("取得手臂速度時出錯。", LoggingLevel.Error);
+                    throw new HiwinRobotControlException($"取得手臂速度時出錯。");
                 }
 
                 _message.LogMethodEnd($"get {nameof(Speed)}", speed.ToString(), "");
@@ -603,13 +691,17 @@ namespace RASDK.Arm.Hiwin
 
                 if (value < 1 || value > 100)
                 {
-                    _message.Show($"手臂速度應為1% ~ 100%之間。輸入值為：{value}",
-                                  LoggingLevel.Warn);
+                    _message?.Log($"手臂速度應為1% ~ 100%之間。輸入值為：{value}", LoggingLevel.Warn);
+                    throw new HiwinRobotControlException($"手臂速度應為1% ~ 100%之間。輸入值為：{value}");
                 }
                 else
                 {
                     var returnCode = HRobot.set_override_ratio(_id, (int)value);
-                    ReturnCodeCheck.IsSuccessful(returnCode, _message);
+
+                    if (!IsSuccessfulReturnCode(returnCode))
+                    {
+                        throw new HiwinRobotControlException(returnCode, nameof(Speed));
+                    }
                 }
 
                 _message.LogMethodEnd($"set {nameof(Speed)}");
@@ -634,7 +726,6 @@ namespace RASDK.Arm.Hiwin
         /// Get robot output(RO).
         /// </summary>
         /// <param name="index"></param>
-        /// <param name="value"></param>
         public override bool GetRobotOutput(int index)
         {
             return HRobot.get_robot_output(_id, index) == 1;
@@ -644,7 +735,6 @@ namespace RASDK.Arm.Hiwin
         /// Get robot input(RI).
         /// </summary>
         /// <param name="index"></param>
-        /// <param name="value"></param>
         public override bool GetRobotInput(int index)
         {
             return HRobot.get_robot_input(_id, index) == 1;
