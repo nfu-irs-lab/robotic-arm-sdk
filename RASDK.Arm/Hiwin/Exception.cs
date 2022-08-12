@@ -12,7 +12,7 @@
         { }
 
         public HiwinRobotControlException(int code, string message)
-            : base($"HIWIN robot error code: {code}. {message}.")
+            : base($"HIWIN robot error code: {code:0000}. {message}.")
         { }
 
         public HiwinRobotControlException(string message, System.Exception innerException)

@@ -19,6 +19,8 @@ namespace RASDK.Arm.Hiwin
     /// </summary>
     public class RoboticArm : RASDK.Arm.RoboticArm
     {
+        public static bool ShowCallBackInfo = false;
+
         /// <summary>
         /// 正在動作中。
         /// </summary>
@@ -366,6 +368,42 @@ namespace RASDK.Arm.Hiwin
             _message.LogMethodEnd(nameof(MoveRelative));
         }
 
+        private static bool ParseMovingState(int motionStateCode, bool srcState)
+        {
+            var moving = srcState;
+
+            // Ref: HRSDK get_motion_state().
+            switch (motionStateCode)
+            {
+                case 0: // 解激磁。
+                case 1: // 等待、閒置。
+                case 3: // 暫停。
+                    moving = false;
+                    break;
+
+                case 2: // 運行。
+                case 5: // 移動。
+                    moving = true;
+                    break;
+
+                case 4: // 延遲。
+                default:
+                    /* Do nothing. */
+                    break;
+            }
+
+            return moving;
+        }
+
+        private void SoftEnableMotor()
+        {
+            // If motor disable, enable motor.
+            if (HRobot.get_motor_state(_id) == 0)
+            {
+                HRobot.set_motor_state(_id, 1);
+            }
+        }
+
         private int GetSmoothTypeCode(SmoothType smoothType, MotionType motionType)
         {
             int code = 0;
@@ -403,14 +441,10 @@ namespace RASDK.Arm.Hiwin
 
                     // Active update motion state.
                     var motionState = HRobot.get_motion_state(_id);
-                    if (motionState == 1) // Idle.
+                    _moving = ParseMovingState(motionState, _moving);
+                    if (!_moving)
                     {
-                        _moving = false;
                         break;
-                    }
-                    else if (motionState == 2 || motionState == 4 || motionState == 5)
-                    {
-                        _moving = true;
                     }
                 }
             }
@@ -535,38 +569,48 @@ namespace RASDK.Arm.Hiwin
 
             // 此處不受 IMessage 影響。
             // Show in Console.
-            Console.WriteLine($"Command:{cmd}, Result:{rlt}");
+            if (ShowCallBackInfo)
+            {
+                Console.WriteLine($"Command:{cmd}, Result:{rlt}");
+            }
+
             switch (cmd)
             {
                 case 0 when rlt == 4702:
                     _receivedCallBack = true; // Set received flag.
 
-                    Console.WriteLine($"HRSS Mode:{infos[0]}\r\n" +
-                                      $"Operation Mode:{infos[1]}\r\n" +
-                                      $"Override Ratio:{infos[2]}\r\n" +
-                                      $"Motor State:{infos[3]}\r\n" +
-                                      $"Exe File Name:{infos[4]}\r\n" +
-                                      $"Function Output:{infos[5]}\r\n" +
-                                      $"Alarm Count:{infos[6]}\r\n" +
-                                      $"Keep Alive:{infos[7]}\r\n" +
-                                      $"Motion Status:{infos[8]}\r\n" +
-                                      $"Payload:{infos[9]}\r\n" +
-                                      $"Speed:{infos[10]}\r\n" +
-                                      $"Position:{infos[11]}\r\n" +
-                                      $"Coor:{infos[14]},{infos[15]},{infos[16]},{infos[17]},{infos[18]},{infos[19]}\r\n" +
-                                      $"Joint:{infos[20]},{infos[21]},{infos[22]},{infos[23]},{infos[24]},{infos[25]}\r\n");
+                    var motionState = int.Parse(infos[8]);
+                    _moving = ParseMovingState(motionState, _moving);
 
-                    // Motion state=1: Idle.
-                    _moving = int.Parse(infos[8]) != 1;
+                    if (ShowCallBackInfo)
+                    {
+                        Console.WriteLine($"HRSS Mode:{infos[0]}\r\n" +
+                                          $"Operation Mode:{infos[1]}\r\n" +
+                                          $"Override Ratio:{infos[2]}\r\n" +
+                                          $"Motor State:{infos[3]}\r\n" +
+                                          $"Exe File Name:{infos[4]}\r\n" +
+                                          $"Function Output:{infos[5]}\r\n" +
+                                          $"Alarm Count:{infos[6]}\r\n" +
+                                          $"Keep Alive:{infos[7]}\r\n" +
+                                          $"Motion Status:{infos[8]}\r\n" +
+                                          $"Payload:{infos[9]}\r\n" +
+                                          $"Speed:{infos[10]}\r\n" +
+                                          $"Position:{infos[11]}\r\n" +
+                                          $"Coor:{infos[14]},{infos[15]},{infos[16]},{infos[17]},{infos[18]},{infos[19]}\r\n" +
+                                          $"Joint:{infos[20]},{infos[21]},{infos[22]},{infos[23]},{infos[24]},{infos[25]}\r\n");
+                    }
                     break;
 
                 case 4011 when rlt != 0:
-                    MessageBox.Show("Update fail. " + rlt,
-                                    "HRSS update callback",
-                                    MessageBoxButtons.OK,
-                                    MessageBoxIcon.Warning,
-                                    MessageBoxDefaultButton.Button1,
-                                    MessageBoxOptions.DefaultDesktopOnly);
+                    if (ShowCallBackInfo)
+                    {
+                        MessageBox.Show("Update fail. " + rlt,
+                                        "HRSS update callback",
+                                        MessageBoxButtons.OK,
+                                        MessageBoxIcon.Warning,
+                                        MessageBoxDefaultButton.Button1,
+                                        MessageBoxOptions.DefaultDesktopOnly);
+                    }
                     break;
             }
         }
