@@ -8,7 +8,7 @@
         public HiwinRobotControlException(string message) : base(message)
         { }
 
-        public HiwinRobotControlException(int code) : base($"HIWIN robot error code: {code}.")
+        public HiwinRobotControlException(int code) : base($"HIWIN robot error code: {code:0000}.")
         { }
 
         public HiwinRobotControlException(int code, string message)
