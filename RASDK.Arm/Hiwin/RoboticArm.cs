@@ -31,6 +31,8 @@ namespace RASDK.Arm.Hiwin
         /// </summary>
         private static volatile bool _receivedCallBack;
 
+        private static volatile int _motionState;
+
         private readonly string _ip;
 
         private int _id;
@@ -246,6 +248,11 @@ namespace RASDK.Arm.Hiwin
                                           double j6C,
                                           AdditionalMotionParameters addParams = null)
         {
+            while (IsMovingState(_motionState, _moving))
+            {
+                // Do nothing, wait for previous motion.
+            }
+
             addParams = addParams ?? new AdditionalMotionParameters();
 
             var paramNames = new List<string> { nameof(j1X), nameof(j2Y), nameof(j3Z), nameof(j4A), nameof(j5B), nameof(j6C), nameof(addParams) };
@@ -316,6 +323,11 @@ namespace RASDK.Arm.Hiwin
                                           double j6C,
                                           AdditionalMotionParameters addParams = null)
         {
+            while(IsMovingState(_motionState,_moving))
+            {
+                // Do nothing, wait for previous motion.
+            }
+
             addParams = addParams ?? new AdditionalMotionParameters();
 
             var paramNames = new List<string> { nameof(j1X), nameof(j2Y), nameof(j3Z), nameof(j4A), nameof(j5B), nameof(j6C), nameof(addParams) };
@@ -368,7 +380,7 @@ namespace RASDK.Arm.Hiwin
             _message.LogMethodEnd(nameof(MoveRelative));
         }
 
-        private static bool ParseMovingState(int motionStateCode, bool srcState)
+        private static bool IsMovingState(int motionStateCode, bool srcState)
         {
             var moving = srcState;
 
@@ -435,13 +447,14 @@ namespace RASDK.Arm.Hiwin
                 _receivedCallBack = false; // Clear received flag.
 
                 i++;
-                if (i > 2000000)
+                if (i > 5e7)
                 {
                     i = 0;
 
                     // Active update motion state.
-                    var motionState = HRobot.get_motion_state(_id);
-                    _moving = ParseMovingState(motionState, _moving);
+                    _motionState = HRobot.get_motion_state(_id);
+                    //_message.LogMethodEnd(nameof(WaitForMotionComplete), $"Motion state code: {_motionState}.", LoggingLevel.Trace);
+                    _moving = IsMovingState(_motionState, _moving);
                     if (!_moving)
                     {
                         break;
@@ -579,8 +592,8 @@ namespace RASDK.Arm.Hiwin
                 case 0 when rlt == 4702:
                     _receivedCallBack = true; // Set received flag.
 
-                    var motionState = int.Parse(infos[8]);
-                    _moving = ParseMovingState(motionState, _moving);
+                    _motionState = int.Parse(infos[8]); 
+                    _moving = IsMovingState(_motionState, _moving);
 
                     if (ShowCallBackInfo)
                     {
